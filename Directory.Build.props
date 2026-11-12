@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <Authors>Viktor Myskovsky</Authors>
+    <Product>Star Citizen Mining Assistant</Product>
+    <Description>External read-only mining assistant for Star Citizen.</Description>
+    <Copyright>Copyright (c) 2026 Viktor Myskovsky</Copyright>
+  </PropertyGroup>
+</Project>
