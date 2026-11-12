@@ -5,6 +5,10 @@
     <ProjectReference Include="..\StarCitizenMiningAssistant.Infrastructure\StarCitizenMiningAssistant.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="..\..\data\mining-equipment.json" Link="data\mining-equipment.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>

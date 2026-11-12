@@ -6,7 +6,11 @@ Work in this order. Finish and test a milestone before starting the next one. A 
 
 Solution, three projects, xUnit, documentation, foundation window, file log, recognition-confidence type.
 
-## 2. Verified crackability model — next
+## 2. Verified crackability model — manual check is in the app
+
+The window calls `CrackabilityCalculator`. Tests cover the SCMiner page examples, stacking, Surge at −16, Sabir, both together, craft percent, and an unconfirmed mass. OCR and the overlay still wait. Another calculator agreeing with these examples is still open; Peacefrog does not agree and is not a second source for this formula.
+
+The working formula is the SCMiner checker, recorded in `docs/research/CRACKABILITY.md`. The equipment catalog is `data/mining-equipment.json`, with the raw pull and the gaps in `docs/research/GAME_DATA.md`.
 
 Do this before any scanner or overlay work.
 
@@ -18,9 +22,9 @@ Do this before any scanner or overlay work.
    - How unstable is the charge, and what does that do to the safe window? Instability is not a substitute for the power check.
 4. Record module limits that change the answer: passive versus active, charges, one gadget on a rock, optimal distance, and multiple turrets on one rock.
 5. When at least two independent sources agree on a worked example, encode that example as an xUnit fixture and implement only the part the fixture covers.
-6. Where sources disagree, leave that part unimplemented and say so in the result model. Do not pick a formula because it looks familiar.
+6. A formula disagreement stays unimplemented until a worked example is verified. An equipment-number disagreement uses the SCMiner value, decision 011. Do not pick a formula because it looks familiar.
 
-The first code in this milestone is domain types plus tests. The WPF window stays as it is until those tests pass.
+The manual check window calls this engine. OCR and the overlay still wait until these tests pass.
 
 ## 3. Equipment configuration and profiles
 

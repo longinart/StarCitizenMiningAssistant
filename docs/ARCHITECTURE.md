@@ -14,9 +14,9 @@ The assignment lists many logical components. A solo developer does not need an 
 | Screen capture | not built | Infrastructure |
 | OCR and image matching | not built | Infrastructure, behind a Core interface |
 | Recognition results | `Core.Recognition` | Core |
-| Mining data | not built | versioned JSON outside the calculation code, loaded by Infrastructure |
+| Mining data | `data/mining-equipment.json`, parsed in Core from a string | refresh stays a versioned file; App reads it |
 | Equipment profiles | not built | Core model, Infrastructure persistence |
-| Crackability | not built | Core, pure functions |
+| Crackability | `Core.Calculation` | Core, pure functions |
 | Recommendations | not built | Core, uses the crackability engine and the user's available equipment |
 | Settings | not built | Infrastructure |
 | Logging | `IDiagnosticLog` in Core, file log in Infrastructure | same |
@@ -36,7 +36,7 @@ Core.Tests
   -> Core
 ```
 
-Core has no reference to WPF, Windows Forms, screen-capture APIs or JSON files. A calculation test must run with `dotnet test` and no window.
+Core has no reference to WPF, Windows Forms, screen-capture APIs, or the file system. It parses catalog JSON only when the caller passes the text in. A calculation test must run with `dotnet test` and no window.
 
 The WPF `App` class is the composition root. It constructs the log and the main window. Window event handlers stay thin: they call a Core or application service, they do not contain mining rules.
 
@@ -44,7 +44,7 @@ The WPF `App` class is the composition root. It constructs the log and the main 
 
 ### StarCitizenMiningAssistant.App
 
-`net10.0-windows`, WPF. Shows the foundation window. Binds the product name and version from `MainWindowViewModel`. The explanatory sentences are static window text.
+`net10.0-windows`, WPF. The main window is a manual crack check: rock mass and resistance, ship, turret heads, craft percent, passive modules, one gadget, and one active module. The click handler calls the view model. The view model calls `CrackabilityCalculator`. The window reads `data/mining-equipment.json` from the output folder.
 
 The overlay, when it exists, will be another window in this project: a separate topmost window owned by this process. It will not be a browser host and it will not be injected into Star Citizen. That choice is recorded in decision 002. Arkanis Overlay demonstrates that a separate WPF process can sit over the game; we are not using its Blazor/WebView2 stack, because a compact status overlay does not need a web view and transparent WebView2 is a known source of pain.
 
@@ -55,12 +55,12 @@ The overlay, when it exists, will be another window in this project: a separate 
 - `ApplicationInfo` — name and version read from the assembly.
 - `ObservedValue<T>` and `RecognitionConfidence` — the rule that missing and uncertain data cannot be used as facts.
 - `IDiagnosticLog` — the logging port. Core does not open files.
+- `Equipment.MiningCatalog` — ships, heads, modules, and gadgets parsed from a JSON string.
+- `Calculation.CrackabilityCalculator` — the SCMiner checker, including craft percent and the gadget / active-module comparison.
 
 Future namespaces, added only with the milestone that needs them:
 
 - `Mining` — rock scan model.
-- `Equipment` — lasers, modules, gadgets, turrets, crafted bonuses, profiles.
-- `Calculation` — crackability.
 - `Recommendation` — search over equipment the user marked as available.
 
 ### StarCitizenMiningAssistant.Infrastructure
@@ -71,7 +71,7 @@ Capture and persistence will land here, implementing interfaces defined in Core 
 
 ### StarCitizenMiningAssistant.Core.Tests
 
-xUnit. Tests the confidence rule and the assembly identity. New calculation behaviour needs tests in this project before any UI calls it.
+xUnit. Tests the confidence rule, the catalog parse, and the crackability fixtures. New calculation behaviour needs tests in this project before any UI calls it.
 
 ## External compatibility
 
@@ -84,7 +84,7 @@ No third-party write-up is a guarantee about Easy Anti-Cheat. The practical rule
 
 ## Data
 
-Equipment statistics and the crackability formula are not in C# yet. They will be loaded from versioned data files with a source and a game patch label. See `docs/DATA_MODEL.md` and `docs/research/CRACKABILITY.md`.
+Equipment statistics live in `data/mining-equipment.json` with a source and a game patch label. The formula lives in `CrackabilityCalculator` and is described in `docs/research/CRACKABILITY.md`. See `docs/DATA_MODEL.md`.
 
 ## Testing strategy
 

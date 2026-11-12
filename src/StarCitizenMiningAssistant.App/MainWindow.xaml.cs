@@ -6,7 +6,7 @@ namespace StarCitizenMiningAssistant.App;
 public partial class MainWindow : Window
 {
     public MainWindow()
-        : this(MainWindowViewModel.Create())
+        : this(MainWindowViewModel.CreateMissing("The catalog is loaded by application startup."))
     {
     }
 
@@ -15,5 +15,13 @@ public partial class MainWindow : Window
         ArgumentNullException.ThrowIfNull(viewModel);
         InitializeComponent();
         DataContext = viewModel;
+    }
+
+    private void Check_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is ViewModels.MainWindowViewModel viewModel)
+        {
+            viewModel.Check();
+        }
     }
 }

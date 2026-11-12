@@ -4,7 +4,7 @@ External, read-only Windows desktop assistant for Star Citizen mining. The produ
 
 **Can I crack this rock with my current mining equipment?**
 
-This repository is the foundation. Screen recognition, the crackability engine, equipment profiles and the in-game overlay are not implemented yet.
+Version 0.1.0 includes a manual crackability check. Screen recognition and the in-game overlay are not implemented yet. The numbers and the gaps are in `docs/research/GAME_DATA.md`.
 
 Star Citizen is a trademark of Cloud Imperium Games. This project is an unofficial fan tool and is not affiliated with Cloud Imperium Games.
 
@@ -27,7 +27,7 @@ dotnet test
 dotnet run --project src/StarCitizenMiningAssistant.App
 ```
 
-A successful build ends with `Build succeeded` and no errors. A successful test run reports every test passed. `dotnet run` opens a small desktop window titled **Star Citizen Mining Assistant** and shows version **0.1.0**.
+A successful build ends with `Build succeeded` and no errors. A successful test run reports every test passed. `dotnet run` opens the desktop window. Enter a rock and a loadout, then press **Check rock**. The verdict uses the SCMiner checker described in `docs/research/CRACKABILITY.md`.
 
 Startup lines are appended to:
 

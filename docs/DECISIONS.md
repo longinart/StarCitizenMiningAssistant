@@ -28,13 +28,13 @@ Date: 2026-11-12.
 
 Lasers, modules, gadgets and materials will be loaded from versioned files with a source, a retrieval date and a game build. The calculation engine receives those values as arguments. Temporary numbers typed into C# to "try a formula" are not allowed, including inside tests, unless the test cites the source of that specific example.
 
-## 005 — No crackability formula in 0.1.0
+## 005 — Crackability follows the SCMiner checker
 
-Date: 2026-11-12.
+Date: 2026-11-12. Updated the same day after the checker script was read and the maintainer confirmed the basic results in game.
 
-Public calculators do not yet give one verified model. Peacefrog, DCal and UVerse publish examples that match `required power = mass / (1 - resistance) / 5` when resistance is a fraction. A mort13 write-up publishes `0.2 * mass * (1 + resistance/100)`, which matches the first formula only at 0% resistance. An SCMINER page snippet for 5,000 kg at 0% resistance shows a 1,800 threshold, which matches neither (mass / 5 would be 1,000). Details and links are in `docs/research/CRACKABILITY.md`.
+Peacefrog, DCal and UVerse use `mass / (1 - resistance) / 5`. At 0% resistance that is `mass / 5`. SCMiner's checker uses `0.36 × mass` as the requirement and multiplies laser power by `(1 - effectiveResistance / 100)`. The 5,000 kg default on that page requires 1,800 W, not 1,000 W. The engine implements the SCMiner expressions. The other model stays documented in `docs/research/CRACKABILITY.md` and is not selectable in the app.
 
-The engine stays unwritten until milestone 2 locks sourced examples.
+Crafting is an extension SCMiner does not calculate: a percent on one head multiplies that head's max power before its modules. Charge time uses `optimal_charge_rate` only. `all_charge_rates` is stored and not applied.
 
 ## 006 — Repository root is this directory
 
@@ -59,3 +59,19 @@ Date: 2026-11-12.
 Date: 2026-11-12.
 
 `ObservedValue<T>` exists before OCR so later code has nowhere convenient to put a bare string. Only `IsConfirmed` authorises a calculation.
+
+## 010 — Wiki items are the equipment catalog, with the duplicates removed
+
+Date: 2026-11-12.
+
+`data/mining-equipment.json` started from the Star Citizen Wiki API for `4.10.2-LIVE.12881860`. The full pull, including records left out of the catalog, is `docs/research/GAME_DATA.md`. Test entities, the MPUV arm that shares the Arbor MH1 name, size 0 lasers, ROC and ATLS GEO lasers, hand lasers, and the two module records with no modifiers are not in the JSON. The catalog heads are the size 1 and size 2 lasers for the Golem, Prospector, and MOLE.
+
+## 011 — SCMiner wins a conflict with the wiki
+
+Date: 2026-11-12.
+
+The maintainer checked SCMiner in game and rejected the wiki scan signatures. The catalog signature, instability, resistance, and deposit ladder for each material come from the SCMiner mineral table retrieved the same day. Wiki signature numbers are not stored.
+
+Where the public SCMiner module and gadget list differs from the wiki `modifier_map`, the JSON stores the SCMiner number. Surge resistance is −16, not the wiki −15.5. SCMiner splits laser `power` from `extractPower`. Only `power` enters the crack formula. `extractPowerPercent` is stored and does not change the yes or no. The replaced fields are listed in `docs/WORK_REPORT.md`.
+
+Head laser power stayed on the wiki `mining_laser.laser_power` values. Those match the SCMiner Helix I page at 780–3900 W, and no second SCMiner head table was found that disagreed. Klein-S1 slots stay 0, which is the SCMiner page value for a null wiki field.
