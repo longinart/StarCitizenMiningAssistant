@@ -57,6 +57,7 @@ The overlay, when it exists, will be another window in this project: a separate 
 - `IDiagnosticLog` — the logging port. Core does not open files.
 - `Equipment.MiningCatalog` — ships, heads, modules, and gadgets parsed from a JSON string.
 - `Calculation.CrackabilityCalculator` — the SCMiner checker, including craft percent and the gadget / active-module comparison.
+- `Calculation.LoadoutComparison` — one confirmed rock against each saved loadout. The row is Crackable, Difficult, Uncrackable, or Unknown, and it names the boost that the crack needs.
 
 Future namespaces, added only with the milestone that needs them:
 

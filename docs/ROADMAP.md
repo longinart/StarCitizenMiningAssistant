@@ -20,11 +20,9 @@ This is the order for the overlay. Finish and test one item before the next. The
 
 The loadout page stores more than one setup, each with a name the user types. One loadout is the whole ship: on the Mole, that is all three turrets plus the gadget. Saving a new name leaves the other names unchanged. Switching names loads that saved setup. The current screen is kept separately and restored on the next start. An older file with one setup still loads, under the name Loadout.
 
-### B. Compare every named loadout to one rock
+### B. Compare every named loadout to one rock — in Core
 
-Core only, with tests. The same confirmed mass, resistance and instability runs through the existing calculator once per saved loadout. Each row is Crackable, Difficult, or Uncrackable. When a boost is what makes it crackable, the row names it: Surge, the gadget, or both. A missing field is Unknown, not Crackable.
-
-Instability and charge-window size stay on the row as the reason a crackable Hofstede setup is the cleaner one for a small rock. They do not turn an uncrackable Hofstede into a crack. No new formula.
+`LoadoutComparison` runs the existing calculator once per saved loadout. Each row is Crackable, Difficult, or Uncrackable. When a boost is what makes it crackable, the row names it: the active module, the gadget, or both. A missing field is Unknown, not Crackable. Instability and charge-window size stay on the row. They do not turn an uncrackable Hofstede into a crack. The overlay does not show this yet.
 
 ### C. Overlay window
 
