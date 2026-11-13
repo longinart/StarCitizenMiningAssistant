@@ -6,78 +6,53 @@ Work in this order. Finish and test a milestone before starting the next one. A 
 
 Solution, three projects, xUnit, documentation, foundation window, file log, recognition-confidence type.
 
-## 2. Verified crackability model — manual check is in the app
+## 2. Verified crackability model — done for the SCMiner checker
 
-The window calls `CrackabilityCalculator`. Tests cover the SCMiner page examples, stacking, Surge at −16, Sabir, both together, craft percent, and an unconfirmed mass. OCR and the overlay still wait. Another calculator agreeing with these examples is still open; Peacefrog does not agree and is not a second source for this formula.
+`CrackabilityCalculator` is covered by the tests: the SCMiner page examples, stacking, Surge at −16, Sabir, both together, craft percent, and an unconfirmed mass. The window no longer asks for a rock by hand. One unnamed loadout is saved. Peacefrog does not agree and is not a second source for this formula.
 
-The working formula is the SCMiner checker, recorded in `docs/research/CRACKABILITY.md`. The equipment catalog is `data/mining-equipment.json`, with the raw pull and the gaps in `docs/research/GAME_DATA.md`.
+The formula stays the one in `docs/research/CRACKABILITY.md`. A new rock number still needs a source. An uncertain reading stays Unknown.
 
-Do this before any scanner or overlay work.
+## Next sequence
 
-1. Collect worked examples from independent public calculators, using the same mass, resistance, instability, laser, modules, gadget and crafting inputs.
-2. Record each example in `docs/research/CRACKABILITY.md` with the source, the date checked, and the Star Citizen patch the source claims.
-3. Separate three questions that must not be collapsed into one number:
-   - Is there enough laser power to fracture the rock?
-   - How do resistance modifiers from lasers, modules, gadgets and crafting combine?
-   - How unstable is the charge, and what does that do to the safe window? Instability is not a substitute for the power check.
-4. Record module limits that change the answer: passive versus active, charges, one gadget on a rock, optimal distance, and multiple turrets on one rock.
-5. When at least two independent sources agree on a worked example, encode that example as an xUnit fixture and implement only the part the fixture covers.
-6. A formula disagreement stays unimplemented until a worked example is verified. An equipment-number disagreement uses the SCMiner value, decision 011. Do not pick a formula because it looks familiar.
+This is the order for the overlay. Finish and test one item before the next. The process stays external: screen capture of a region the user places, no game memory, no injected input.
 
-The calculator stays in Core and is covered by the tests. The window no longer asks for a rock by hand. OCR and the overlay still wait until these tests pass.
+### A. Named loadouts — next
 
-## 3. Equipment configuration and profiles
+Save more than one setup, each with a name the user types. One loadout is the whole ship: on the Mole, that is all three turrets plus the gadget. Hofstede with Focus III and XTR-XL is one name. Helix II with XTR-XL, Surge and Rieger-C3 is another. Switching names does not mix their modules. The current single save still loads.
 
-Ships, turrets, laser heads, module slots, gadgets and crafted bonuses as data. Each turret has its own loadout. The user marks which parts they own. Profiles are saved locally.
+### B. Compare every named loadout to one rock
 
-Equipment numbers come from a versioned data file, not from literals in the calculator. Preferred sources are the Star Citizen Wiki API and `scunpacked-data`, with the dump's game build recorded. Confirm the licence and terms of any third-party API before calling it.
+Core only, with tests. The same confirmed mass, resistance and instability runs through the existing calculator once per saved loadout. Each row is Crackable, Difficult, or Uncrackable. When a boost is what makes it crackable, the row names it: Surge, the gadget, or both. A missing field is Unknown, not Crackable.
 
-## 4. Calculation engine
+Instability and charge-window size stay on the row as the reason a crackable Hofstede setup is the cleaner one for a small rock. They do not turn an uncrackable Hofstede into a crack. No new formula.
 
-Pure Core service. Inputs are a confirmed rock scan plus one or more turret loadouts. Outputs, per turret and for selected turrets together:
+### C. Overlay window
 
-- enough power, or not enough, or unknown because a required input is missing or the formula is unverified
-- power required, power available, and the margin
-- adjusted resistance and instability, each with the modifiers that produced them
-- warnings for active-module charges, gadget conflicts and unstable charge windows
+A second WPF window, not a browser view. The user moves it and resizes it. Position and size are saved. It shows one row per named loadout from B. It does not read the screen yet, so the table can be checked before OCR exists. Click-through waits until the window is readable over the game.
 
-No UI references. Tests from milestone 2 must pass unchanged or be updated in the same change with the reason recorded.
+### D. Two capture regions
 
-## 5. Recommendation engine
+The user places one rectangle on the signature list and another on the rock panel, where mass, resistance and instability are drawn. Different monitors get different rectangles. The rectangles are saved. A still image can be saved for diagnosis. No game hooks.
 
-Search only equipment the user marked as available. Rank by a stated preference: fewest changes from the current loadout, or largest safety margin. Return which single turret can crack the rock, whether several turrets must work together, and which gadget or module is required. Never recommend an item the user does not have.
+### E. OCR
 
-## 6. Screen capture
+Ask before adding an OCR package. Infrastructure implements a Core interface. Every signature and every rock number is an `ObservedValue<T>`. A low-confidence read stays Uncertain.
 
-Capture a user-chosen region of the desktop with a documented Windows capture API. Save diagnostic images locally when the user asks. No game-process hooks.
+### F. Signature watch
 
-## 7. OCR and image recognition
+A confirmed signature is matched to the catalog. The overlay prints the mineral name beside it. Minerals ticked on the signature page blink. A sound plays only when the user has turned that sound on.
 
-Read the mining panel with OCR plus template or anchor checks where the UI is stable. Every field is an `ObservedValue<T>`. A low-confidence read stays `Uncertain`.
+### G. Rock scan into the comparison
 
-## 8. Mining scan parsing
+Confirmed mass, resistance and instability from the rock rectangle run B and fill the overlay. Uncertain fields stay Unknown and do not produce Crackable.
 
-Turn recognised text into a rock scan: materials and percentages, mass, resistance, instability, signature, deposit count. Validate ranges. Reject a parse that contradicts itself instead of guessing.
+### H. Game check
 
-## 9. Overlay
+Manual check on the user's borderless layout: both rectangles land on the right panels, the overlay stays where it was placed, and the process sends no input to the game.
 
-A second, compact WPF window: position, size, opacity, font size, colour for crackable / not crackable / unknown, collapsed and expanded layouts, a hotkey, and click-through when the user wants it. Test it with Star Citizen in borderless and Vulkan before calling it compatible. Unknown stays visible as unknown.
+## Later
 
-## 10. Wire recognition to calculation
-
-The overlay calls the engine only with confirmed fields. Uncertain fields are shown as uncertain and the verdict is "unknown", not "crackable".
-
-## 11. Settings, persistence and usability
-
-Profiles, overlay layout, capture region and data-file updates survive a restart. Settings live under LocalAppData.
-
-## 12. Compatibility pass
-
-Manual checklist against a named Star Citizen patch: borderless window, overlay visibility, no interaction with the game, log file remains readable, capture region still matches the mining panel.
-
-## 13. Packaging
-
-A per-user installer or a portable build for other Windows machines. No admin rights required for normal use.
+A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out.
 
 ## Explicitly out of scope
 
