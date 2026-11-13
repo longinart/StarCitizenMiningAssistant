@@ -85,7 +85,14 @@
                                     CornerRadius="8"
                                     Visibility="{Binding IsActive, Converter={StaticResource ShowWhenTrue}}">
                                 <StackPanel>
-                                    <TextBlock Text="{Binding Heading}" FontWeight="SemiBold" />
+                                    <DockPanel>
+                                        <CheckBox DockPanel.Dock="Right"
+                                                  Content="Count this laser"
+                                                  IsChecked="{Binding IsLaserOn}"
+                                                  Foreground="#FFE7EDF5"
+                                                  VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Heading}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    </DockPanel>
                                     <TextBlock Style="{StaticResource FieldLabel}" Text="Mining head" />
                                     <ComboBox ItemsSource="{Binding Heads}"
                                               SelectedItem="{Binding SelectedHead}"
@@ -103,10 +110,22 @@
                                                                VerticalAlignment="Center"
                                                                Foreground="#FF9AA8B8"
                                                                Text="{Binding Label}" />
-                                                    <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.PassiveChoices}"
+                                                    <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
                                                               SelectedItem="{Binding Selected}"
                                                               DisplayMemberPath="Name"
-                                                              IsEnabled="{Binding IsEnabled}" />
+                                                              IsEnabled="{Binding IsEnabled}">
+                                                        <ComboBox.ItemContainerStyle>
+                                                            <Style TargetType="ComboBoxItem">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsHeader}" Value="True">
+                                                                        <Setter Property="IsEnabled" Value="False" />
+                                                                        <Setter Property="FontStyle" Value="Italic" />
+                                                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </ComboBox.ItemContainerStyle>
+                                                    </ComboBox>
                                                 </DockPanel>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
@@ -117,20 +136,12 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <UniformGrid Columns="2" Margin="0,12,0,0">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Gadget" Margin="0" />
-                        <ComboBox ItemsSource="{Binding Gadgets}"
-                                  SelectedItem="{Binding SelectedGadget}"
-                                  DisplayMemberPath="Name" />
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Active module" Margin="0" />
-                        <ComboBox ItemsSource="{Binding ActiveModules}"
-                                  SelectedItem="{Binding SelectedActive}"
-                                  DisplayMemberPath="Name" />
-                    </StackPanel>
-                </UniformGrid>
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Gadget" />
+                <ComboBox Width="280"
+                          HorizontalAlignment="Left"
+                          ItemsSource="{Binding Gadgets}"
+                          SelectedItem="{Binding SelectedGadget}"
+                          DisplayMemberPath="Name" />
 
                 <TextBlock Margin="0,8,0,0"
                            Foreground="#FF9AA8B8"

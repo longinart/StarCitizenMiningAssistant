@@ -233,6 +233,41 @@ public class MiningCatalogTests
         Assert.Contains(agriciumDeposit, match => match.Material.Name == "Agricium" && match.DepositNumber == 2);
     }
 
+    [Fact]
+    public void One_helix_ii_with_rieger_c3_surge_and_sabir_matches_the_31300kg_screen()
+    {
+        var catalog = MiningCatalog.Parse(File.ReadAllText(FindCatalog()));
+        var helix = catalog.FindHead("helix-ii-mining-laser");
+        var rieger = catalog.FindModule("rieger-c3-module");
+        var xtr = catalog.FindModule("xtr-xl-module");
+        var surge = catalog.FindModule("surge-module");
+        var sabir = catalog.FindGadget("sabir");
+        Assert.NotNull(helix);
+        Assert.NotNull(rieger);
+        Assert.NotNull(xtr);
+        Assert.NotNull(surge);
+        Assert.NotNull(sabir);
+        Assert.Equal(0, xtr.PowerPercent);
+
+        var laser = new LaserContribution(
+            helix.MaxPower,
+            0,
+            new ModifierSet(0, helix.Resistance, helix.Instability, helix.GreenZone, helix.OptimalChargeRate, 0),
+            [
+                new ModifierSet(rieger.PowerPercent, rieger.Resistance, rieger.Instability, rieger.GreenZone, rieger.OptimalChargeRate, rieger.Shatter),
+                new ModifierSet(xtr.PowerPercent, xtr.Resistance, xtr.Instability, xtr.GreenZone, xtr.OptimalChargeRate, xtr.Shatter),
+                new ModifierSet(surge.PowerPercent, surge.Resistance, surge.Instability, surge.GreenZone, surge.OptimalChargeRate, surge.Shatter)
+            ]);
+        var gadget = new ModifierSet(sabir.PowerPercent, sabir.Resistance, sabir.Instability, sabir.GreenZone, sabir.OptimalChargeRate, 0);
+
+        var result = CrackabilityCalculator.Assess(RockReading.Confirmed(31300, 50, 0), [laser], gadget);
+
+        Assert.Equal(11268, result.PowerRequired);
+        Assert.Equal(7885, result.PowerDelivered!.Value, 0);
+        Assert.False(result.CanCrack);
+        Assert.Equal(70, (int)Math.Round(result.PowerRatio!.Value * 100, MidpointRounding.AwayFromZero));
+    }
+
     private static string FindCatalog()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

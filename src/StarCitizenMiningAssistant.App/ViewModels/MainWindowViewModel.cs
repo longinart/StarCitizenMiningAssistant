@@ -13,7 +13,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly MiningCatalog? _catalog;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
-    private CatalogChoice<MiningModule>? _selectedActive;
     private string _massText = "5000";
     private string _resistanceText = "0";
     private string _instabilityText = "";
@@ -34,8 +33,7 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         Ships = new ObservableCollection<MiningShip>(catalog?.Ships ?? []);
         Gadgets = new ObservableCollection<CatalogChoice<MiningGadget>>(GadgetChoices(catalog));
-        ActiveModules = new ObservableCollection<CatalogChoice<MiningModule>>(ActiveChoices(catalog));
-        ModuleSlotEditor.SetPassiveModules(catalog?.Modules ?? []);
+        ModuleSlotEditor.SetModules(catalog?.Modules ?? []);
         Turrets =
         [
             new TurretEditor(),
@@ -44,8 +42,6 @@ public sealed class MainWindowViewModel : ViewModelBase
         ];
 
         _selectedGadget = Gadgets.FirstOrDefault();
-        _selectedActive = ActiveModules.FirstOrDefault(choice => choice.Item?.Id == "surge-module")
-            ?? ActiveModules.FirstOrDefault();
         _selectedShip = Ships.FirstOrDefault(ship => ship.Id == "misc-prospector") ?? Ships.FirstOrDefault();
         ApplyShip();
     }
@@ -61,8 +57,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     public ObservableCollection<MiningShip> Ships { get; }
 
     public ObservableCollection<CatalogChoice<MiningGadget>> Gadgets { get; }
-
-    public ObservableCollection<CatalogChoice<MiningModule>> ActiveModules { get; }
 
     public IReadOnlyList<TurretEditor> Turrets { get; }
 
@@ -82,12 +76,6 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         get => _selectedGadget;
         set => Set(ref _selectedGadget, value);
-    }
-
-    public CatalogChoice<MiningModule>? SelectedActive
-    {
-        get => _selectedActive;
-        set => Set(ref _selectedActive, value);
     }
 
     public string MassText
@@ -170,7 +158,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             return;
         }
 
-        if (!TryReadLasers(out var lasers))
+        if (!TryReadLasers(out var equipped, out var withoutActives, out var activeNames))
         {
             return;
         }
@@ -183,31 +171,30 @@ public sealed class MainWindowViewModel : ViewModelBase
                 : ObservedValue<double>.Confirmed(instability.Value));
 
         var gadget = SelectedGadget?.Item;
-        var active = SelectedActive?.Item;
         ModifierSet? gadgetModifier = gadget is null ? null : ToModifier(gadget);
-        ModifierSet? activeModifier = active is null ? null : ToModifier(active);
+        var activesSelected = activeNames.Count > 0;
 
-        var bare = CrackabilityCalculator.Assess(rock, lasers);
+        var bare = CrackabilityCalculator.Assess(rock, withoutActives);
         var gadgetOnly = gadgetModifier is null
             ? null
-            : CrackabilityCalculator.Assess(rock, lasers, gadgetModifier);
-        var consumableOnly = activeModifier is null
-            ? null
-            : CrackabilityCalculator.Assess(rock, lasers, consumable: activeModifier);
-        var both = gadgetModifier is null || activeModifier is null
-            ? null
-            : CrackabilityCalculator.Assess(rock, lasers, gadgetModifier, activeModifier);
-
-        Verdict = CrackabilityCalculator.DescribeAssistance(
+            : CrackabilityCalculator.Assess(rock, withoutActives, gadgetModifier);
+        var consumableOnly = activesSelected
+            ? CrackabilityCalculator.Assess(rock, equipped)
+            : null;
+        var both = activesSelected && gadgetModifier is not null
+            ? CrackabilityCalculator.Assess(rock, equipped, gadgetModifier)
+            : null;
+        var selected = both ?? (activesSelected ? consumableOnly : gadgetOnly) ?? bare;
+        var advice = CrackabilityCalculator.DescribeAssistance(
             bare,
             gadgetOnly,
             consumableOnly,
             both,
             gadget?.Name,
-            active?.Name);
+            activeNames.Count == 0 ? null : string.Join(", ", activeNames));
 
-        var selected = both ?? gadgetOnly ?? consumableOnly ?? bare;
-        Details = FormatDetails(bare, gadgetOnly, consumableOnly, both, selected, instability is null, signature);
+        Verdict = RatioLine(selected, equipped.Count) + Environment.NewLine + advice;
+        Details = FormatDetails(bare, gadgetOnly, consumableOnly, both, selected!, instability is null, signature);
     }
 
     private bool TryReadRequired(string text, string label, out double value)
@@ -243,10 +230,15 @@ public sealed class MainWindowViewModel : ViewModelBase
         return false;
     }
 
-    private bool TryReadLasers(out List<LaserContribution> lasers)
+    private bool TryReadLasers(
+        out List<LaserContribution> equipped,
+        out List<LaserContribution> withoutActives,
+        out List<string> activeNames)
     {
-        lasers = [];
-        var anyActive = false;
+        equipped = [];
+        withoutActives = [];
+        activeNames = [];
+        var anyPort = false;
         foreach (var turret in Turrets)
         {
             if (!turret.IsActive)
@@ -254,7 +246,12 @@ public sealed class MainWindowViewModel : ViewModelBase
                 continue;
             }
 
-            anyActive = true;
+            anyPort = true;
+            if (!turret.IsLaserOn)
+            {
+                continue;
+            }
+
             if (turret.SelectedHead is null)
             {
                 Verdict = "Choose a mining head for turret " + turret.Number + ".";
@@ -269,26 +266,43 @@ public sealed class MainWindowViewModel : ViewModelBase
                 return false;
             }
 
-            var modules = new List<ModifierSet>();
+            var allModules = new List<ModifierSet>();
+            var passiveModules = new List<ModifierSet>();
             foreach (var slot in turret.Slots)
             {
-                if (slot.IsEnabled && slot.Selected?.Item is MiningModule module)
+                if (!slot.IsEnabled || slot.Selected is not { IsHeader: false, Item: MiningModule module })
                 {
-                    modules.Add(ToModifier(module));
+                    continue;
+                }
+
+                var modifier = ToModifier(module);
+                allModules.Add(modifier);
+                if (module.Active)
+                {
+                    activeNames.Add(module.Name);
+                }
+                else
+                {
+                    passiveModules.Add(modifier);
                 }
             }
 
             var head = turret.SelectedHead;
-            lasers.Add(new LaserContribution(
-                head.MaxPower,
-                craft,
-                new ModifierSet(0, head.Resistance, head.Instability, head.GreenZone, head.OptimalChargeRate, 0),
-                modules));
+            var headModifier = new ModifierSet(0, head.Resistance, head.Instability, head.GreenZone, head.OptimalChargeRate, 0);
+            equipped.Add(new LaserContribution(head.MaxPower, craft, headModifier, allModules));
+            withoutActives.Add(new LaserContribution(head.MaxPower, craft, headModifier, passiveModules));
         }
 
-        if (!anyActive)
+        if (!anyPort)
         {
             Verdict = "Choose a ship.";
+            Details = "";
+            return false;
+        }
+
+        if (equipped.Count == 0)
+        {
+            Verdict = "Turn on at least one laser. Extra turrets start off so a one-laser check does not include the whole ship.";
             Details = "";
             return false;
         }
@@ -296,11 +310,30 @@ public sealed class MainWindowViewModel : ViewModelBase
         return true;
     }
 
+    private static string RatioLine(CrackAssessment selected, int laserCount)
+    {
+        if (selected.PowerRatio is not double ratio
+            || selected.PowerDelivered is not double delivered
+            || selected.PowerRequired is not double required)
+        {
+            return selected.Reason;
+        }
+
+        var lasers = laserCount == 1 ? "1 laser counted." : laserCount + " lasers counted.";
+        return "Power ratio " + FormatPercent(ratio) + ". Delivered "
+            + delivered.ToString("N0", CultureInfo.CurrentCulture) + " W against "
+            + required.ToString("N0", CultureInfo.CurrentCulture) + " W required. " + lasers;
+    }
+
     private void ApplyShip()
     {
-        ShipNote = SelectedShip?.VariantOf is null
+        var variant = SelectedShip?.VariantOf is null
             ? ""
-            : "This variant uses the base hull turret layout. Its own hardpoints were not walked.";
+            : "This variant uses the base hull turret layout. Its own hardpoints were not walked. ";
+        var extra = SelectedShip?.Turrets.Count > 1
+            ? "Extra turrets start off. Turn on each laser that is actually mining."
+            : "";
+        ShipNote = (variant + extra).Trim();
 
         var ports = SelectedShip?.Turrets;
         for (var i = 0; i < Turrets.Count; i++)
@@ -310,7 +343,7 @@ public sealed class MainWindowViewModel : ViewModelBase
                 var port = ports[i];
                 var heads = _catalog.Heads.Where(head => head.Size == port.Size).ToList();
                 var stock = heads.FirstOrDefault(head => head.Id == port.StockHeadId) ?? heads.FirstOrDefault();
-                Turrets[i].Activate(i + 1, port.Size, heads, stock);
+                Turrets[i].Activate(i + 1, port.Size, heads, stock, countThisLaser: i == 0);
             }
             else
             {
@@ -449,40 +482,30 @@ public sealed class MainWindowViewModel : ViewModelBase
             yield return new CatalogChoice<MiningGadget>(gadget.Name, gadget);
         }
     }
-
-    private static IEnumerable<CatalogChoice<MiningModule>> ActiveChoices(MiningCatalog? catalog)
-    {
-        yield return new CatalogChoice<MiningModule>("None", null);
-        if (catalog is null)
-        {
-            yield break;
-        }
-
-        foreach (var module in catalog.Modules.Where(item => item.Active).OrderBy(item => item.Name, StringComparer.OrdinalIgnoreCase))
-        {
-            yield return new CatalogChoice<MiningModule>(module.Name, module);
-        }
-    }
 }
 
 public sealed class CatalogChoice<T>
     where T : class
 {
-    public CatalogChoice(string name, T? item)
+    public CatalogChoice(string name, T? item, bool isHeader = false)
     {
         Name = name;
         Item = item;
+        IsHeader = isHeader;
     }
 
     public string Name { get; }
 
     public T? Item { get; }
+
+    public bool IsHeader { get; }
 }
 
 public sealed class TurretEditor : ViewModelBase
 {
     private readonly ModuleSlotEditor[] _slots = [new(1), new(2), new(3)];
     private bool _isActive;
+    private bool _isLaserOn;
     private int _number;
     private int _size;
     private MiningHead? _selectedHead;
@@ -497,6 +520,12 @@ public sealed class TurretEditor : ViewModelBase
     {
         get => _isActive;
         private set => Set(ref _isActive, value);
+    }
+
+    public bool IsLaserOn
+    {
+        get => _isLaserOn;
+        set => Set(ref _isLaserOn, value);
     }
 
     public int Number
@@ -541,7 +570,7 @@ public sealed class TurretEditor : ViewModelBase
 
     public IReadOnlyList<ModuleSlotEditor> Slots => _slots;
 
-    public void Activate(int number, int size, IReadOnlyList<MiningHead> heads, MiningHead? stock)
+    public void Activate(int number, int size, IReadOnlyList<MiningHead> heads, MiningHead? stock, bool countThisLaser)
     {
         Number = number;
         Size = size;
@@ -553,12 +582,14 @@ public sealed class TurretEditor : ViewModelBase
 
         SelectedHead = stock;
         IsActive = true;
+        IsLaserOn = countThisLaser;
         OnPropertyChanged(nameof(Heading));
     }
 
     public void Deactivate()
     {
         IsActive = false;
+        IsLaserOn = false;
         Heads.Clear();
         SelectedHead = null;
     }
@@ -581,10 +612,10 @@ public sealed class ModuleSlotEditor : ViewModelBase
     public ModuleSlotEditor(int number)
     {
         Number = number;
-        _selected = PassiveChoices[0];
+        _selected = ModuleChoices[0];
     }
 
-    public static IReadOnlyList<CatalogChoice<MiningModule>> PassiveChoices { get; private set; } =
+    public static IReadOnlyList<CatalogChoice<MiningModule>> ModuleChoices { get; private set; } =
         [new CatalogChoice<MiningModule>("None", null)];
 
     public int Number { get; }
@@ -603,17 +634,24 @@ public sealed class ModuleSlotEditor : ViewModelBase
         set => Set(ref _selected, value);
     }
 
-    public static void SetPassiveModules(IEnumerable<MiningModule> modules)
+    public static void SetModules(IEnumerable<MiningModule> modules)
     {
+        var list = modules.ToList();
         var choices = new List<CatalogChoice<MiningModule>>
         {
-            new("None", null)
+            new("None", null),
+            new("--- passive modules ---", null, true)
         };
-        choices.AddRange(modules
+        choices.AddRange(list
             .Where(module => !module.Active)
             .OrderBy(module => module.Name, StringComparer.OrdinalIgnoreCase)
             .Select(module => new CatalogChoice<MiningModule>(module.Name, module)));
-        PassiveChoices = choices;
+        choices.Add(new CatalogChoice<MiningModule>("--- active modules ---", null, true));
+        choices.AddRange(list
+            .Where(module => module.Active)
+            .OrderBy(module => module.Name, StringComparer.OrdinalIgnoreCase)
+            .Select(module => new CatalogChoice<MiningModule>(module.Name, module)));
+        ModuleChoices = choices;
     }
 }
 

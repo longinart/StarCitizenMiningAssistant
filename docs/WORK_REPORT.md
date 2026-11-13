@@ -55,6 +55,10 @@ The app was started and closed with `CloseMainWindow`. Exit code 0. The log reco
 
 Image OCR and the overlay were not started. The crack-check catalog change was already the review point for this session, and an OCR engine would have been a new Windows API path with no mining-panel image to check against. That is the next session, after you accept or correct the module table above.
 
+## Follow-up: 31,300 kg screen
+
+The 7,885 W / 11,268 W result is one Helix II with Rieger-C3, XTR-XL, Surge, and Sabir. XTR-XL adds no laser power in that result. The app had been counting every MOLE turret, so the other two stock lasers made Surge plus Sabir look sufficient. Extra turrets now start off, and the verdict shows the power ratio, delivered watts, required watts, and how many lasers were counted. Active modules are chosen in the laser slot list, under the passive modules.
+
 ## Left for the maintainer
 
 - Read the table above. The important case is Forel, FLTR, Vaux, and XTR: SCMiner does not treat the old wiki power percent as crack power.
