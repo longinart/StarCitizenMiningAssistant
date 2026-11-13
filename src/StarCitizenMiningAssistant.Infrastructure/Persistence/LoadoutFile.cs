@@ -1,53 +1,16 @@
-using System.Text.Json;
+using StarCitizenMiningAssistant.Core.Equipment;
 
 namespace StarCitizenMiningAssistant.Infrastructure.Persistence;
 
-public sealed class SavedLoadout
-{
-    public string ShipId { get; set; } = "";
-
-    public string? GadgetId { get; set; }
-
-    public string MassText { get; set; } = "5000";
-
-    public string ResistanceText { get; set; } = "0";
-
-    public string InstabilityText { get; set; } = "";
-
-    public string SignatureText { get; set; } = "";
-
-    public List<SavedTurret> Turrets { get; set; } = [];
-
-    public List<string> TrackedMinerals { get; set; } = [];
-}
-
-public sealed class SavedTurret
-{
-    public string? HeadId { get; set; }
-
-    public bool LaserOn { get; set; }
-
-    public string CraftPercent { get; set; } = "0";
-
-    public List<string?> Modules { get; set; } = [];
-}
-
 public static class LoadoutFile
 {
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        PropertyNameCaseInsensitive = true,
-        WriteIndented = true
-    };
-
     public static string DefaultPath()
     {
         var root = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         return Path.Combine(root, "StarCitizenMiningAssistant", "loadout.json");
     }
 
-    public static SavedLoadout? TryLoad(string? path = null)
+    public static LoadoutLibrary? TryLoad(string? path = null)
     {
         var file = path ?? DefaultPath();
         try
@@ -57,17 +20,17 @@ public static class LoadoutFile
                 return null;
             }
 
-            return JsonSerializer.Deserialize<SavedLoadout>(File.ReadAllText(file), JsonOptions);
+            return LoadoutLibrary.TryParse(File.ReadAllText(file));
         }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             return null;
         }
     }
 
-    public static void Save(SavedLoadout loadout, string? path = null)
+    public static void Save(LoadoutLibrary library, string? path = null)
     {
-        ArgumentNullException.ThrowIfNull(loadout);
+        ArgumentNullException.ThrowIfNull(library);
         var file = path ?? DefaultPath();
         var directory = Path.GetDirectoryName(file);
         if (!string.IsNullOrEmpty(directory))
@@ -75,6 +38,6 @@ public static class LoadoutFile
             Directory.CreateDirectory(directory);
         }
 
-        File.WriteAllText(file, JsonSerializer.Serialize(loadout, JsonOptions));
+        File.WriteAllText(file, library.ToJson());
     }
 }

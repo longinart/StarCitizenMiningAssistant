@@ -76,6 +76,14 @@ public partial class MainWindow : Window
             case ModuleSlotEditor slot when box.SelectedItem is CatalogChoice<MiningModule> choice && !choice.IsHeader:
                 slot.Selected = choice;
                 break;
+            case MainWindowViewModel viewModel when box.SelectedItem is LoadoutNameChoice loadout:
+                var before = viewModel.SelectedShip?.Id;
+                viewModel.SelectNamedLoadout(loadout.Name);
+                if (viewModel.SelectedShip is { } ship && ship.Id != before)
+                {
+                    Settle(ship.Id);
+                }
+                break;
             case MainWindowViewModel viewModel when box.SelectedItem is CatalogChoice<MiningGadget> choice:
                 viewModel.SelectedGadget = choice;
                 break;
@@ -167,6 +175,22 @@ public partial class MainWindow : Window
     }
 
     private void SaveConfiguration_Click(object sender, RoutedEventArgs e) => ShowSignatures_Click(sender, e);
+
+    private void SaveLoadout_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.SaveNamedLoadout();
+        }
+    }
+
+    private void DeleteLoadout_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.DeleteNamedLoadout();
+        }
+    }
 
     private void MineralName_Click(object sender, RoutedEventArgs e)
     {

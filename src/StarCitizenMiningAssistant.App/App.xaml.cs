@@ -41,9 +41,9 @@ public partial class App : Application
             WriteInformation("Loaded equipment catalog " + catalog.GameVersion + ".");
             var viewModel = MainWindowViewModel.Create(catalog);
             var saved = LoadoutFile.TryLoad();
-            if (saved is not null && !string.IsNullOrWhiteSpace(saved.ShipId))
+            if (saved is not null)
             {
-                viewModel.Restore(saved);
+                viewModel.RestoreLibrary(saved);
             }
 
             viewModel.LoadoutChanged += (_, _) => SaveLoadout(viewModel);
@@ -60,7 +60,7 @@ public partial class App : Application
     {
         try
         {
-            LoadoutFile.Save(viewModel.CaptureLoadout());
+            LoadoutFile.Save(viewModel.CaptureLibrary());
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

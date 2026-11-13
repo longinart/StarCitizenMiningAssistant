@@ -6,7 +6,6 @@ using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
 using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Core.Recognition;
-using StarCitizenMiningAssistant.Infrastructure.Persistence;
 
 namespace StarCitizenMiningAssistant.App.ViewModels;
 
@@ -28,6 +27,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _details = "";
     private string _mineralSearch = "";
     private string _copyStatus = "";
+    private string _loadoutName = "";
+    private LoadoutNameChoice? _selectedLoadoutName;
+    private readonly LoadoutLibrary _library = new();
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
     {
@@ -244,52 +246,184 @@ public sealed class MainWindowViewModel : ViewModelBase
         SelectedShip = ship;
     }
 
-    public SavedLoadout CaptureLoadout() =>
-        new()
-        {
-            ShipId = SelectedShip?.Id ?? "",
-            GadgetId = SelectedGadget?.Item?.Id,
-            MassText = MassText,
-            ResistanceText = ResistanceText,
-            InstabilityText = InstabilityText,
-            SignatureText = SignatureText,
-            Turrets = Turrets.Where(turret => turret.IsActive).Select(turret => turret.Capture()).ToList(),
-            TrackedMinerals = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList()
-        };
+    public ObservableCollection<LoadoutNameChoice> LoadoutNames { get; } = [];
 
-    public void Restore(SavedLoadout saved)
+    public string LoadoutName
+    {
+        get => _loadoutName;
+        set => Set(ref _loadoutName, value);
+    }
+
+    public LoadoutNameChoice? SelectedLoadoutName
+    {
+        get => _selectedLoadoutName;
+        private set => Set(ref _selectedLoadoutName, value);
+    }
+
+    public LoadoutLibrary CaptureLibrary()
+    {
+        _library.RememberDraft(CaptureScreen());
+        _library.TrackedMinerals = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList();
+        _library.MassText = MassText;
+        _library.ResistanceText = ResistanceText;
+        _library.InstabilityText = InstabilityText;
+        _library.SignatureText = SignatureText;
+        return _library;
+    }
+
+    public void RestoreLibrary(LoadoutLibrary saved)
     {
         ArgumentNullException.ThrowIfNull(saved);
         _suspendSave = true;
         try
         {
-            SelectBaseShip(saved.ShipId);
-            if (SelectedShip?.Id != saved.ShipId)
-            {
-                return;
-            }
-
+            _library.Loadouts = saved.Loadouts.Select(LoadoutLibrary.Clone).ToList();
+            _library.ActiveName = saved.ActiveName;
+            _library.Draft = saved.Draft is null ? null : LoadoutLibrary.Clone(saved.Draft);
+            _library.TrackedMinerals = saved.TrackedMinerals?.ToList() ?? [];
+            _library.MassText = saved.MassText;
+            _library.ResistanceText = saved.ResistanceText;
+            _library.InstabilityText = saved.InstabilityText;
+            _library.SignatureText = saved.SignatureText;
             MassText = string.IsNullOrWhiteSpace(saved.MassText) ? MassText : saved.MassText;
             ResistanceText = string.IsNullOrWhiteSpace(saved.ResistanceText) ? ResistanceText : saved.ResistanceText;
             InstabilityText = saved.InstabilityText ?? "";
             SignatureText = saved.SignatureText ?? "";
-            SelectedGadget = Gadgets.FirstOrDefault(choice => choice.Item?.Id == saved.GadgetId) ?? Gadgets.FirstOrDefault();
-            var active = Turrets.Where(turret => turret.IsActive).ToList();
-            for (var i = 0; i < active.Count && i < saved.Turrets.Count; i++)
+
+            var screen = _library.Draft ?? _library.Find(_library.ActiveName);
+            if (screen is not null)
             {
-                active[i].Apply(saved.Turrets[i]);
+                ApplyScreen(screen);
+                LoadoutName = string.IsNullOrWhiteSpace(_library.ActiveName) ? screen.Name : _library.ActiveName;
             }
 
-            var tracked = new HashSet<string>(saved.TrackedMinerals ?? [], StringComparer.OrdinalIgnoreCase);
+            var tracked = new HashSet<string>(_library.TrackedMinerals, StringComparer.OrdinalIgnoreCase);
             foreach (var row in Minerals)
             {
                 row.SetTracked(tracked.Contains(row.Name));
             }
+
+            RefreshLoadoutNames();
         }
         finally
         {
             _suspendSave = false;
         }
+    }
+
+    public bool SaveNamedLoadout()
+    {
+        if (SelectedShip is null || !_library.SaveNamed(LoadoutName, CaptureScreen()))
+        {
+            return false;
+        }
+
+        LoadoutName = _library.ActiveName ?? LoadoutName;
+        RefreshLoadoutNames();
+        NotifyLoadout();
+        return true;
+    }
+
+    public void SelectNamedLoadout(string name)
+    {
+        if (string.Equals(name, _library.ActiveName, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        var chosen = _library.Find(name);
+        if (chosen is null || SelectedShip is null)
+        {
+            return;
+        }
+
+        _suspendSave = true;
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(_library.ActiveName))
+            {
+                _library.SaveNamed(_library.ActiveName, CaptureScreen());
+            }
+
+            chosen = _library.Find(name);
+            if (chosen is null)
+            {
+                return;
+            }
+
+            _library.ActiveName = chosen.Name;
+            _library.Draft = LoadoutLibrary.Clone(chosen);
+            ApplyScreen(chosen);
+            LoadoutName = chosen.Name;
+            RefreshLoadoutNames();
+        }
+        finally
+        {
+            _suspendSave = false;
+        }
+
+        NotifyLoadout();
+    }
+
+    public void DeleteNamedLoadout()
+    {
+        if (!_library.Delete(_library.ActiveName))
+        {
+            return;
+        }
+
+        _library.RememberDraft(CaptureScreen());
+        RefreshLoadoutNames();
+        NotifyLoadout();
+    }
+
+    private StoredLoadout CaptureScreen() =>
+        new()
+        {
+            Name = _library.ActiveName ?? "",
+            ShipId = SelectedShip?.Id ?? "",
+            GadgetId = SelectedGadget?.Item?.Id,
+            Turrets = Turrets.Where(turret => turret.IsActive).Select(turret => turret.Capture()).ToList()
+        };
+
+    private void ApplyScreen(StoredLoadout saved)
+    {
+        if (string.IsNullOrWhiteSpace(saved.ShipId))
+        {
+            return;
+        }
+
+        SelectBaseShip(saved.ShipId);
+        if (SelectedShip?.Id != saved.ShipId)
+        {
+            return;
+        }
+
+        SelectedGadget = Gadgets.FirstOrDefault(choice => choice.Item?.Id == saved.GadgetId) ?? Gadgets.FirstOrDefault();
+        var active = Turrets.Where(turret => turret.IsActive).ToList();
+        var turrets = saved.Turrets ?? [];
+        for (var i = 0; i < active.Count && i < turrets.Count; i++)
+        {
+            active[i].Apply(turrets[i]);
+        }
+    }
+
+    private void RefreshLoadoutNames()
+    {
+        var names = _library.Loadouts.Select(loadout => loadout.Name).ToList();
+        var unchanged = LoadoutNames.Count == names.Count
+            && LoadoutNames.Select(choice => choice.Name).SequenceEqual(names);
+        if (!unchanged)
+        {
+            LoadoutNames.Clear();
+            foreach (var name in names)
+            {
+                LoadoutNames.Add(new LoadoutNameChoice(name));
+            }
+        }
+
+        SelectedLoadoutName = LoadoutNames.FirstOrDefault(choice =>
+            string.Equals(choice.Name, _library.ActiveName, StringComparison.OrdinalIgnoreCase));
     }
 
     public void CommitLoadout() => NotifyLoadout();
@@ -711,6 +845,16 @@ public sealed class MainWindowViewModel : ViewModelBase
     }
 }
 
+public sealed class LoadoutNameChoice
+{
+    public LoadoutNameChoice(string name)
+    {
+        Name = name;
+    }
+
+    public string Name { get; }
+}
+
 public sealed class CatalogChoice<T>
     where T : class
 {
@@ -815,7 +959,7 @@ public sealed class TurretEditor : ViewModelBase
         }
     }
 
-    public SavedTurret Capture() =>
+    public StoredTurret Capture() =>
         new()
         {
             HeadId = SelectedHead?.Id,
@@ -824,7 +968,7 @@ public sealed class TurretEditor : ViewModelBase
             Modules = Slots.Select(slot => slot.IsEnabled ? slot.Selected?.Item?.Id : null).ToList()
         };
 
-    public void Apply(SavedTurret saved)
+    public void Apply(StoredTurret saved)
     {
         var head = Heads.FirstOrDefault(item => item.Id == saved.HeadId);
         if (head is not null)

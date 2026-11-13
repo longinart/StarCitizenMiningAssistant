@@ -7,7 +7,7 @@
         Height="860"
         Width="1420"
         MinHeight="720"
-        MinWidth="1280"
+        MinWidth="1340"
         WindowStartupLocation="CenterScreen"
         Background="#FF16191D"
         FontFamily="Segoe UI"
@@ -35,7 +35,7 @@
         </DataTemplate>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FFA7B0BA" />
-            <Setter Property="Margin" Value="0,14,0,6" />
+            <Setter Property="Margin" Value="0,22,0,10" />
             <Setter Property="FontSize" Value="13" />
         </Style>
         <Style x:Key="NavButton" TargetType="Button">
@@ -44,7 +44,7 @@
             <Setter Property="FontSize" Value="17" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Padding" Value="16,14" />
-            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Margin" Value="0,0,0,16" />
             <Setter Property="HorizontalContentAlignment" Value="Left" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Template">
@@ -168,7 +168,22 @@
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
             <StackPanel MaxWidth="1080" HorizontalAlignment="Center">
-                <ItemsControl ItemsSource="{Binding ActiveTurrets}">
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Loadout name" HorizontalAlignment="Center" />
+                <TextBox Width="320" HorizontalAlignment="Center"
+                         Text="{Binding LoadoutName, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="0,14,0,0" HorizontalAlignment="Center" Foreground="#FFA7B0BA" TextWrapping="Wrap" TextAlignment="Center"
+                           Text="Save under a name. Other saved names stay as they were." />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
+                    <Button Content="Save loadout" MinWidth="160" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="SaveLoadout_Click" />
+                    <Button Content="Delete loadout" MinWidth="160" MinHeight="44" FontSize="16" FontWeight="SemiBold" Click="DeleteLoadout_Click" />
+                </StackPanel>
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Saved loadouts" HorizontalAlignment="Center" />
+                <ComboBox Width="320" HorizontalAlignment="Center"
+                          ItemsSource="{Binding LoadoutNames}"
+                          SelectedItem="{Binding SelectedLoadoutName, Mode=OneWay}"
+                          DropDownOpened="Choice_DropDownOpened"
+                          DropDownClosed="Choice_DropDownClosed" />
+                <ItemsControl Margin="0,36,0,12" ItemsSource="{Binding ActiveTurrets}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
@@ -176,8 +191,8 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Width="290" Margin="8,0">
-                                <DockPanel Margin="0,0,0,8" Visibility="{Binding ShowsLaserSwitch, Converter={StaticResource ShowWhenTrue}}">
+                            <StackPanel Width="290" Margin="22,0">
+                                <DockPanel Margin="0,0,0,14" Visibility="{Binding ShowsLaserSwitch, Converter={StaticResource ShowWhenTrue}}">
                                     <CheckBox DockPanel.Dock="Right"
                                               Content="Count this laser"
                                               IsChecked="{Binding IsLaserOn}"
@@ -192,10 +207,10 @@
                                 <TextBlock Style="{StaticResource FieldLabel}" Text="Craft power %" />
                                 <TextBox Width="120" HorizontalAlignment="Left"
                                          Text="{Binding CraftPercentText, UpdateSourceTrigger=PropertyChanged}" />
-                                <ItemsControl ItemsSource="{Binding Slots}" Margin="0,4,0,0">
+                                <ItemsControl ItemsSource="{Binding Slots}" Margin="0,8,0,0">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <DockPanel Margin="0,8,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource ShowWhenTrue}}">
+                                            <DockPanel Margin="0,14,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource ShowWhenTrue}}">
                                                 <TextBlock DockPanel.Dock="Left" Width="78" VerticalAlignment="Center" Foreground="#FFA7B0BA" Text="{Binding Label}" />
                                                 <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
                                                           ItemTemplate="{StaticResource ChoiceWithStats}"
@@ -218,12 +233,12 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                                <StackPanel Margin="0,16,0,8" Visibility="{Binding HasStatistics, Converter={StaticResource ShowWhenTrue}}">
+                                <StackPanel Margin="0,26,0,12" Visibility="{Binding HasStatistics, Converter={StaticResource ShowWhenTrue}}">
                                     <TextBlock Text="Laser statistics" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
                                     <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Statistics}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Grid Margin="0,2">
+                                                <Grid Margin="0,4">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="168" />
                                                         <ColumnDefinition Width="*" />
@@ -247,13 +262,13 @@
                           SelectedItem="{Binding SelectedGadget, Mode=OneWay}"
                           DropDownOpened="Choice_DropDownOpened"
                           DropDownClosed="Choice_DropDownClosed" />
-                <StackPanel Width="320" Margin="0,12,0,0" HorizontalAlignment="Center"
+                <StackPanel Width="320" Margin="0,18,0,8" HorizontalAlignment="Center"
                             Visibility="{Binding HasGadget, Converter={StaticResource ShowWhenTrue}}">
                     <TextBlock Text="Gadget statistics" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
                     <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding GadgetStatistics}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,2">
+                                <Grid Margin="0,4">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="168" />
                                         <ColumnDefinition Width="*" />
@@ -266,7 +281,7 @@
                     </ItemsControl>
                 </StackPanel>
 
-                <Button Margin="0,32,0,16" HorizontalAlignment="Center" Content="Save configuration" Style="{StaticResource ActionButton}" Click="SaveConfiguration_Click" />
+                <Button Margin="0,40,0,28" HorizontalAlignment="Center" Content="Save configuration" Style="{StaticResource ActionButton}" Click="SaveConfiguration_Click" />
             </StackPanel>
         </ScrollViewer>
 

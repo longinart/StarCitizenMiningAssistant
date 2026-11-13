@@ -16,9 +16,9 @@ The formula stays the one in `docs/research/CRACKABILITY.md`. A new rock number 
 
 This is the order for the overlay. Finish and test one item before the next. The process stays external: screen capture of a region the user places, no game memory, no injected input.
 
-### A. Named loadouts — next
+### A. Named loadouts — in the app
 
-Save more than one setup, each with a name the user types. One loadout is the whole ship: on the Mole, that is all three turrets plus the gadget. Hofstede with Focus III and XTR-XL is one name. Helix II with XTR-XL, Surge and Rieger-C3 is another. Switching names does not mix their modules. The current single save still loads.
+The loadout page stores more than one setup, each with a name the user types. One loadout is the whole ship: on the Mole, that is all three turrets plus the gadget. Saving a new name leaves the other names unchanged. Switching names loads that saved setup. The current screen is kept separately and restored on the next start. An older file with one setup still loads, under the name Loadout.
 
 ### B. Compare every named loadout to one rock
 
