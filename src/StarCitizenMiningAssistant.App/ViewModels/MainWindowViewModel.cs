@@ -6,12 +6,14 @@ using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
 using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Core.Recognition;
+using StarCitizenMiningAssistant.Infrastructure.Persistence;
 
 namespace StarCitizenMiningAssistant.App.ViewModels;
 
 public sealed class MainWindowViewModel : ViewModelBase
 {
     private readonly MiningCatalog? _catalog;
+    private bool _suspendSave;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
     private string _massText = "5000";
@@ -23,6 +25,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _verdictHeadline = "";
     private Brush _verdictBrush = Brushes.Transparent;
     private string _details = "";
+    private string _mineralSearch = "";
+    private string _copyStatus = "";
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
     {
@@ -45,9 +49,21 @@ public sealed class MainWindowViewModel : ViewModelBase
         ];
 
         _selectedGadget = Gadgets.FirstOrDefault();
-        _selectedShip = Ships.FirstOrDefault(ship => ship.Id == "misc-prospector") ?? Ships.FirstOrDefault();
-        ApplyShip();
+        foreach (var turret in Turrets)
+        {
+            turret.Changed += NotifyLoadout;
+        }
+
+        ActiveTurrets = [];
+        Minerals = new ObservableCollection<MineralRow>(
+            (catalog?.Materials ?? [])
+            .OrderBy(material => material.Name, StringComparer.OrdinalIgnoreCase)
+            .Select(material => new MineralRow(material, NotifyLoadout)));
+        MineralsView = System.Windows.Data.CollectionViewSource.GetDefaultView(Minerals);
+        MineralsView.Filter = item => item is MineralRow row && row.Matches(MineralSearch);
     }
+
+    public event EventHandler? LoadoutChanged;
 
     public string WindowTitle { get; }
 
@@ -62,6 +78,12 @@ public sealed class MainWindowViewModel : ViewModelBase
     public ObservableCollection<CatalogChoice<MiningGadget>> Gadgets { get; }
 
     public IReadOnlyList<TurretEditor> Turrets { get; }
+
+    public ObservableCollection<TurretEditor> ActiveTurrets { get; }
+
+    public ObservableCollection<MineralRow> Minerals { get; }
+
+    public System.ComponentModel.ICollectionView MineralsView { get; }
 
     public MiningShip? SelectedShip
     {
@@ -78,31 +100,61 @@ public sealed class MainWindowViewModel : ViewModelBase
     public CatalogChoice<MiningGadget>? SelectedGadget
     {
         get => _selectedGadget;
-        set => Set(ref _selectedGadget, value);
+        set
+        {
+            if (Set(ref _selectedGadget, value))
+            {
+                NotifyLoadout();
+            }
+        }
     }
 
     public string MassText
     {
         get => _massText;
-        set => Set(ref _massText, value);
+        set
+        {
+            if (Set(ref _massText, value))
+            {
+                NotifyLoadout();
+            }
+        }
     }
 
     public string ResistanceText
     {
         get => _resistanceText;
-        set => Set(ref _resistanceText, value);
+        set
+        {
+            if (Set(ref _resistanceText, value))
+            {
+                NotifyLoadout();
+            }
+        }
     }
 
     public string InstabilityText
     {
         get => _instabilityText;
-        set => Set(ref _instabilityText, value);
+        set
+        {
+            if (Set(ref _instabilityText, value))
+            {
+                NotifyLoadout();
+            }
+        }
     }
 
     public string SignatureText
     {
         get => _signatureText;
-        set => Set(ref _signatureText, value);
+        set
+        {
+            if (Set(ref _signatureText, value))
+            {
+                NotifyLoadout();
+            }
+        }
     }
 
     public string ShipNote
@@ -135,6 +187,29 @@ public sealed class MainWindowViewModel : ViewModelBase
         private set => Set(ref _details, value);
     }
 
+    public string MineralSearch
+    {
+        get => _mineralSearch;
+        set
+        {
+            if (Set(ref _mineralSearch, value))
+            {
+                MineralsView.Refresh();
+            }
+        }
+    }
+
+    public string CopyStatus
+    {
+        get => _copyStatus;
+        private set => Set(ref _copyStatus, value);
+    }
+
+    public void NoteCopied(string mineralName)
+    {
+        CopyStatus = "Copied " + mineralName + " signatures.";
+    }
+
     public static MainWindowViewModel Create(MiningCatalog catalog)
     {
         ArgumentNullException.ThrowIfNull(catalog);
@@ -143,6 +218,77 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public static MainWindowViewModel CreateMissing(string error) =>
         new(null, error);
+
+    public void SelectBaseShip(string shipId)
+    {
+        var ship = Ships.FirstOrDefault(item => item.Id == shipId);
+        if (ship is null)
+        {
+            return;
+        }
+
+        SelectedShip = ship;
+    }
+
+    public SavedLoadout CaptureLoadout() =>
+        new()
+        {
+            ShipId = SelectedShip?.Id ?? "",
+            GadgetId = SelectedGadget?.Item?.Id,
+            MassText = MassText,
+            ResistanceText = ResistanceText,
+            InstabilityText = InstabilityText,
+            SignatureText = SignatureText,
+            Turrets = Turrets.Where(turret => turret.IsActive).Select(turret => turret.Capture()).ToList(),
+            TrackedMinerals = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList()
+        };
+
+    public void Restore(SavedLoadout saved)
+    {
+        ArgumentNullException.ThrowIfNull(saved);
+        _suspendSave = true;
+        try
+        {
+            SelectBaseShip(saved.ShipId);
+            if (SelectedShip?.Id != saved.ShipId)
+            {
+                return;
+            }
+
+            MassText = string.IsNullOrWhiteSpace(saved.MassText) ? MassText : saved.MassText;
+            ResistanceText = string.IsNullOrWhiteSpace(saved.ResistanceText) ? ResistanceText : saved.ResistanceText;
+            InstabilityText = saved.InstabilityText ?? "";
+            SignatureText = saved.SignatureText ?? "";
+            SelectedGadget = Gadgets.FirstOrDefault(choice => choice.Item?.Id == saved.GadgetId) ?? Gadgets.FirstOrDefault();
+            var active = Turrets.Where(turret => turret.IsActive).ToList();
+            for (var i = 0; i < active.Count && i < saved.Turrets.Count; i++)
+            {
+                active[i].Apply(saved.Turrets[i]);
+            }
+
+            var tracked = new HashSet<string>(saved.TrackedMinerals ?? [], StringComparer.OrdinalIgnoreCase);
+            foreach (var row in Minerals)
+            {
+                row.SetTracked(tracked.Contains(row.Name));
+            }
+        }
+        finally
+        {
+            _suspendSave = false;
+        }
+    }
+
+    public void CommitLoadout() => NotifyLoadout();
+
+    private void NotifyLoadout()
+    {
+        if (_suspendSave || SelectedShip is null)
+        {
+            return;
+        }
+
+        LoadoutChanged?.Invoke(this, EventArgs.Empty);
+    }
 
     public void Check()
     {
@@ -402,13 +548,21 @@ public sealed class MainWindowViewModel : ViewModelBase
                 var port = ports[i];
                 var heads = _catalog.Heads.Where(head => head.Size == port.Size).ToList();
                 var stock = heads.FirstOrDefault(head => head.Id == port.StockHeadId) ?? heads.FirstOrDefault();
-                Turrets[i].Activate(i + 1, port.Size, heads, stock, countThisLaser: i == 0);
+                Turrets[i].Activate(i + 1, port.Size, heads, stock, countThisLaser: i == 0, showLaserSwitch: ports.Count > 1);
             }
             else
             {
                 Turrets[i].Deactivate();
             }
         }
+
+        ActiveTurrets.Clear();
+        foreach (var turret in Turrets.Where(turret => turret.IsActive))
+        {
+            ActiveTurrets.Add(turret);
+        }
+
+        NotifyLoadout();
     }
 
     private string FormatDetails(
@@ -565,6 +719,7 @@ public sealed class TurretEditor : ViewModelBase
     private readonly ModuleSlotEditor[] _slots = [new(1), new(2), new(3)];
     private bool _isActive;
     private bool _isLaserOn;
+    private bool _showsLaserSwitch;
     private int _number;
     private int _size;
     private MiningHead? _selectedHead;
@@ -573,6 +728,10 @@ public sealed class TurretEditor : ViewModelBase
     public TurretEditor()
     {
         Heads = [];
+        foreach (var slot in _slots)
+        {
+            slot.Changed += () => Changed?.Invoke();
+        }
     }
 
     public bool IsActive
@@ -584,8 +743,16 @@ public sealed class TurretEditor : ViewModelBase
     public bool IsLaserOn
     {
         get => _isLaserOn;
-        set => Set(ref _isLaserOn, value);
+        set
+        {
+            if (Set(ref _isLaserOn, value))
+            {
+                Changed?.Invoke();
+            }
+        }
     }
+
+    public event Action? Changed;
 
     public int Number
     {
@@ -605,7 +772,13 @@ public sealed class TurretEditor : ViewModelBase
         }
     }
 
-    public string Heading => "Turret " + Number + " · size " + Size;
+    public string Heading => "Turret " + Number;
+
+    public bool ShowsLaserSwitch
+    {
+        get => _showsLaserSwitch;
+        private set => Set(ref _showsLaserSwitch, value);
+    }
 
     public ObservableCollection<MiningHead> Heads { get; }
 
@@ -617,22 +790,58 @@ public sealed class TurretEditor : ViewModelBase
             if (Set(ref _selectedHead, value))
             {
                 ApplySlots();
+                Changed?.Invoke();
             }
+        }
+    }
+
+    public SavedTurret Capture() =>
+        new()
+        {
+            HeadId = SelectedHead?.Id,
+            LaserOn = IsLaserOn,
+            CraftPercent = CraftPercentText,
+            Modules = Slots.Select(slot => slot.IsEnabled ? slot.Selected?.Item?.Id : null).ToList()
+        };
+
+    public void Apply(SavedTurret saved)
+    {
+        var head = Heads.FirstOrDefault(item => item.Id == saved.HeadId);
+        if (head is not null)
+        {
+            SelectedHead = head;
+        }
+
+        IsLaserOn = saved.LaserOn;
+        CraftPercentText = string.IsNullOrWhiteSpace(saved.CraftPercent) ? "0" : saved.CraftPercent;
+        var modules = saved.Modules ?? [];
+        for (var i = 0; i < Slots.Count && i < modules.Count; i++)
+        {
+            var moduleId = modules[i];
+            Slots[i].Selected = ModuleSlotEditor.ModuleChoices.FirstOrDefault(choice => choice.Item?.Id == moduleId)
+                ?? ModuleSlotEditor.ModuleChoices[0];
         }
     }
 
     public string CraftPercentText
     {
         get => _craftPercentText;
-        set => Set(ref _craftPercentText, value);
+        set
+        {
+            if (Set(ref _craftPercentText, value))
+            {
+                Changed?.Invoke();
+            }
+        }
     }
 
     public IReadOnlyList<ModuleSlotEditor> Slots => _slots;
 
-    public void Activate(int number, int size, IReadOnlyList<MiningHead> heads, MiningHead? stock, bool countThisLaser)
+    public void Activate(int number, int size, IReadOnlyList<MiningHead> heads, MiningHead? stock, bool countThisLaser, bool showLaserSwitch)
     {
         Number = number;
         Size = size;
+        ShowsLaserSwitch = showLaserSwitch;
         Heads.Clear();
         foreach (var head in heads)
         {
@@ -690,8 +899,16 @@ public sealed class ModuleSlotEditor : ViewModelBase
     public CatalogChoice<MiningModule>? Selected
     {
         get => _selected;
-        set => Set(ref _selected, value);
+        set
+        {
+            if (Set(ref _selected, value))
+            {
+                Changed?.Invoke();
+            }
+        }
     }
+
+    public event Action? Changed;
 
     public static void SetModules(IEnumerable<MiningModule> modules)
     {
@@ -712,6 +929,75 @@ public sealed class ModuleSlotEditor : ViewModelBase
             .Select(module => new CatalogChoice<MiningModule>(module.Name, module)));
         ModuleChoices = choices;
     }
+}
+
+public sealed class MineralRow : ViewModelBase
+{
+    private readonly Action _changed;
+    private bool _isTracked;
+    private bool _isExpanded;
+
+    public MineralRow(MineableMaterial material, Action changed)
+    {
+        ArgumentNullException.ThrowIfNull(material);
+        _changed = changed;
+        Name = material.Name;
+        var numbers = material.DepositSignatures.Where(value => value > 0).ToList();
+        if (numbers.Count == 0 && material.Signature > 0)
+        {
+            numbers.Add(material.Signature);
+        }
+
+        Numbers = numbers;
+    }
+
+    public string Name { get; }
+
+    public IReadOnlyList<double> Numbers { get; }
+
+    public bool HasSignatures => Numbers.Count > 0;
+
+    public string SignatureLine => string.Join("    ", Numbers.Select(FormatNumber));
+
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set
+        {
+            if (Set(ref _isExpanded, value))
+            {
+                OnPropertyChanged(nameof(ShowSignatures));
+                OnPropertyChanged(nameof(ShowMissing));
+            }
+        }
+    }
+
+    public bool ShowSignatures => IsExpanded && HasSignatures;
+
+    public bool ShowMissing => IsExpanded && !HasSignatures;
+
+    public bool IsTracked
+    {
+        get => _isTracked;
+        set
+        {
+            if (Set(ref _isTracked, value))
+            {
+                _changed();
+            }
+        }
+    }
+
+    public void SetTracked(bool tracked) => Set(ref _isTracked, tracked);
+
+    public bool Matches(string search) =>
+        string.IsNullOrWhiteSpace(search)
+        || Name.Contains(search.Trim(), StringComparison.OrdinalIgnoreCase);
+
+    private static string FormatNumber(double value) =>
+        value == Math.Truncate(value)
+            ? value.ToString("0", CultureInfo.InvariantCulture)
+            : value.ToString("0.##", CultureInfo.InvariantCulture);
 }
 
 public abstract class ViewModelBase : System.ComponentModel.INotifyPropertyChanged

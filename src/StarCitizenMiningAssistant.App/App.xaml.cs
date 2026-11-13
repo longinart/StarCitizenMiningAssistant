@@ -6,6 +6,7 @@ using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Diagnostics;
 using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Infrastructure.Diagnostics;
+using StarCitizenMiningAssistant.Infrastructure.Persistence;
 
 namespace StarCitizenMiningAssistant.App;
 
@@ -38,12 +39,32 @@ public partial class App : Application
         {
             var catalog = MiningCatalog.Parse(File.ReadAllText(catalogPath));
             WriteInformation("Loaded equipment catalog " + catalog.GameVersion + ".");
-            return MainWindowViewModel.Create(catalog);
+            var viewModel = MainWindowViewModel.Create(catalog);
+            var saved = LoadoutFile.TryLoad();
+            if (saved is not null && !string.IsNullOrWhiteSpace(saved.ShipId))
+            {
+                viewModel.Restore(saved);
+            }
+
+            viewModel.LoadoutChanged += (_, _) => SaveLoadout(viewModel);
+            return viewModel;
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
         {
             WriteInformation("Equipment catalog failed to load: " + ex.Message);
             return MainWindowViewModel.CreateMissing(ex.Message);
+        }
+    }
+
+    private void SaveLoadout(MainWindowViewModel viewModel)
+    {
+        try
+        {
+            LoadoutFile.Save(viewModel.CaptureLoadout());
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            WriteInformation("Loadout was not saved: " + ex.Message);
         }
     }
 

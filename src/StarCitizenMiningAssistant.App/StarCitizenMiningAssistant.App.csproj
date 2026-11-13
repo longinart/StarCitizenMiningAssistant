@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <Content Include="..\..\data\mining-equipment.json" Link="data\mining-equipment.json" CopyToOutputDirectory="PreserveNewest" />
+    <Resource Include="..\..\media\golem.png" Link="Media\golem.png" />
+    <Resource Include="..\..\media\Prospector.png" Link="Media\Prospector.png" />
+    <Resource Include="..\..\media\MOLE.png" Link="Media\MOLE.png" />
   </ItemGroup>
 
   <PropertyGroup>

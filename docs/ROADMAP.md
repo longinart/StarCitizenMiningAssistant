@@ -24,7 +24,7 @@ Do this before any scanner or overlay work.
 5. When at least two independent sources agree on a worked example, encode that example as an xUnit fixture and implement only the part the fixture covers.
 6. A formula disagreement stays unimplemented until a worked example is verified. An equipment-number disagreement uses the SCMiner value, decision 011. Do not pick a formula because it looks familiar.
 
-The manual check window calls this engine. OCR and the overlay still wait until these tests pass.
+The calculator stays in Core and is covered by the tests. The window no longer asks for a rock by hand. OCR and the overlay still wait until these tests pass.
 
 ## 3. Equipment configuration and profiles
 

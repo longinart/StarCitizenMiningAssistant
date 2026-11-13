@@ -4,182 +4,221 @@
         xmlns:local="clr-namespace:StarCitizenMiningAssistant.App"
         xmlns:vm="clr-namespace:StarCitizenMiningAssistant.App.ViewModels"
         Title="{Binding WindowTitle}"
-        Height="860"
-        Width="820"
-        MinHeight="640"
-        MinWidth="680"
+        Height="820"
+        Width="1180"
+        MinHeight="680"
+        MinWidth="980"
         WindowStartupLocation="CenterScreen"
-        Background="#FF12161C"
+        Background="#FF16191D"
         FontFamily="Segoe UI"
-        TextOptions.TextFormattingMode="Display">
+        TextOptions.TextFormattingMode="Display"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <local:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FFE7EDF5" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="0,4,12,0" />
-            <Setter Property="Padding" Value="6,4" />
-            <Setter Property="Background" Value="#FF0E131A" />
-            <Setter Property="Foreground" Value="#FFE7EDF5" />
-            <Setter Property="BorderBrush" Value="#FF314052" />
-            <Setter Property="CaretBrush" Value="#FFE7EDF5" />
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Margin" Value="0,4,12,0" />
-            <Setter Property="Padding" Value="4,4" />
-        </Style>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="#FF9AA8B8" />
-            <Setter Property="Margin" Value="0,8,0,0" />
+            <Setter Property="Foreground" Value="#FFA7B0BA" />
+            <Setter Property="Margin" Value="0,14,0,6" />
+            <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style x:Key="ShipButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="280" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent" CornerRadius="16" Padding="12,8,12,16">
+                            <ContentPresenter HorizontalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#33262B31" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
-    <DockPanel Margin="22">
-        <StackPanel DockPanel.Dock="Top">
-            <TextBlock Text="{Binding ProductName}" FontSize="22" FontWeight="SemiBold" />
-            <TextBlock Text="{Binding VersionText}" Margin="0,4,0,0" Foreground="#FFD4A24C" />
-            <TextBlock Text="{Binding CatalogNote}" Margin="0,6,0,0" Foreground="#FF9AA8B8" TextWrapping="Wrap" />
-        </StackPanel>
+    <Grid x:Name="Root">
+        <Ellipse Width="720" Height="260" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Opacity="0.55">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#33E08A3C" Offset="0" />
+                    <GradientStop Color="#0016191D" Offset="1" />
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Ellipse Width="420" Height="180" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,20,0,0" IsHitTestVisible="False" Opacity="0.35">
+            <Ellipse.Fill>
+                <RadialGradientBrush>
+                    <GradientStop Color="#223A4450" Offset="0" />
+                    <GradientStop Color="#0016191D" Offset="1" />
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
 
-        <TextBlock DockPanel.Dock="Bottom"
-                   Margin="0,12,0,0"
-                   Foreground="#FF9AA8B8"
-                   TextWrapping="Wrap"
-                   Text="This program does not attach to the game, read its memory, send input, or change game files." />
+        <Button x:Name="ChangeShipButton"
+                Content="Change ship"
+                Style="{StaticResource GhostButton}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,18,28,0"
+                Visibility="Collapsed"
+                Click="ChangeShip_Click" />
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,16,0,0">
-            <StackPanel>
-                <TextBlock Style="{StaticResource FieldLabel}" Text="Rock" Margin="0" />
-                <UniformGrid Columns="4" Margin="0,6,0,0">
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Mass kg" Margin="0" />
-                        <TextBox Text="{Binding MassText, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Resistance %" Margin="0" />
-                        <TextBox Text="{Binding ResistanceText, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Instability (optional)" Margin="0" />
-                        <TextBox Text="{Binding InstabilityText, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource FieldLabel}" Text="Signature (optional)" Margin="0" />
-                        <TextBox Text="{Binding SignatureText, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                </UniformGrid>
+        <Grid x:Name="Stage" VerticalAlignment="Center" Margin="24,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button x:Name="GolemButton" Grid.Column="0" Style="{StaticResource ShipButton}" HorizontalAlignment="Center" Click="Golem_Click">
+                <StackPanel>
+                    <Image Source="Media/golem.png" Height="150" Stretch="Uniform" />
+                    <TextBlock Text="Golem" FontSize="20" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="ProspectorButton" Grid.Column="1" Style="{StaticResource ShipButton}" HorizontalAlignment="Center" Click="Prospector_Click">
+                <StackPanel>
+                    <Image Source="Media/Prospector.png" Height="150" Stretch="Uniform" />
+                    <TextBlock Text="Prospector" FontSize="20" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="MoleButton" Grid.Column="2" Style="{StaticResource ShipButton}" HorizontalAlignment="Center" Click="Mole_Click">
+                <StackPanel>
+                    <Image Source="Media/MOLE.png" Height="150" Stretch="Uniform" />
+                    <TextBlock Text="Mole" FontSize="20" HorizontalAlignment="Center" Margin="0,12,0,0" />
+                </StackPanel>
+            </Button>
+        </Grid>
 
-                <TextBlock Style="{StaticResource FieldLabel}" Text="Ship" />
-                <ComboBox ItemsSource="{Binding Ships}"
-                          SelectedItem="{Binding SelectedShip}"
-                          DisplayMemberPath="Name" />
-                <TextBlock Text="{Binding ShipNote}" Margin="0,4,0,0" Foreground="#FFD4A24C" TextWrapping="Wrap" />
+        <TextBlock x:Name="Prompt"
+                   Text="Select your ship"
+                   FontSize="32"
+                   Foreground="#FFE08A3C"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,300,0,0" />
 
-                <ItemsControl ItemsSource="{Binding Turrets}" Margin="0,8,0,0">
+        <ScrollViewer x:Name="Loadout"
+                      Margin="80,230,80,24"
+                      Opacity="0"
+                      IsHitTestVisible="False"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel MaxWidth="1080" HorizontalAlignment="Center">
+                <ItemsControl ItemsSource="{Binding ActiveTurrets}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Margin="0,8,0,0"
-                                    Padding="12"
-                                    Background="#FF1C2430"
-                                    CornerRadius="8"
-                                    Visibility="{Binding IsActive, Converter={StaticResource ShowWhenTrue}}">
-                                <StackPanel>
-                                    <DockPanel>
-                                        <CheckBox DockPanel.Dock="Right"
-                                                  Content="Count this laser"
-                                                  IsChecked="{Binding IsLaserOn}"
-                                                  Foreground="#FFE7EDF5"
-                                                  VerticalAlignment="Center" />
-                                        <TextBlock Text="{Binding Heading}" FontWeight="SemiBold" VerticalAlignment="Center" />
-                                    </DockPanel>
-                                    <TextBlock Style="{StaticResource FieldLabel}" Text="Mining head" />
-                                    <ComboBox ItemsSource="{Binding Heads}"
-                                              SelectedItem="{Binding SelectedHead}"
-                                              DisplayMemberPath="Name" />
-                                    <TextBlock Style="{StaticResource FieldLabel}" Text="Craft power %" />
-                                    <TextBox Width="120"
-                                             HorizontalAlignment="Left"
-                                             Text="{Binding CraftPercentText, UpdateSourceTrigger=PropertyChanged}" />
-                                    <ItemsControl ItemsSource="{Binding Slots}" Margin="0,6,0,0">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <DockPanel Margin="0,4,0,0">
-                                                    <TextBlock DockPanel.Dock="Left"
-                                                               Width="72"
-                                                               VerticalAlignment="Center"
-                                                               Foreground="#FF9AA8B8"
-                                                               Text="{Binding Label}" />
-                                                    <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
-                                                              SelectedItem="{Binding Selected}"
-                                                              DisplayMemberPath="Name"
-                                                              IsEnabled="{Binding IsEnabled}">
-                                                        <ComboBox.ItemContainerStyle>
-                                                            <Style TargetType="ComboBoxItem">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding IsHeader}" Value="True">
-                                                                        <Setter Property="IsEnabled" Value="False" />
-                                                                        <Setter Property="FontStyle" Value="Italic" />
-                                                                        <Setter Property="HorizontalContentAlignment" Value="Center" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </ComboBox.ItemContainerStyle>
-                                                    </ComboBox>
-                                                </DockPanel>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </StackPanel>
-                            </Border>
+                            <StackPanel Width="320" Margin="14,0">
+                                <DockPanel Margin="0,0,0,8" Visibility="{Binding ShowsLaserSwitch, Converter={StaticResource ShowWhenTrue}}">
+                                    <CheckBox DockPanel.Dock="Right"
+                                              Content="Count this laser"
+                                              IsChecked="{Binding IsLaserOn}"
+                                              VerticalAlignment="Center" />
+                                    <TextBlock Text="{Binding Heading}" VerticalAlignment="Center" Foreground="#FFE6E8EB" FontSize="16" />
+                                </DockPanel>
+                                <ComboBox ItemsSource="{Binding Heads}"
+                                          SelectedItem="{Binding SelectedHead, Mode=OneWay}"
+                                          DropDownOpened="Choice_DropDownOpened"
+                                          DropDownClosed="Choice_DropDownClosed" />
+                                <TextBlock Style="{StaticResource FieldLabel}" Text="Craft power %" />
+                                <TextBox Width="120" HorizontalAlignment="Left"
+                                         Text="{Binding CraftPercentText, UpdateSourceTrigger=PropertyChanged}" />
+                                <ItemsControl ItemsSource="{Binding Slots}" Margin="0,4,0,0">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="0,8,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource ShowWhenTrue}}">
+                                                <TextBlock DockPanel.Dock="Left" Width="78" VerticalAlignment="Center" Foreground="#FFA7B0BA" Text="{Binding Label}" />
+                                                <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
+                                                          SelectedItem="{Binding Selected, Mode=OneWay}"
+                                                          DropDownOpened="Choice_DropDownOpened"
+                                                          DropDownClosed="Choice_DropDownClosed">
+                                                    <ComboBox.ItemContainerStyle>
+                                                        <Style TargetType="ComboBoxItem" BasedOn="{StaticResource {x:Type ComboBoxItem}}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsHeader}" Value="True">
+                                                                    <Setter Property="IsEnabled" Value="False" />
+                                                                    <Setter Property="FontStyle" Value="Italic" />
+                                                                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </ComboBox.ItemContainerStyle>
+                                                </ComboBox>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <TextBlock Style="{StaticResource FieldLabel}" Text="Gadget" />
-                <ComboBox Width="280"
-                          HorizontalAlignment="Left"
+                <TextBlock Style="{StaticResource FieldLabel}" Text="Gadget" HorizontalAlignment="Center" />
+                <ComboBox Width="320" HorizontalAlignment="Center"
                           ItemsSource="{Binding Gadgets}"
-                          SelectedItem="{Binding SelectedGadget}"
-                          DisplayMemberPath="Name" />
+                          SelectedItem="{Binding SelectedGadget, Mode=OneWay}"
+                          DropDownOpened="Choice_DropDownOpened"
+                          DropDownClosed="Choice_DropDownClosed" />
 
-                <TextBlock Margin="0,8,0,0"
-                           Foreground="#FF9AA8B8"
-                           TextWrapping="Wrap"
-                           Text="Extract power and inert-material values are stored on modules. This check uses laser power, resistance, instability, green zone, charge rate, and shatter." />
-
-                <Button Margin="0,16,0,0"
-                        Padding="14,8"
-                        HorizontalAlignment="Left"
-                        Content="Check rock"
-                        Click="Check_Click" />
-
-                <TextBlock Margin="0,16,0,0"
-                           FontSize="32"
-                           FontWeight="Bold"
-                           Text="{Binding VerdictHeadline}"
-                           Foreground="{Binding VerdictBrush}">
-                    <TextBlock.Style>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="Visibility" Value="Visible" />
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding VerdictHeadline}" Value="">
-                                    <Setter Property="Visibility" Value="Collapsed" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Margin="0,8,0,0"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Text="{Binding Verdict}"
-                           TextWrapping="Wrap" />
-                <TextBlock Margin="0,8,0,0"
-                           Foreground="#FF9AA8B8"
-                           Text="{Binding Details}"
-                           TextWrapping="Wrap" />
+                <Button Margin="0,28,0,12" HorizontalAlignment="Center" Content="Save configuration" Click="SaveConfiguration_Click" />
             </StackPanel>
         </ScrollViewer>
-    </DockPanel>
+
+        <Grid x:Name="MineralsPage" Margin="48,28,48,20" Opacity="0" IsHitTestVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Style="{StaticResource GhostButton}" Content="Loadout" Click="BackToLoadout_Click" />
+                <TextBlock Text="Signatures to track" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
+            </DockPanel>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,16,0,8">
+                <TextBlock Foreground="#FFA7B0BA" TextAlignment="Center" Text="Tick the minerals the overlay should watch. Click a name to show its signatures. Shift-click the name to copy them." />
+                <TextBlock Margin="0,12,0,0" HorizontalAlignment="Center" Foreground="#FFA7B0BA" Text="Search" />
+                <TextBox Width="360" Margin="0,6,0,0" HorizontalAlignment="Center"
+                         Text="{Binding MineralSearch, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="0,8,0,0" HorizontalAlignment="Center" Foreground="#FFE08A3C" Text="{Binding CopyStatus}" />
+            </StackPanel>
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ItemsControl Width="760" HorizontalAlignment="Center" ItemsSource="{Binding MineralsView}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,10">
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox IsChecked="{Binding IsTracked}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                    <Button Content="{Binding Name}"
+                                            Background="#FF16191D"
+                                            Foreground="#FFE6E8EB"
+                                            BorderThickness="0"
+                                            FontSize="16"
+                                            HorizontalAlignment="Left"
+                                            Padding="8,4"
+                                            Cursor="Hand"
+                                            Click="MineralName_Click" />
+                                </StackPanel>
+                                <TextBlock Margin="32,6,0,0" Foreground="#FFE6E8EB" FontSize="15" TextWrapping="Wrap"
+                                           Text="{Binding SignatureLine}"
+                                           Visibility="{Binding ShowSignatures, Converter={StaticResource ShowWhenTrue}}" />
+                                <TextBlock Margin="32,6,0,0" Foreground="#FFA7B0BA" FontStyle="Italic"
+                                           Text="No signature is stored for this mineral."
+                                           Visibility="{Binding ShowMissing, Converter={StaticResource ShowWhenTrue}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
 </Window>
