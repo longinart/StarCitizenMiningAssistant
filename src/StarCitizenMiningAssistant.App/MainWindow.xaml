@@ -108,6 +108,8 @@
                 <Button x:Name="NavLoadout" Content="Ship loadouts" Style="{StaticResource NavButton}" Click="ShowLoadout_Click" IsEnabled="False" />
                 <Button x:Name="NavSignatures" Content="Signatures" Style="{StaticResource NavButton}" Click="ShowSignatures_Click" IsEnabled="False" />
                 <Button x:Name="NavOverlay" Content="Overlay" Style="{StaticResource NavButton}" Click="ShowOverlay_Click" IsEnabled="False" />
+                <CheckBox Margin="16,0,0,12" Foreground="#FFE6E8EB" Content="Clicks pass through the overlay"
+                          IsChecked="{Binding ClickThrough}" />
                 <Button x:Name="NavScan" Content="Scan areas" Style="{StaticResource NavButton}" Click="ShowScan_Click" IsEnabled="False" />
             </StackPanel>
         </Border>
@@ -338,7 +340,7 @@
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
                 <TextBlock Text="Scan areas" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
                 <TextBlock Margin="0,16,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" TextAlignment="Center"
-                           Text="Place one rectangle on the signature list and one on the rock panel. Each monitor keeps its own. Read text reads the bright core of the interface numbers. A reading stays uncertain and is not used for a crack check." />
+                           Text="Place one rectangle on the signature list and one on the rock panel. Each monitor keeps its own. While the overlay is open, both rectangles are read twice a second. A dark frame keeps the last number. A signature is confirmed only when it matches one catalog deposit. A rock mass or resistance is confirmed after two identical reads, and one read stays uncertain." />
                 <TextBlock Margin="0,28,0,8" Foreground="#FFA7B0BA" Text="Monitor" />
                 <ComboBox x:Name="ScanMonitor" Width="460" HorizontalAlignment="Left" SelectionChanged="ScanMonitor_Changed" />
                 <TextBlock x:Name="ScanMonitorNote" Margin="0,10,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />

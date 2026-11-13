@@ -21,5 +21,5 @@ public sealed class OverlaySignatureHit
     public bool HasDetail { get; }
 
     public static OverlaySignatureHit From(SignatureWatchHit hit) =>
-        new(hit.Mineral, hit.DepositNumber > 0 ? "deposit " + hit.DepositNumber : "", hit.Blink);
+        new(hit.Label, "", hit.Blink);
 }

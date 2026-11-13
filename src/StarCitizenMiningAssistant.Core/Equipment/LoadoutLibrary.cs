@@ -62,7 +62,11 @@ public sealed class LoadoutLibrary
 
     public string SignatureText { get; set; } = "";
 
+    public string SignatureConfidence { get; set; } = "";
+
     public bool SoundEnabled { get; set; }
+
+    public bool ClickThrough { get; set; }
 
     public double? OverlayLeft { get; set; }
 

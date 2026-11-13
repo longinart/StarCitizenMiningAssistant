@@ -2,7 +2,10 @@ using StarCitizenMiningAssistant.Core.Equipment;
 
 namespace StarCitizenMiningAssistant.Core.Recognition;
 
-public sealed record SignatureWatchHit(string Mineral, int DepositNumber, bool Blink);
+public sealed record SignatureWatchHit(string Mineral, int DepositNumber, bool Blink)
+{
+    public string Label => DepositNumber > 0 ? DepositNumber + " × " + Mineral : Mineral;
+}
 
 public sealed class SignatureWatchResult
 {

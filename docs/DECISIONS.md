@@ -83,3 +83,31 @@ Date: 2026-11-13.
 Text is read with Windows.Media.Ocr. That API is part of Windows, so no OCR package was added. The engine returns words and does not return a confidence. The data model says an OCR value stays Uncertain or Missing until a field-specific rule in a decision promotes it. This record does not add that rule. A blank image is a failure. A blank line is dropped. Any text the engine returns is Uncertain and must not feed the crack calculator.
 
 Mass, resistance and instability are chosen only by those words on a line. A number keeps the confidence of that line. An unlabelled number is not assigned to a field. The number is parsed with the Windows culture, then the invariant culture if that fails.
+
+## 013 — One catalog deposit confirms a signature
+
+Date: 2026-11-13.
+
+Decision 012 still leaves every OCR line Uncertain. A signature is a separate field. `SignatureReading` parses the digit lines. When those lines hold one number and `MatchSignature` returns exactly one deposit, that signature becomes Confirmed. The overlay may then print the deposit count and the mineral, blink a ticked mineral, and request the sound. Zero deposits, two deposits, or two different numbers stay Uncertain. No number stays Missing. Typing in the signature box is still manual entry, which is Confirmed.
+
+This rule does not promote mass, resistance, or instability. A confirmed signature does not enter the crack check.
+
+## 014 — A missing sample keeps the last reading
+
+Date: 2026-11-13.
+
+While the overlay is open, the signature rectangle and the rock rectangle are captured about twice a second. `ReadingHold` keeps the previous field when the new sample is Missing. A sample that contains a number replaces that field. An uncertain number stays uncertain. Several dark frames in a row keep the last number. Closing the overlay stops the capture. This rule does not send input to the game.
+
+## 015 — Two identical rock reads are confirmed
+
+Date: 2026-11-13.
+
+Mass, resistance, and instability still come only from a line that contains that word. Decision 012 leaves one such line Uncertain. `StableReading` compares the new sample with the previous sample of that same field. When the two numbers agree, the field becomes Confirmed and can enter the crack check. One sample stays Uncertain, so the verdict stays Unknown until mass and resistance have each agreed once. A missing sample does not count as a disagreement and does not confirm the field. A number typed by the user stays Confirmed when the first sample matches it. A different number replaces it and stays Uncertain until the next sample agrees.
+
+The rock image is scaled up to three times, without going past 2000 pixels on a side, before Windows OCR sees it. No OCR package is added, and the old buffer cast is not used. Signature digits keep their own reader.
+
+## 016 — The overlay can sit above the game
+
+Date: 2026-11-13.
+
+The overlay window is topmost and drawn at 94 percent opacity so a borderless game can show behind it. The assistant window has a checkbox, Clicks pass through the overlay. While that box is ticked, the overlay's extended style includes WS_EX_TRANSPARENT, so the mouse hit test skips this window. The program does not call SendInput and does not synthesize a click. Untick the box to move or close the overlay. The choice is saved in the loadout file and starts unticked. The rectangle-placement window is unchanged: it is topmost only while a rectangle is being dragged.

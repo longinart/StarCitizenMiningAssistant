@@ -32,6 +32,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     private LoadoutNameChoice? _selectedLoadoutName;
     private readonly LoadoutLibrary _library = new();
     private bool _applyingScan;
+    private ObservedValue<double>? _lastMassSample;
+    private ObservedValue<double>? _lastResistanceSample;
+    private ObservedValue<double>? _lastInstabilitySample;
     private IReadOnlyList<OverlayCrackRow> _crackRows = [];
     private IReadOnlyList<OverlaySignatureHit> _signatureHits = [];
     private string _soundKey = "";
@@ -189,6 +192,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             if (Set(ref _signatureText, value))
             {
+                if (!_applyingScan && !_suspendSave)
+                {
+                    _library.SignatureConfidence = "";
+                }
+
                 NotifyLoadout();
             }
         }
@@ -309,7 +317,9 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.ResistanceConfidence = saved.ResistanceConfidence ?? "";
             _library.InstabilityConfidence = saved.InstabilityConfidence ?? "";
             _library.SignatureText = saved.SignatureText;
+            _library.SignatureConfidence = saved.SignatureConfidence ?? "";
             _library.SoundEnabled = saved.SoundEnabled;
+            _library.ClickThrough = saved.ClickThrough;
             _library.OverlayLeft = saved.OverlayLeft;
             _library.OverlayTop = saved.OverlayTop;
             _library.OverlayWidth = saved.OverlayWidth;
@@ -320,6 +330,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             InstabilityText = saved.InstabilityText ?? "";
             SignatureText = saved.SignatureText ?? "";
             OnPropertyChanged(nameof(SoundEnabled));
+            OnPropertyChanged(nameof(ClickThrough));
 
             var screen = _library.Draft ?? _library.Find(_library.ActiveName);
             if (screen is not null)
@@ -482,6 +493,25 @@ public sealed class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public event EventHandler? ClickThroughChanged;
+
+    public bool ClickThrough
+    {
+        get => _library.ClickThrough;
+        set
+        {
+            if (_library.ClickThrough == value)
+            {
+                return;
+            }
+
+            _library.ClickThrough = value;
+            OnPropertyChanged(nameof(ClickThrough));
+            ClickThroughChanged?.Invoke(this, EventArgs.Empty);
+            NotifyLoadout();
+        }
+    }
+
     public string OverlayNote { get; private set; } = "Type the rock here until the scan area can read it.";
 
     public double? OverlayLeft => _library.OverlayLeft;
@@ -541,6 +571,80 @@ public sealed class MainWindowViewModel : ViewModelBase
         NotifyLoadout();
     }
 
+    public ObservedValue<double> ApplySignatureScan(IReadOnlyList<ObservedValue<string>> lines)
+    {
+        ArgumentNullException.ThrowIfNull(lines);
+        var reading = _catalog is null
+            ? ObservedValue<double>.Missing()
+            : SignatureReading.FromLines(_catalog, lines);
+        ApplySignature(reading);
+        return reading;
+    }
+
+    public HeldReading WatchSignature(IReadOnlyList<ObservedValue<string>>? lines)
+    {
+        var sample = lines is null || _catalog is null
+            ? ObservedValue<double>.Missing()
+            : SignatureReading.FromLines(_catalog, lines);
+        var previous = RockScan.Value(SignatureText, _library.SignatureConfidence);
+        var held = ReadingHold.Next(previous, sample);
+        if (!held.Equals(previous))
+        {
+            ApplySignature(held);
+        }
+
+        return new HeldReading(sample, held);
+    }
+
+    public RockOcrFields WatchRock(RockOcrFields? sample)
+    {
+        var current = ReadRock();
+        var mass = StableReading.Next(current.MassKilograms, _lastMassSample, sample?.Mass ?? ObservedValue<double>.Missing());
+        var resistance = StableReading.Next(current.ResistancePercent, _lastResistanceSample, sample?.Resistance ?? ObservedValue<double>.Missing());
+        var instability = StableReading.Next(current.Instability, _lastInstabilitySample, sample?.Instability ?? ObservedValue<double>.Missing());
+        _lastMassSample = mass.LastSample;
+        _lastResistanceSample = resistance.LastSample;
+        _lastInstabilitySample = instability.LastSample;
+        var held = new RockOcrFields
+        {
+            Mass = mass.Shown,
+            Resistance = resistance.Shown,
+            Instability = instability.Shown
+        };
+        if (!held.Mass.Equals(current.MassKilograms)
+            || !held.Resistance.Equals(current.ResistancePercent)
+            || !held.Instability.Equals(current.Instability))
+        {
+            ApplyRockScan(held);
+        }
+
+        return held;
+    }
+
+    private void ApplySignature(ObservedValue<double> reading)
+    {
+        _applyingScan = true;
+        try
+        {
+            _library.SignatureConfidence = RockScan.ConfidenceName(reading.Confidence);
+            var text = reading.Confidence == RecognitionConfidence.Missing
+                ? ""
+                : reading.Value.ToString("0.###", CultureInfo.InvariantCulture);
+            if (_signatureText == text)
+            {
+                NotifyLoadout();
+            }
+            else
+            {
+                SignatureText = text;
+            }
+        }
+        finally
+        {
+            _applyingScan = false;
+        }
+    }
+
     public CaptureRectangle? CaptureOf(string deviceName, CaptureTarget target)
     {
         var monitor = _library.FindCapture(deviceName);
@@ -587,9 +691,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         }
         else
         {
-            var signature = TryParseNumber(SignatureText, out var parsed)
-                ? ObservedValue<double>.Confirmed(parsed)
-                : ObservedValue<double>.Missing();
+            var signature = RockScan.Value(SignatureText, _library.SignatureConfidence);
             var tracked = Minerals.Where(row => row.IsTracked).Select(row => row.Name);
             var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled);
             _signatureHits = result.Hits.Select(OverlaySignatureHit.From).ToList();

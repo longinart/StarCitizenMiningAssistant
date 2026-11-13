@@ -8,6 +8,8 @@
         MinHeight="360"
         MinWidth="320"
         Background="#FF16191D"
+        Opacity="0.94"
+        Topmost="True"
         FontFamily="Segoe UI"
         TextOptions.TextFormattingMode="Display"
         ResizeMode="CanResize"
@@ -25,6 +27,8 @@
         </Grid.RowDefinitions>
         <StackPanel>
             <TextBlock Text="Rock" FontSize="18" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
+            <TextBlock Margin="0,6,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap"
+                       Text="This window stays above other windows. Tick Clicks pass through on the assistant to let the mouse reach the game. Untick it there to move this window." />
             <TextBlock Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" Text="{Binding OverlayNote}" />
             <TextBlock Margin="0,16,0,6" Foreground="#FFA7B0BA" Text="Mass" />
             <TextBox Text="{Binding MassText, UpdateSourceTrigger=PropertyChanged}" />
@@ -35,7 +39,7 @@
             <TextBlock Margin="0,14,0,6" Foreground="#FFA7B0BA" Text="Signature" />
             <TextBox Text="{Binding SignatureText, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Margin="0,6,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap"
-                       Text="Typed in until a scan is confirmed. An uncertain read does not blink." />
+                       Text="A scan that matches one catalog deposit is confirmed. Typing here confirms it too. An uncertain read does not blink." />
             <ItemsControl Margin="0,10,0,0" ItemsSource="{Binding SignatureHits}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

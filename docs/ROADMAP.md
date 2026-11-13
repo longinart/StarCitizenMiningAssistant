@@ -34,11 +34,11 @@ Scan areas lets the user place one rectangle on the signature list and another o
 
 ### E. OCR — in the app
 
-Scan areas can read the placed rectangle. No OCR package was added. Interface digits are read from the bright core of each glyph, because Windows OCR misses this small font. Every line is an `ObservedValue<T>`. Decision 012 does not promote a line, so a reading stays Uncertain and does not change the crack check.
+Scan areas can read the placed rectangle. No OCR package was added. Interface digits are read from the bright core of each glyph, because Windows OCR misses this small font. Every line is an `ObservedValue<T>`. Decision 012 does not promote a line. Decision 013 promotes a signature only when that number is one catalog deposit.
 
 ### F. Signature watch — in the app
 
-A confirmed signature is matched to the catalog. The overlay prints the mineral name beside it. Minerals ticked on the signature page blink. A sound plays only when that box is ticked, and not again for the same mineral. An uncertain OCR line does not match or blink.
+A confirmed signature is matched to the catalog. The overlay prints the deposit count and the mineral. Minerals ticked on the signature page blink. A sound plays only when that box is ticked, and not again for the same mineral. An uncertain OCR line does not match or blink.
 
 ### G. Rock scan into the comparison — in the app
 
@@ -46,7 +46,23 @@ Read text on the rock rectangle fills the overlay. A confirmed mass and resistan
 
 ### H. Game check — waiting on the layout
 
-The program has no path that sends keyboard, mouse, or controller input. The overlay is a normal window. The placement window is topmost only while a rectangle is being dragged, and it closes on Enter or Escape. Still to confirm on the borderless layout: both rectangles land on the right panels, and the overlay stays where it was placed.
+The program has no path that sends keyboard, mouse, or controller input. The overlay is topmost, and clicks pass through only while that box is ticked. The placement window is topmost only while a rectangle is being dragged, and it closes on Enter or Escape. Still to confirm on the borderless layout: both rectangles land on the right panels, and the overlay stays where it was placed.
+
+### I. One catalog signature — in the app
+
+A digit line that equals exactly one catalog deposit is confirmed. The overlay prints the deposit count and the mineral, such as 2 × Bexalite. A ticked mineral blinks, and the sound plays once for that mineral when the checkbox is on. A near miss, a blank frame, or a number shared by two minerals stays uncertain and does not blink. Mass and resistance are not promoted, so the crack verdict stays unchanged.
+
+### J. Watch while the overlay is open — in the app
+
+The overlay reads both rectangles about twice a second. A dark frame keeps the last number. A different number replaces it. The scan page shows the last signature and the last rock fields. Closing the overlay stops the capture. An uncertain rock field still does not produce Crackable.
+
+### K. Two identical rock reads — in the app
+
+The rock rectangle is scaled up and read with Windows OCR. Mass, resistance, and instability are taken only from a line that contains that word. The same number on two samples confirms that field. One sample stays uncertain, so the verdict stays Unknown until both mass and resistance are confirmed. A dark frame does not break the pair.
+
+### L. Overlay above the game — in the app
+
+The overlay stays above other windows and is slightly translucent. Clicks pass through the overlay only while that box is ticked on the assistant window. Untick it to move the overlay. The program does not send keyboard, mouse, or controller input.
 
 ## Later
 

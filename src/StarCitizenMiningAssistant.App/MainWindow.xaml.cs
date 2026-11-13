@@ -11,6 +11,7 @@ using StarCitizenMiningAssistant.Core.Capture;
 using StarCitizenMiningAssistant.Core.Recognition;
 using StarCitizenMiningAssistant.Infrastructure.Capture;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core.Equipment;
 
@@ -25,6 +26,8 @@ public partial class MainWindow : Window
     private bool _onPicker = true;
     private Button? _chosenButton;
     private OverlayWindow? _overlay;
+    private DispatcherTimer? _watch;
+    private bool _watchBusy;
 
     private static SolidColorBrush Freeze(Color color)
     {
@@ -43,6 +46,7 @@ public partial class MainWindow : Window
         ArgumentNullException.ThrowIfNull(viewModel);
         InitializeComponent();
         DataContext = viewModel;
+        viewModel.ClickThroughChanged += (_, _) => ApplyOverlayClickThrough();
         SizeChanged += Window_SizeChanged;
         if (FindRequestedMonitor() is MonitorInfo monitor)
         {
@@ -237,14 +241,185 @@ public partial class MainWindow : Window
                 DataContext = DataContext,
                 Owner = this
             };
-            _overlay.Closed += (_, _) => _overlay = null;
+            _overlay.Closed += (_, _) =>
+            {
+                _overlay = null;
+                StopWatch();
+            };
             _overlay.PlaceFromViewModel();
             _overlay.Show();
+            ApplyOverlayClickThrough();
+            StartWatch();
             return;
         }
 
         _overlay.Activate();
+        StartWatch();
     }
+
+    private void ApplyOverlayClickThrough()
+    {
+        if (_overlay is null || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        _overlay.SetClickThrough(viewModel.ClickThrough);
+        if (viewModel.ClickThrough && _overlay.IsKeyboardFocusWithin)
+        {
+            Focus();
+        }
+    }
+
+    private void StartWatch()
+    {
+        _watch ??= new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(500) };
+        if (_watch.IsEnabled)
+        {
+            return;
+        }
+
+        _watch.Tick += WatchTick;
+        _watch.Start();
+    }
+
+    private void StopWatch()
+    {
+        if (_watch is null)
+        {
+            return;
+        }
+
+        _watch.Stop();
+        _watch.Tick -= WatchTick;
+    }
+
+    private async void WatchTick(object? sender, EventArgs e)
+    {
+        if (_watchBusy || _overlay is null || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        _watchBusy = true;
+        try
+        {
+            var monitor = WatchMonitor(viewModel);
+            if (_overlay is null)
+            {
+                return;
+            }
+
+            SignatureReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Signatures);
+            if (_overlay is null)
+            {
+                return;
+            }
+
+            RockReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Rock);
+        }
+        finally
+        {
+            _watchBusy = false;
+        }
+    }
+
+    private MonitorInfo? WatchMonitor(MainWindowViewModel viewModel)
+    {
+        if (ScanMonitor.SelectedItem is MonitorInfo selected
+            && HasRectangle(viewModel, selected))
+        {
+            return selected;
+        }
+
+        return DisplayMonitors.List().FirstOrDefault(monitor => HasRectangle(viewModel, monitor));
+    }
+
+    private static bool HasRectangle(MainWindowViewModel viewModel, MonitorInfo monitor) =>
+        viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Signatures) is { IsPlaceable: true }
+        || viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Rock) is { IsPlaceable: true };
+
+    private async Task<IReadOnlyList<ObservedValue<string>>?> ReadWatchAsync(
+        MainWindowViewModel viewModel,
+        MonitorInfo? monitor,
+        CaptureTarget target)
+    {
+        if (monitor is null)
+        {
+            return null;
+        }
+
+        var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
+        if (rectangle is not { IsPlaceable: true })
+        {
+            return null;
+        }
+
+        var captured = RegionImage.CaptureBmp(
+            monitor.Left + (int)Math.Round(rectangle.Left),
+            monitor.Top + (int)Math.Round(rectangle.Top),
+            (int)Math.Round(rectangle.Width),
+            (int)Math.Round(rectangle.Height));
+        if (captured is null)
+        {
+            return null;
+        }
+
+        var document = target == CaptureTarget.Rock
+            ? await new WindowsOcrReader().ReadLabelsAsync(captured)
+            : await new WindowsOcrReader().ReadAsync(captured);
+        return document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
+    }
+
+    private async Task<string> DescribeTarget(MainWindowViewModel viewModel, MonitorInfo? monitor, CaptureTarget target)
+    {
+        var placed = monitor is not null
+            && viewModel.CaptureOf(monitor.DeviceName, target) is { IsPlaceable: true };
+        if (!placed)
+        {
+            var label = target == CaptureTarget.Signatures ? "signature" : "rock";
+            return "Watching. The " + label + " rectangle is not placed.";
+        }
+
+        var lines = await ReadWatchAsync(viewModel, monitor, target);
+        if (_overlay is null)
+        {
+            return "";
+        }
+
+        if (target == CaptureTarget.Signatures)
+        {
+            var reading = viewModel.WatchSignature(lines);
+            var names = string.Join(", ", viewModel.SignatureHits.Select(hit => hit.Name));
+            return "Watching. " + DescribeHeld("Signature", reading)
+                + (names.Length == 0 ? "" : " " + names);
+        }
+
+        var rock = lines is null ? null : RockOcrFields.Read(lines);
+        var held = viewModel.WatchRock(rock);
+        return "Watching. "
+            + DescribeHeld("Mass", new HeldReading(rock?.Mass ?? ObservedValue<double>.Missing(), held.Mass))
+            + " " + DescribeHeld("Resistance", new HeldReading(rock?.Resistance ?? ObservedValue<double>.Missing(), held.Resistance))
+            + " " + DescribeHeld("Instability", new HeldReading(rock?.Instability ?? ObservedValue<double>.Missing(), held.Instability));
+    }
+
+    private static string DescribeHeld(string name, HeldReading reading)
+    {
+        if (reading.Sample.Confidence == RecognitionConfidence.Missing)
+        {
+            return reading.Held.Confidence == RecognitionConfidence.Missing
+                ? name + " has no number in this frame."
+                : name + " kept " + FormatNumber(reading.Held) + ".";
+        }
+
+        var state = reading.Held.IsConfirmed ? "confirmed" : "uncertain";
+        return name + " " + FormatNumber(reading.Sample) + " " + state + ".";
+    }
+
+    private static string FormatNumber(ObservedValue<double> reading) =>
+        reading.Confidence == RecognitionConfidence.Missing
+            ? ""
+            : reading.Value.ToString("0.###", CultureInfo.InvariantCulture);
 
     private void ShowScan_Click(object sender, RoutedEventArgs e)
     {
@@ -431,7 +606,10 @@ public partial class MainWindow : Window
         }
 
         output.Text = "Reading...";
-        var document = await new WindowsOcrReader().ReadAsync(bmp);
+        var reader = new WindowsOcrReader();
+        var document = target == CaptureTarget.Rock
+            ? await reader.ReadLabelsAsync(bmp)
+            : await reader.ReadAsync(bmp);
         if (document.Failure is not null)
         {
             output.Text = document.Failure;
@@ -446,22 +624,32 @@ public partial class MainWindow : Window
 
         if (target == CaptureTarget.Signatures)
         {
-            output.Text = "Read with " + document.Language + ". These lines stay uncertain."
+            if (DataContext is not MainWindowViewModel signatureModel)
+            {
+                output.Text = "The signature could not be applied.";
+                return;
+            }
+
+            var signature = signatureModel.ApplySignatureScan(document.Lines);
+            var names = string.Join(", ", signatureModel.SignatureHits.Select(hit => hit.Name));
+            output.Text = "Read with " + document.Language + ". " + DescribeSignature(signature)
+                + (names.Length == 0 ? "" : Environment.NewLine + names)
                 + Environment.NewLine
                 + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
             return;
         }
 
         var rock = RockOcrFields.Read(document.Lines);
+        var shown = rock;
         if (DataContext is MainWindowViewModel viewModel)
         {
-            viewModel.ApplyRockScan(rock);
+            shown = viewModel.WatchRock(rock);
         }
 
-        output.Text = "Read with " + document.Language + ". Only a confirmed number changes the overlay verdict."
-            + Environment.NewLine + FormatField("Mass", rock.Mass)
-            + Environment.NewLine + FormatField("Resistance", rock.Resistance)
-            + Environment.NewLine + FormatField("Instability", rock.Instability)
+        output.Text = "Read with " + document.Language + ". Two identical reads confirm a rock number."
+            + Environment.NewLine + FormatField("Mass", shown.Mass)
+            + Environment.NewLine + FormatField("Resistance", shown.Resistance)
+            + Environment.NewLine + FormatField("Instability", shown.Instability)
             + Environment.NewLine + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
     }
 
@@ -499,6 +687,19 @@ public partial class MainWindow : Window
 
     private static string FormatLine(ObservedValue<string> line) =>
         line.Value + "   " + ConfidenceWord(line.Confidence);
+
+    private static string DescribeSignature(ObservedValue<double> signature)
+    {
+        if (signature.Confidence == RecognitionConfidence.Missing)
+        {
+            return "No signature number was read.";
+        }
+
+        var text = signature.Value.ToString("0.###", CultureInfo.InvariantCulture);
+        return signature.IsConfirmed
+            ? text + " matches one catalog deposit, so it is confirmed."
+            : text + " stays uncertain. It does not match one catalog deposit.";
+    }
 
     private static string FormatField(string name, ObservedValue<double> value) =>
         value.Confidence == RecognitionConfidence.Missing

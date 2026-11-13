@@ -162,6 +162,16 @@ public class LoadoutLibraryTests
         Assert.Null(restored.FindCapture(@"\\.\DISPLAY3")!.Signatures);
     }
 
+    [Fact]
+    public void Click_through_survives_the_saved_file()
+    {
+        var library = new LoadoutLibrary { ClickThrough = true };
+        var restored = LoadoutLibrary.TryParse(library.ToJson());
+
+        Assert.NotNull(restored);
+        Assert.True(restored.ClickThrough);
+    }
+
     private static StoredLoadout Screen(string shipId, string headId, params string[] modules) =>
         new()
         {
