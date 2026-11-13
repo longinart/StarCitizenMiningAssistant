@@ -31,7 +31,11 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _loadoutName = "";
     private LoadoutNameChoice? _selectedLoadoutName;
     private readonly LoadoutLibrary _library = new();
+    private bool _applyingScan;
     private IReadOnlyList<OverlayCrackRow> _crackRows = [];
+    private IReadOnlyList<OverlaySignatureHit> _signatureHits = [];
+    private string _soundKey = "";
+    private bool _soundArmed;
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
     {
@@ -134,6 +138,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             if (Set(ref _massText, value))
             {
+                if (!_applyingScan && !_suspendSave)
+                {
+                    _library.MassConfidence = "";
+                }
+
                 NotifyLoadout();
             }
         }
@@ -146,6 +155,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             if (Set(ref _resistanceText, value))
             {
+                if (!_applyingScan && !_suspendSave)
+                {
+                    _library.ResistanceConfidence = "";
+                }
+
                 NotifyLoadout();
             }
         }
@@ -158,6 +172,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             if (Set(ref _instabilityText, value))
             {
+                if (!_applyingScan && !_suspendSave)
+                {
+                    _library.InstabilityConfidence = "";
+                }
+
                 NotifyLoadout();
             }
         }
@@ -286,7 +305,11 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.MassText = saved.MassText;
             _library.ResistanceText = saved.ResistanceText;
             _library.InstabilityText = saved.InstabilityText;
+            _library.MassConfidence = saved.MassConfidence ?? "";
+            _library.ResistanceConfidence = saved.ResistanceConfidence ?? "";
+            _library.InstabilityConfidence = saved.InstabilityConfidence ?? "";
             _library.SignatureText = saved.SignatureText;
+            _library.SoundEnabled = saved.SoundEnabled;
             _library.OverlayLeft = saved.OverlayLeft;
             _library.OverlayTop = saved.OverlayTop;
             _library.OverlayWidth = saved.OverlayWidth;
@@ -296,6 +319,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             ResistanceText = string.IsNullOrWhiteSpace(saved.ResistanceText) ? ResistanceText : saved.ResistanceText;
             InstabilityText = saved.InstabilityText ?? "";
             SignatureText = saved.SignatureText ?? "";
+            OnPropertyChanged(nameof(SoundEnabled));
 
             var screen = _library.Draft ?? _library.Find(_library.ActiveName);
             if (screen is not null)
@@ -318,6 +342,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         }
 
         RefreshCrackRows();
+        RefreshSignatureWatch();
     }
 
     public bool SaveNamedLoadout()
@@ -439,6 +464,24 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public IReadOnlyList<OverlayCrackRow> CrackRows => _crackRows;
 
+    public IReadOnlyList<OverlaySignatureHit> SignatureHits => _signatureHits;
+
+    public bool SoundEnabled
+    {
+        get => _library.SoundEnabled;
+        set
+        {
+            if (_library.SoundEnabled == value)
+            {
+                return;
+            }
+
+            _library.SoundEnabled = value;
+            OnPropertyChanged(nameof(SoundEnabled));
+            NotifyLoadout();
+        }
+    }
+
     public string OverlayNote { get; private set; } = "Type the rock here until the scan area can read it.";
 
     public double? OverlayLeft => _library.OverlayLeft;
@@ -477,6 +520,27 @@ public sealed class MainWindowViewModel : ViewModelBase
         return true;
     }
 
+    public void ApplyRockScan(RockOcrFields fields)
+    {
+        ArgumentNullException.ThrowIfNull(fields);
+        _applyingScan = true;
+        try
+        {
+            _library.MassConfidence = RockScan.ConfidenceName(fields.Mass.Confidence);
+            _library.ResistanceConfidence = RockScan.ConfidenceName(fields.Resistance.Confidence);
+            _library.InstabilityConfidence = RockScan.ConfidenceName(fields.Instability.Confidence);
+            MassText = DisplayReading(fields.Mass);
+            ResistanceText = DisplayReading(fields.Resistance);
+            InstabilityText = DisplayReading(fields.Instability);
+        }
+        finally
+        {
+            _applyingScan = false;
+        }
+
+        NotifyLoadout();
+    }
+
     public CaptureRectangle? CaptureOf(string deviceName, CaptureTarget target)
     {
         var monitor = _library.FindCapture(deviceName);
@@ -486,6 +550,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private void NotifyLoadout()
     {
         RefreshCrackRows();
+        RefreshSignatureWatch();
         if (_suspendSave || SelectedShip is null)
         {
             return;
@@ -507,13 +572,41 @@ public sealed class MainWindowViewModel : ViewModelBase
             _crackRows = loadouts.Count == 0
                 ? []
                 : LoadoutComparison.Compare(_catalog, ReadRock(), loadouts).Select(OverlayCrackRow.From).ToList();
-            OverlayNote = RockIsReadable()
-                ? "Typed in until the scan area can read the rock."
-                : "Mass and resistance have to be numbers before a verdict.";
+            OverlayNote = RockNote();
         }
 
         OnPropertyChanged(nameof(CrackRows));
         OnPropertyChanged(nameof(OverlayNote));
+    }
+
+    private void RefreshSignatureWatch()
+    {
+        if (_catalog is null)
+        {
+            _signatureHits = [];
+        }
+        else
+        {
+            var signature = TryParseNumber(SignatureText, out var parsed)
+                ? ObservedValue<double>.Confirmed(parsed)
+                : ObservedValue<double>.Missing();
+            var tracked = Minerals.Where(row => row.IsTracked).Select(row => row.Name);
+            var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled);
+            _signatureHits = result.Hits.Select(OverlaySignatureHit.From).ToList();
+            var key = string.Join("|", result.Hits.Where(hit => hit.Blink).Select(hit => hit.Mineral));
+            if (!_suspendSave)
+            {
+                if (_soundArmed && result.PlaySound && key.Length > 0 && key != _soundKey)
+                {
+                    WatchSound.Play();
+                }
+
+                _soundKey = result.PlaySound ? key : "";
+                _soundArmed = true;
+            }
+        }
+
+        OnPropertyChanged(nameof(SignatureHits));
     }
 
     private List<StoredLoadout> ComparisonLoadouts()
@@ -533,24 +626,30 @@ public sealed class MainWindowViewModel : ViewModelBase
         return [screen];
     }
 
-    private RockReading ReadRock()
+    private RockReading ReadRock() =>
+        new(
+            RockScan.Value(MassText, _library.MassConfidence),
+            RockScan.Value(ResistanceText, _library.ResistanceConfidence),
+            RockScan.Value(InstabilityText, _library.InstabilityConfidence));
+
+    private string RockNote()
     {
-        var mass = TryParseNumber(MassText, out var parsedMass)
-            ? ObservedValue<double>.Confirmed(parsedMass)
-            : ObservedValue<double>.Missing();
-        var resistance = TryParseNumber(ResistanceText, out var parsedResistance)
-            ? ObservedValue<double>.Confirmed(parsedResistance)
-            : ObservedValue<double>.Missing();
-        var instability = string.IsNullOrWhiteSpace(InstabilityText)
-            ? ObservedValue<double>.Missing()
-            : TryParseNumber(InstabilityText, out var parsedInstability)
-                ? ObservedValue<double>.Confirmed(parsedInstability)
-                : ObservedValue<double>.Missing();
-        return new RockReading(mass, resistance, instability);
+        var rock = ReadRock();
+        if (rock.MassKilograms.Confidence == RecognitionConfidence.Uncertain
+            || rock.ResistancePercent.Confidence == RecognitionConfidence.Uncertain)
+        {
+            return "The rock scan is uncertain, so the verdict stays Unknown.";
+        }
+
+        return rock.MassKilograms.IsConfirmed && rock.ResistancePercent.IsConfirmed
+            ? "Confirmed mass and resistance are used. An uncertain scan stays Unknown."
+            : "Mass and resistance have to be confirmed before a verdict.";
     }
 
-    private bool RockIsReadable() =>
-        TryParseNumber(MassText, out _) && TryParseNumber(ResistanceText, out _);
+    private static string DisplayReading(ObservedValue<double> reading) =>
+        reading.Confidence == RecognitionConfidence.Missing
+            ? ""
+            : reading.Value.ToString("0.###", CultureInfo.CurrentCulture);
 
     private static bool Near(double? stored, double value) =>
         stored is double current && Math.Abs(current - value) < 0.5;

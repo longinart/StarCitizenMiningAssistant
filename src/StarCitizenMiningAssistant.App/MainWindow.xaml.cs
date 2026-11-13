@@ -1,6 +1,8 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -42,13 +44,56 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = viewModel;
         SizeChanged += Window_SizeChanged;
+        if (FindRequestedMonitor() is MonitorInfo monitor)
+        {
+            WindowStartupLocation = WindowStartupLocation.Manual;
+            ShowActivated = false;
+            Left = monitor.Left + 40;
+            Top = monitor.Top + 40;
+        }
     }
 
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
         DarkCaption.Apply(this);
+        PlaceOnRequestedMonitor();
     }
+
+    private static int? RequestedMonitor()
+    {
+        var text = Environment.GetEnvironmentVariable("SCMA_MONITOR");
+        return int.TryParse(text, out var number) && number > 0 ? number : null;
+    }
+
+    private static MonitorInfo? FindRequestedMonitor()
+    {
+        if (RequestedMonitor() is not int number)
+        {
+            return null;
+        }
+
+        var monitors = DisplayMonitors.List();
+        return monitors.FirstOrDefault(item =>
+            item.DeviceName.EndsWith("DISPLAY" + number, StringComparison.OrdinalIgnoreCase))
+            ?? (monitors.Count >= number ? monitors[number - 1] : null);
+    }
+
+    private void PlaceOnRequestedMonitor()
+    {
+        if (FindRequestedMonitor() is not MonitorInfo monitor)
+        {
+            return;
+        }
+
+        var width = Math.Min(1420, Math.Max(1340, monitor.Width - 80));
+        var height = Math.Min(860, Math.Max(720, monitor.Height - 80));
+        var handle = new WindowInteropHelper(this).Handle;
+        SetWindowPos(handle, IntPtr.Zero, monitor.Left + 40, monitor.Top + 40, width, height, 0x0014);
+    }
+
+    [DllImport("user32.dll")]
+    private static extern bool SetWindowPos(IntPtr hwnd, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
 
     private void Choice_DropDownOpened(object sender, EventArgs e)
     {
@@ -408,7 +453,12 @@ public partial class MainWindow : Window
         }
 
         var rock = RockOcrFields.Read(document.Lines);
-        output.Text = "Read with " + document.Language + ". Uncertain numbers are not used for a crack check."
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.ApplyRockScan(rock);
+        }
+
+        output.Text = "Read with " + document.Language + ". Only a confirmed number changes the overlay verdict."
             + Environment.NewLine + FormatField("Mass", rock.Mass)
             + Environment.NewLine + FormatField("Resistance", rock.Resistance)
             + Environment.NewLine + FormatField("Instability", rock.Instability)

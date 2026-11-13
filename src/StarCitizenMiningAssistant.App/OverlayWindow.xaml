@@ -32,6 +32,40 @@
             <TextBox Text="{Binding ResistanceText, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Margin="0,14,0,6" Foreground="#FFA7B0BA" Text="Instability" />
             <TextBox Text="{Binding InstabilityText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Margin="0,14,0,6" Foreground="#FFA7B0BA" Text="Signature" />
+            <TextBox Text="{Binding SignatureText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Margin="0,6,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap"
+                       Text="Typed in until a scan is confirmed. An uncertain read does not blink." />
+            <ItemsControl Margin="0,10,0,0" ItemsSource="{Binding SignatureHits}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,4,0,0">
+                            <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="SemiBold" Foreground="#FFE08A3C">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Blink}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard x:Name="BlinkStoryboard">
+                                                        <Storyboard AutoReverse="True" RepeatBehavior="Forever">
+                                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.2" Duration="0:0:0.45" />
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <StopStoryboard BeginStoryboardName="BlinkStoryboard" />
+                                                </DataTrigger.ExitActions>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                            <TextBlock Text="{Binding Detail}" Foreground="#FFA7B0BA"
+                                       Visibility="{Binding HasDetail, Converter={StaticResource ShowWhenTrue}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
         <ScrollViewer Grid.Row="1" Margin="0,22,0,0" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding CrackRows}">

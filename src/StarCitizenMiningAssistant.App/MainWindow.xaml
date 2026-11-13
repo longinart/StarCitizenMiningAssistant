@@ -295,7 +295,10 @@
             </Grid.RowDefinitions>
             <TextBlock Text="Signatures to track" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,16,0,8">
-                <TextBlock Foreground="#FFA7B0BA" TextAlignment="Center" Text="Tick the minerals the overlay should watch. Click a name to show its signatures. Shift-click the name to copy them." />
+                <TextBlock Foreground="#FFA7B0BA" TextAlignment="Center" TextWrapping="Wrap" Text="Tick the minerals the overlay should watch. A ticked mineral blinks when its signature is confirmed. Click a name to show its signatures. Shift-click the name to copy them." />
+                <CheckBox Margin="0,14,0,0" HorizontalAlignment="Center" Foreground="#FFE6E8EB"
+                          Content="Play a sound when a ticked mineral is confirmed"
+                          IsChecked="{Binding SoundEnabled}" />
                 <TextBlock Margin="0,12,0,0" HorizontalAlignment="Center" Foreground="#FFA7B0BA" Text="Search" />
                 <TextBox Width="360" Margin="0,6,0,0" HorizontalAlignment="Center"
                          Text="{Binding MineralSearch, UpdateSourceTrigger=PropertyChanged}" />
@@ -335,7 +338,7 @@
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
                 <TextBlock Text="Scan areas" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
                 <TextBlock Margin="0,16,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" TextAlignment="Center"
-                           Text="Place one rectangle on the signature list and one on the rock panel. Each monitor keeps its own. Read text uses Windows OCR. A reading stays uncertain and is not used for a crack check." />
+                           Text="Place one rectangle on the signature list and one on the rock panel. Each monitor keeps its own. Read text reads the bright core of the interface numbers. A reading stays uncertain and is not used for a crack check." />
                 <TextBlock Margin="0,28,0,8" Foreground="#FFA7B0BA" Text="Monitor" />
                 <ComboBox x:Name="ScanMonitor" Width="460" HorizontalAlignment="Left" SelectionChanged="ScanMonitor_Changed" />
                 <TextBlock x:Name="ScanMonitorNote" Margin="0,10,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
@@ -347,7 +350,7 @@
                     <Button Content="Show still" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="SignatureStill_Click" />
                     <Button Content="Read text" MinWidth="140" MinHeight="44" FontSize="16" FontWeight="SemiBold" Click="SignatureRead_Click" />
                 </StackPanel>
-                <Image x:Name="SignatureStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" />
+                <Image x:Name="SignatureStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
                 <TextBlock x:Name="SignatureStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
                 <TextBlock x:Name="SignatureReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
 
@@ -358,7 +361,7 @@
                     <Button Content="Show still" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="RockStill_Click" />
                     <Button Content="Read text" MinWidth="140" MinHeight="44" FontSize="16" FontWeight="SemiBold" Click="RockRead_Click" />
                 </StackPanel>
-                <Image x:Name="RockStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" />
+                <Image x:Name="RockStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
                 <TextBlock x:Name="RockStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
                 <TextBlock x:Name="RockReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
             </StackPanel>

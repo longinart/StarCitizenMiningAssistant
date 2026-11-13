@@ -22,6 +22,24 @@ public class LoadoutComparisonTests
     }
 
     [Fact]
+    public void An_uncertain_rock_scan_stays_unknown_and_a_confirmed_one_can_crack()
+    {
+        var catalog = Catalog();
+        var uncertain = new RockReading(
+            RockScan.Value("5000", "uncertain"),
+            RockScan.Value("0", "uncertain"),
+            RockScan.Value("", "missing"));
+        var confirmed = new RockReading(
+            RockScan.Value("5000", "confirmed"),
+            RockScan.Value("0", ""),
+            RockScan.Value("40", "confirmed"));
+
+        Assert.Equal(CrackVerdict.Unknown, LoadoutComparison.Compare(catalog, uncertain, [Hofstede()]).Single().Verdict);
+        Assert.Equal(CrackVerdict.Crackable, LoadoutComparison.Compare(catalog, confirmed, [Hofstede()]).Single().Verdict);
+        Assert.False(RockScan.Value("5000", "uncertain").IsConfirmed);
+    }
+
+    [Fact]
     public void A_small_rock_is_crackable_and_hofstede_keeps_the_wider_window()
     {
         var rows = LoadoutComparison.Compare(Catalog(), RockReading.Confirmed(5000, 0, 40), [Hofstede(), Helix()]);

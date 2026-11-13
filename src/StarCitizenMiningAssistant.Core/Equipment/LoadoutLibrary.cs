@@ -54,7 +54,15 @@ public sealed class LoadoutLibrary
 
     public string InstabilityText { get; set; } = "";
 
+    public string MassConfidence { get; set; } = "";
+
+    public string ResistanceConfidence { get; set; } = "";
+
+    public string InstabilityConfidence { get; set; } = "";
+
     public string SignatureText { get; set; } = "";
+
+    public bool SoundEnabled { get; set; }
 
     public double? OverlayLeft { get; set; }
 

@@ -34,19 +34,19 @@ Scan areas lets the user place one rectangle on the signature list and another o
 
 ### E. OCR — in the app
 
-Scan areas can read the placed rectangle with Windows OCR. No OCR package was added. Every line is an `ObservedValue<T>`. Windows does not report a confidence, and decision 012 does not promote a line, so a reading stays Uncertain and does not change the crack check.
+Scan areas can read the placed rectangle. No OCR package was added. Interface digits are read from the bright core of each glyph, because Windows OCR misses this small font. Every line is an `ObservedValue<T>`. Decision 012 does not promote a line, so a reading stays Uncertain and does not change the crack check.
 
-### F. Signature watch
+### F. Signature watch — in the app
 
-A confirmed signature is matched to the catalog. The overlay prints the mineral name beside it. Minerals ticked on the signature page blink. A sound plays only when the user has turned that sound on.
+A confirmed signature is matched to the catalog. The overlay prints the mineral name beside it. Minerals ticked on the signature page blink. A sound plays only when that box is ticked, and not again for the same mineral. An uncertain OCR line does not match or blink.
 
-### G. Rock scan into the comparison
+### G. Rock scan into the comparison — in the app
 
-Confirmed mass, resistance and instability from the rock rectangle run B and fill the overlay. Uncertain fields stay Unknown and do not produce Crackable.
+Read text on the rock rectangle fills the overlay. A confirmed mass and resistance run the loadout comparison. An uncertain or missing field stays Unknown and does not produce Crackable. Typing in a box again counts as manual entry, which is confirmed.
 
-### H. Game check
+### H. Game check — waiting on the layout
 
-Manual check on the user's borderless layout: both rectangles land on the right panels, the overlay stays where it was placed, and the process sends no input to the game.
+The program has no path that sends keyboard, mouse, or controller input. The overlay is a normal window. The placement window is topmost only while a rectangle is being dragged, and it closes on Enter or Escape. Still to confirm on the borderless layout: both rectangles land on the right panels, and the overlay stays where it was placed.
 
 ## Later
 
