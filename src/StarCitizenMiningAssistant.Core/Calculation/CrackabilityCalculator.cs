@@ -104,7 +104,9 @@ public static class CrackabilityCalculator
 
         if (gadgetOnly is null && consumableOnly is null)
         {
-            return "These lasers cannot crack this rock. Choose a gadget or an active module to see whether either is enough.";
+            return NearThreshold(bare)
+                ? "The lasers reach " + Percent(bare) + "% of the required power. A gadget or an active module may close this gap."
+                : "These lasers cannot crack this rock. Choose a gadget or an active module to see whether either is enough.";
         }
 
         if (gadgetCracks && consumableCracks)
@@ -129,16 +131,29 @@ public static class CrackabilityCalculator
 
         if (gadgetOnly is not null && consumableOnly is not null)
         {
-            return $"{gadget} and {consumable} together are still not enough. This rock needs more lasers.";
+            var together = both ?? consumableOnly;
+            return NearThreshold(together)
+                ? $"{gadget} and {consumable} together reach {Percent(together)}% of the required power. This is the difficult band: close, and still short of a crack."
+                : $"{gadget} and {consumable} together are still not enough. This rock needs more lasers.";
         }
 
         if (gadgetOnly is not null)
         {
-            return $"{gadget} is not enough. This rock needs more lasers.";
+            return NearThreshold(gadgetOnly)
+                ? $"{gadget} reaches {Percent(gadgetOnly)}% of the required power. This is the difficult band: close, and still short of a crack."
+                : $"{gadget} is not enough. This rock needs more lasers.";
         }
 
-        return $"{consumable} is not enough. This rock needs more lasers.";
+        return NearThreshold(consumableOnly)
+            ? $"{consumable} reaches {Percent(consumableOnly!)}% of the required power. This is the difficult band: close, and still short of a crack."
+            : $"{consumable} is not enough. This rock needs more lasers.";
     }
+
+    private static bool NearThreshold(CrackAssessment? assessment) =>
+        assessment?.CanCrack == false && assessment.PowerRatio is >= 0.7;
+
+    private static int Percent(CrackAssessment assessment) =>
+        Round((assessment.PowerRatio ?? 0) * 100);
 
     private static FleetFactors Combine(
         IReadOnlyList<LaserContribution> lasers,

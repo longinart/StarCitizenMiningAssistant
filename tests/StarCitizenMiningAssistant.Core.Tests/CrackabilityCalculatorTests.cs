@@ -171,7 +171,26 @@ public class CrackabilityCalculatorTests
         Assert.Equal(
             "Sabir alone is enough, and Surge alone is enough. You do not need both.",
             CrackabilityCalculator.DescribeAssistance(bare, cracks, cracks, cracks, "Sabir", "Surge"));
+        Assert.Equal(
+            "Sabir and Surge together reach 70% of the required power. This is the difficult band: close, and still short of a crack.",
+            CrackabilityCalculator.DescribeAssistance(bare, Assessment(false), Assessment(false), NearThresholdAssessment(), "Sabir", "Surge"));
     }
+
+    private static CrackAssessment NearThresholdAssessment() =>
+        new(
+            CrackabilityCalculator.FormulaVersion,
+            CrackBand.NeedsGadgetOrConsumable,
+            false,
+            11232,
+            7885,
+            0.702,
+            14.7,
+            null,
+            18,
+            null,
+            21903,
+            14,
+            "test");
 
     private static CrackAssessment Assessment(bool canCrack) =>
         new(
