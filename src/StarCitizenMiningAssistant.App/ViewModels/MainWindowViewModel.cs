@@ -16,6 +16,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private bool _suspendSave;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
+    private IReadOnlyList<SetupStat> _gadgetStatistics = [];
     private string _massText = "5000";
     private string _resistanceText = "0";
     private string _instabilityText = "";
@@ -104,9 +105,22 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             if (Set(ref _selectedGadget, value))
             {
+                RefreshGadgetStatistics();
                 NotifyLoadout();
             }
         }
+    }
+
+    public IReadOnlyList<SetupStat> GadgetStatistics => _gadgetStatistics;
+
+    public bool HasGadget => SelectedGadget?.Item is not null;
+
+    private void RefreshGadgetStatistics()
+    {
+        var gadget = SelectedGadget?.Item;
+        _gadgetStatistics = gadget is null ? [] : EquipmentStatText.Gadget(gadget);
+        OnPropertyChanged(nameof(GadgetStatistics));
+        OnPropertyChanged(nameof(HasGadget));
     }
 
     public string MassText
@@ -724,13 +738,18 @@ public sealed class TurretEditor : ViewModelBase
     private int _size;
     private MiningHead? _selectedHead;
     private string _craftPercentText = "0";
+    private IReadOnlyList<SetupStat> _statistics = [];
 
     public TurretEditor()
     {
         Heads = [];
         foreach (var slot in _slots)
         {
-            slot.Changed += () => Changed?.Invoke();
+            slot.Changed += () =>
+            {
+                RefreshStatistics();
+                Changed?.Invoke();
+            };
         }
     }
 
@@ -790,6 +809,7 @@ public sealed class TurretEditor : ViewModelBase
             if (Set(ref _selectedHead, value))
             {
                 ApplySlots();
+                RefreshStatistics();
                 Changed?.Invoke();
             }
         }
@@ -830,12 +850,97 @@ public sealed class TurretEditor : ViewModelBase
         {
             if (Set(ref _craftPercentText, value))
             {
+                RefreshStatistics();
                 Changed?.Invoke();
             }
         }
     }
 
     public IReadOnlyList<ModuleSlotEditor> Slots => _slots;
+
+    public IReadOnlyList<SetupStat> Statistics => _statistics;
+
+    public bool HasStatistics => _statistics.Count > 0;
+
+    private void RefreshStatistics()
+    {
+        var head = SelectedHead;
+        if (head is null)
+        {
+            _statistics = [];
+        }
+        else
+        {
+            var craft = TryParseCraft(CraftPercentText, out var parsed) ? parsed : 0;
+            var summary = LaserStatSummary.Combine(
+                head.MinPower,
+                head.MaxPower,
+                craft,
+                head.OptimalRange,
+                head.MaximumRange,
+                HeadModifiers(head),
+                FittedModules());
+            _statistics = EquipmentStatText.Laser(summary, head.MaxPower);
+        }
+
+        OnPropertyChanged(nameof(Statistics));
+        OnPropertyChanged(nameof(HasStatistics));
+    }
+
+    private List<LaserStatParts> FittedModules()
+    {
+        var modules = new List<LaserStatParts>();
+        foreach (var slot in _slots)
+        {
+            if (!slot.IsEnabled)
+            {
+                continue;
+            }
+
+            var module = slot.Selected?.Item;
+            if (module is null)
+            {
+                continue;
+            }
+
+            modules.Add(new LaserStatParts(
+                module.PowerPercent,
+                module.Resistance,
+                module.Instability,
+                module.GreenZone,
+                module.OptimalChargeRate,
+                module.Shatter,
+                module.OverchargeRate,
+                module.InertMaterials,
+                module.ExtractPowerPercent,
+                0));
+        }
+
+        return modules;
+    }
+
+    private static LaserStatParts HeadModifiers(MiningHead head) =>
+        new(
+            0,
+            head.Resistance,
+            head.Instability,
+            head.GreenZone,
+            head.OptimalChargeRate,
+            0,
+            0,
+            head.InertMaterials,
+            0,
+            head.AllChargeRates);
+
+    private static bool TryParseCraft(string text, out double value)
+    {
+        if (double.TryParse(text, NumberStyles.Float, CultureInfo.CurrentCulture, out value))
+        {
+            return true;
+        }
+
+        return double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+    }
 
     public void Activate(int number, int size, IReadOnlyList<MiningHead> heads, MiningHead? stock, bool countThisLaser, bool showLaserSwitch)
     {

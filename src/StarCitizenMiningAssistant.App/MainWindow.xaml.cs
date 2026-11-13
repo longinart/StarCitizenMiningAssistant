@@ -12,8 +12,19 @@ namespace StarCitizenMiningAssistant.App;
 
 public partial class MainWindow : Window
 {
+    private static readonly SolidColorBrush NavSelectedBrush = Freeze(Color.FromRgb(0x2A, 0x24, 0x1C));
+    private static readonly SolidColorBrush NavTextBrush = Freeze(Color.FromRgb(0xE0, 0x8A, 0x3C));
+
     private bool _chosen;
+    private bool _onPicker = true;
     private Button? _chosenButton;
+
+    private static SolidColorBrush Freeze(Color color)
+    {
+        var brush = new SolidColorBrush(color);
+        brush.Freeze();
+        return brush;
+    }
 
     public MainWindow()
         : this(MainWindowViewModel.CreateMissing("The catalog is loaded by application startup."))
@@ -73,6 +84,7 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        MarkNav(NavSelectShip);
         if (DataContext is MainWindowViewModel { SelectedShip: { } ship })
         {
             Settle(ship.Id);
@@ -87,8 +99,17 @@ public partial class MainWindow : Window
 
     private void ChangeShip_Click(object sender, RoutedEventArgs e)
     {
+        if (_onPicker)
+        {
+            return;
+        }
+
         _chosen = false;
         _chosenButton = null;
+        _onPicker = true;
+        Stage.Opacity = 1;
+        Stage.IsHitTestVisible = true;
+        HideMinerals();
         foreach (var button in new[] { GolemButton, ProspectorButton, MoleButton })
         {
             button.IsHitTestVisible = true;
@@ -103,11 +124,40 @@ public partial class MainWindow : Window
         Prompt.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(280)));
         Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(220)));
         Loadout.IsHitTestVisible = false;
-        ChangeShipButton.Visibility = Visibility.Collapsed;
+        NavLoadout.IsEnabled = false;
+        NavSignatures.IsEnabled = false;
+        MarkNav(NavSelectShip);
     }
 
-    private void SaveConfiguration_Click(object sender, RoutedEventArgs e)
+    private void ShowLoadout_Click(object sender, RoutedEventArgs e)
     {
+        if (!_chosen)
+        {
+            return;
+        }
+
+        HideMinerals();
+        Stage.Opacity = 1;
+        Stage.IsHitTestVisible = true;
+        Prompt.Opacity = 0;
+        Loadout.IsHitTestVisible = true;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(220)));
+        if (_chosenButton is not null)
+        {
+            PlaceChosen(_chosenButton, animate: false);
+        }
+
+        _onPicker = false;
+        MarkNav(NavLoadout);
+    }
+
+    private void ShowSignatures_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_chosen)
+        {
+            return;
+        }
+
         if (DataContext is MainWindowViewModel viewModel)
         {
             viewModel.CommitLoadout();
@@ -116,26 +166,7 @@ public partial class MainWindow : Window
         ShowMinerals();
     }
 
-    private void BackToLoadout_Click(object sender, RoutedEventArgs e)
-    {
-        MineralsPage.BeginAnimation(OpacityProperty, null);
-        MineralsPage.Opacity = 0;
-        MineralsPage.IsHitTestVisible = false;
-        if (!_chosen)
-        {
-            return;
-        }
-
-        Stage.Opacity = 1;
-        Stage.IsHitTestVisible = true;
-        Loadout.IsHitTestVisible = true;
-        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(220)));
-        ChangeShipButton.Visibility = Visibility.Visible;
-        if (_chosenButton is not null)
-        {
-            PlaceChosen(_chosenButton, animate: false);
-        }
-    }
+    private void SaveConfiguration_Click(object sender, RoutedEventArgs e) => ShowSignatures_Click(sender, e);
 
     private void MineralName_Click(object sender, RoutedEventArgs e)
     {
@@ -163,7 +194,6 @@ public partial class MainWindow : Window
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
-        ChangeShipButton.Visibility = Visibility.Collapsed;
         Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
         Loadout.IsHitTestVisible = false;
         MineralsPage.IsHitTestVisible = true;
@@ -171,6 +201,32 @@ public partial class MainWindow : Window
         {
             BeginTime = TimeSpan.FromMilliseconds(120)
         });
+        _onPicker = false;
+        MarkNav(NavSignatures);
+    }
+
+    private void HideMinerals()
+    {
+        MineralsPage.BeginAnimation(OpacityProperty, null);
+        MineralsPage.Opacity = 0;
+        MineralsPage.IsHitTestVisible = false;
+    }
+
+    private void MarkNav(Button selected)
+    {
+        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures })
+        {
+            var active = button == selected;
+            button.Background = active ? NavSelectedBrush : Brushes.Transparent;
+            if (active)
+            {
+                button.Foreground = NavTextBrush;
+            }
+            else
+            {
+                button.ClearValue(ForegroundProperty);
+            }
+        }
     }
 
     private void Choose(string shipId, Button chosen, Button otherA, Button otherB)
@@ -232,7 +288,10 @@ public partial class MainWindow : Window
         {
             BeginTime = animate ? TimeSpan.FromMilliseconds(220) : TimeSpan.Zero
         });
-        ChangeShipButton.Visibility = Visibility.Visible;
+        NavLoadout.IsEnabled = true;
+        NavSignatures.IsEnabled = true;
+        _onPicker = false;
+        MarkNav(NavLoadout);
     }
 
     private void PlaceChosen(Button chosen, bool animate)

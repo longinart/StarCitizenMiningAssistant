@@ -4,10 +4,10 @@
         xmlns:local="clr-namespace:StarCitizenMiningAssistant.App"
         xmlns:vm="clr-namespace:StarCitizenMiningAssistant.App.ViewModels"
         Title="{Binding WindowTitle}"
-        Height="820"
-        Width="1180"
-        MinHeight="680"
-        MinWidth="980"
+        Height="860"
+        Width="1420"
+        MinHeight="720"
+        MinWidth="1280"
         WindowStartupLocation="CenterScreen"
         Background="#FF16191D"
         FontFamily="Segoe UI"
@@ -15,10 +15,65 @@
         Loaded="Window_Loaded">
     <Window.Resources>
         <local:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+        <local:EquipmentStatsConverter x:Key="EquipmentStats" />
+        <DataTemplate x:Key="ChoiceWithStats">
+            <StackPanel Margin="0,3">
+                <TextBlock Text="{Binding Name}" FontSize="14" />
+                <ItemsControl ItemsSource="{Binding Converter={StaticResource EquipmentStats}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="0,2,12,0" FontSize="12" Text="{Binding Text}" Foreground="{Binding Brush}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </DataTemplate>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#FFA7B0BA" />
             <Setter Property="Margin" Value="0,14,0,6" />
             <Setter Property="FontSize" Value="13" />
+        </Style>
+        <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#FFE6E8EB" />
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="16,14" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#FF2A2F35" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#FF1A1E22" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#FF6A7380" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ActionButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="FontSize" Value="17" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="28,14" />
+            <Setter Property="MinHeight" Value="52" />
+            <Setter Property="MinWidth" Value="260" />
         </Style>
         <Style x:Key="ShipButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent" />
@@ -42,7 +97,19 @@
         </Style>
     </Window.Resources>
 
-    <Grid x:Name="Root">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="248" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border Grid.Column="0" Background="#FF121418" BorderBrush="#FF2C3138" BorderThickness="0,0,1,0">
+            <StackPanel Margin="16,28,16,16">
+                <Button x:Name="NavSelectShip" Content="Select ship" Style="{StaticResource NavButton}" Click="ChangeShip_Click" />
+                <Button x:Name="NavLoadout" Content="Ship loadouts" Style="{StaticResource NavButton}" Click="ShowLoadout_Click" IsEnabled="False" />
+                <Button x:Name="NavSignatures" Content="Signatures" Style="{StaticResource NavButton}" Click="ShowSignatures_Click" IsEnabled="False" />
+            </StackPanel>
+        </Border>
+        <Grid x:Name="Root" Grid.Column="1">
         <Ellipse Width="720" Height="260" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" Opacity="0.55">
             <Ellipse.Fill>
                 <RadialGradientBrush>
@@ -59,15 +126,6 @@
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
-
-        <Button x:Name="ChangeShipButton"
-                Content="Change ship"
-                Style="{StaticResource GhostButton}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Margin="0,18,28,0"
-                Visibility="Collapsed"
-                Click="ChangeShip_Click" />
 
         <Grid x:Name="Stage" VerticalAlignment="Center" Margin="24,0">
             <Grid.ColumnDefinitions>
@@ -104,7 +162,7 @@
                    Margin="0,300,0,0" />
 
         <ScrollViewer x:Name="Loadout"
-                      Margin="80,230,80,24"
+                      Margin="24,220,24,16"
                       Opacity="0"
                       IsHitTestVisible="False"
                       VerticalScrollBarVisibility="Auto"
@@ -118,7 +176,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Width="320" Margin="14,0">
+                            <StackPanel Width="290" Margin="8,0">
                                 <DockPanel Margin="0,0,0,8" Visibility="{Binding ShowsLaserSwitch, Converter={StaticResource ShowWhenTrue}}">
                                     <CheckBox DockPanel.Dock="Right"
                                               Content="Count this laser"
@@ -127,6 +185,7 @@
                                     <TextBlock Text="{Binding Heading}" VerticalAlignment="Center" Foreground="#FFE6E8EB" FontSize="16" />
                                 </DockPanel>
                                 <ComboBox ItemsSource="{Binding Heads}"
+                                          ItemTemplate="{StaticResource ChoiceWithStats}"
                                           SelectedItem="{Binding SelectedHead, Mode=OneWay}"
                                           DropDownOpened="Choice_DropDownOpened"
                                           DropDownClosed="Choice_DropDownClosed" />
@@ -139,6 +198,7 @@
                                             <DockPanel Margin="0,8,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource ShowWhenTrue}}">
                                                 <TextBlock DockPanel.Dock="Left" Width="78" VerticalAlignment="Center" Foreground="#FFA7B0BA" Text="{Binding Label}" />
                                                 <ComboBox ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
+                                                          ItemTemplate="{StaticResource ChoiceWithStats}"
                                                           SelectedItem="{Binding Selected, Mode=OneWay}"
                                                           DropDownOpened="Choice_DropDownOpened"
                                                           DropDownClosed="Choice_DropDownClosed">
@@ -158,6 +218,23 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                                <StackPanel Margin="0,16,0,8" Visibility="{Binding HasStatistics, Converter={StaticResource ShowWhenTrue}}">
+                                    <TextBlock Text="Laser statistics" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
+                                    <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Statistics}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,2">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="168" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{Binding Label}" Foreground="#FFA7B0BA" />
+                                                    <TextBlock Grid.Column="1" Text="{Binding Value}" FontWeight="SemiBold" Foreground="{Binding Brush}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -166,11 +243,30 @@
                 <TextBlock Style="{StaticResource FieldLabel}" Text="Gadget" HorizontalAlignment="Center" />
                 <ComboBox Width="320" HorizontalAlignment="Center"
                           ItemsSource="{Binding Gadgets}"
+                          ItemTemplate="{StaticResource ChoiceWithStats}"
                           SelectedItem="{Binding SelectedGadget, Mode=OneWay}"
                           DropDownOpened="Choice_DropDownOpened"
                           DropDownClosed="Choice_DropDownClosed" />
+                <StackPanel Width="320" Margin="0,12,0,0" HorizontalAlignment="Center"
+                            Visibility="{Binding HasGadget, Converter={StaticResource ShowWhenTrue}}">
+                    <TextBlock Text="Gadget statistics" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
+                    <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding GadgetStatistics}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="168" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Label}" Foreground="#FFA7B0BA" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Value}" FontWeight="SemiBold" Foreground="{Binding Brush}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
 
-                <Button Margin="0,28,0,12" HorizontalAlignment="Center" Content="Save configuration" Click="SaveConfiguration_Click" />
+                <Button Margin="0,32,0,16" HorizontalAlignment="Center" Content="Save configuration" Style="{StaticResource ActionButton}" Click="SaveConfiguration_Click" />
             </StackPanel>
         </ScrollViewer>
 
@@ -180,10 +276,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <DockPanel>
-                <Button DockPanel.Dock="Left" Style="{StaticResource GhostButton}" Content="Loadout" Click="BackToLoadout_Click" />
-                <TextBlock Text="Signatures to track" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
-            </DockPanel>
+            <TextBlock Text="Signatures to track" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,16,0,8">
                 <TextBlock Foreground="#FFA7B0BA" TextAlignment="Center" Text="Tick the minerals the overlay should watch. Click a name to show its signatures. Shift-click the name to copy them." />
                 <TextBlock Margin="0,12,0,0" HorizontalAlignment="Center" Foreground="#FFA7B0BA" Text="Search" />
@@ -219,6 +312,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
+        </Grid>
         </Grid>
     </Grid>
 </Window>
