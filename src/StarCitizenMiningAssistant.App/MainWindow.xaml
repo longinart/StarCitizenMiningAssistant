@@ -155,6 +155,22 @@
                         Click="Check_Click" />
 
                 <TextBlock Margin="0,16,0,0"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Text="{Binding VerdictHeadline}"
+                           Foreground="{Binding VerdictBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding VerdictHeadline}" Value="">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock Margin="0,8,0,0"
                            FontSize="16"
                            FontWeight="SemiBold"
                            Text="{Binding Verdict}"

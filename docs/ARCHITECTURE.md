@@ -44,7 +44,7 @@ The WPF `App` class is the composition root. It constructs the log and the main 
 
 ### StarCitizenMiningAssistant.App
 
-`net10.0-windows`, WPF. The main window is a manual crack check: rock mass and resistance, ship, and one card per turret. Each turret has a laser switch, a head, craft percent, and module slots. The slot list is passive modules, then active modules. One gadget applies to the rock. Extra turrets start switched off. The click handler calls the view model. The view model calls `CrackabilityCalculator`. The window reads `data/mining-equipment.json` from the output folder.
+`net10.0-windows`, WPF. The main window is a manual crack check: rock mass and resistance, ship, and one card per turret. Each turret has a laser switch, a head, craft percent, and module slots. The slot list is passive modules, then active modules. One gadget applies to the rock. Extra turrets start switched off. The click handler calls the view model. The view model calls `CrackabilityCalculator`. The result is a large label: green Crackable at 100% or more, yellow Difficult from 70% up to 100%, red Uncrackable under 70%. The window reads `data/mining-equipment.json` from the output folder.
 
 The overlay, when it exists, will be another window in this project: a separate topmost window owned by this process. It will not be a browser host and it will not be injected into Star Citizen. That choice is recorded in decision 002. Arkanis Overlay demonstrates that a separate WPF process can sit over the game; we are not using its Blazor/WebView2 stack, because a compact status overlay does not need a web view and transparent WebView2 is a known source of pain.
 

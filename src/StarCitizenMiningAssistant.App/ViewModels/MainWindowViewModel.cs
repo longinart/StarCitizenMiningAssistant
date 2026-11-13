@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
+using System.Windows.Media;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
 using StarCitizenMiningAssistant.Core.Equipment;
@@ -19,6 +20,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _signatureText = "";
     private string _shipNote = "";
     private string _verdict = "Enter the rock and press Check rock.";
+    private string _verdictHeadline = "";
+    private Brush _verdictBrush = Brushes.Transparent;
     private string _details = "";
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
@@ -114,6 +117,18 @@ public sealed class MainWindowViewModel : ViewModelBase
         private set => Set(ref _verdict, value);
     }
 
+    public string VerdictHeadline
+    {
+        get => _verdictHeadline;
+        private set => Set(ref _verdictHeadline, value);
+    }
+
+    public Brush VerdictBrush
+    {
+        get => _verdictBrush;
+        private set => Set(ref _verdictBrush, value);
+    }
+
     public string Details
     {
         get => _details;
@@ -133,7 +148,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         if (_catalog is null)
         {
-            Verdict = CatalogNote;
+            ShowMessage(CatalogNote);
             Details = "";
             return;
         }
@@ -193,7 +208,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             gadget?.Name,
             activeNames.Count == 0 ? null : string.Join(", ", activeNames));
 
-        Verdict = RatioLine(selected, equipped.Count) + Environment.NewLine + advice;
+        ShowResult(selected, equipped.Count, advice);
         Details = FormatDetails(bare, gadgetOnly, consumableOnly, both, selected!, instability is null, signature);
     }
 
@@ -204,7 +219,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             return true;
         }
 
-        Verdict = label + " has to be a number.";
+        ShowMessage(label + " has to be a number.");
         Details = "";
         value = 0;
         return false;
@@ -224,7 +239,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             return true;
         }
 
-        Verdict = label + " has to be a number, or left blank.";
+        ShowMessage(label + " has to be a number, or left blank.");
         Details = "";
         value = null;
         return false;
@@ -254,14 +269,14 @@ public sealed class MainWindowViewModel : ViewModelBase
 
             if (turret.SelectedHead is null)
             {
-                Verdict = "Choose a mining head for turret " + turret.Number + ".";
+                ShowMessage("Choose a mining head for turret " + turret.Number + ".");
                 Details = "";
                 return false;
             }
 
             if (!TryParseNumber(string.IsNullOrWhiteSpace(turret.CraftPercentText) ? "0" : turret.CraftPercentText, out var craft))
             {
-                Verdict = "Craft percent on turret " + turret.Number + " has to be a number.";
+                ShowMessage("Craft percent on turret " + turret.Number + " has to be a number.");
                 Details = "";
                 return false;
             }
@@ -295,19 +310,63 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         if (!anyPort)
         {
-            Verdict = "Choose a ship.";
+            ShowMessage("Choose a ship.");
             Details = "";
             return false;
         }
 
         if (equipped.Count == 0)
         {
-            Verdict = "Turn on at least one laser. Extra turrets start off so a one-laser check does not include the whole ship.";
+            ShowMessage("Turn on at least one laser. Extra turrets start off so a one-laser check does not include the whole ship.");
             Details = "";
             return false;
         }
 
         return true;
+    }
+
+    private void ShowMessage(string text)
+    {
+        VerdictHeadline = "";
+        Verdict = text;
+    }
+
+    private void ShowResult(CrackAssessment selected, int laserCount, string advice)
+    {
+        if (selected.CanCrack == true)
+        {
+            VerdictHeadline = "Crackable";
+            VerdictBrush = CrackableBrush;
+        }
+        else if (selected.PowerRatio is >= 0.7)
+        {
+            VerdictHeadline = "Difficult";
+            VerdictBrush = DifficultBrush;
+        }
+        else if (selected.PowerRatio is not null)
+        {
+            VerdictHeadline = "Uncrackable";
+            VerdictBrush = UncrackableBrush;
+        }
+        else
+        {
+            VerdictHeadline = "";
+        }
+
+        Verdict = RatioLine(selected, laserCount) + Environment.NewLine + advice;
+    }
+
+    private static readonly SolidColorBrush CrackableBrush = Freeze("#FF3DDC7A");
+
+    private static readonly SolidColorBrush DifficultBrush = Freeze("#FFF0C14A");
+
+    private static readonly SolidColorBrush UncrackableBrush = Freeze("#FFE15B64");
+
+    private static SolidColorBrush Freeze(string hex)
+    {
+        var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+        brush.Freeze();
+        return brush;
     }
 
     private static string RatioLine(CrackAssessment selected, int laserCount)
