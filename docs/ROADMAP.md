@@ -24,17 +24,17 @@ The loadout page stores more than one setup, each with a name the user types. On
 
 `LoadoutComparison` runs the existing calculator once per saved loadout. Each row is Crackable, Difficult, or Uncrackable. When a boost is what makes it crackable, the row names it: the active module, the gadget, or both. A missing field is Unknown, not Crackable. Instability and charge-window size stay on the row. They do not turn an uncrackable Hofstede into a crack. The overlay does not show this yet.
 
-### C. Overlay window
+### C. Overlay window — in the app
 
-A second WPF window, not a browser view. The user moves it and resizes it. Position and size are saved. It shows one row per named loadout from B. It does not read the screen yet, so the table can be checked before OCR exists. Click-through waits until the window is readable over the game.
+The Overlay menu opens a second WPF window. The user moves it and resizes it, and that place is saved. It shows one row per named loadout from B. Mass, resistance and instability are typed in until the scan area exists. Click-through waits until the window is readable over the game.
 
-### D. Two capture regions
+### D. Two capture regions — in the app
 
-The user places one rectangle on the signature list and another on the rock panel, where mass, resistance and instability are drawn. Different monitors get different rectangles. The rectangles are saved. A still image can be saved for diagnosis. No game hooks.
+Scan areas lets the user place one rectangle on the signature list and another on the rock panel. Each monitor keeps its own rectangles in the loadout file. Show still captures that rectangle and saves a bitmap for diagnosis. No text is read yet, and there are no game hooks.
 
-### E. OCR
+### E. OCR — in the app
 
-Ask before adding an OCR package. Infrastructure implements a Core interface. Every signature and every rock number is an `ObservedValue<T>`. A low-confidence read stays Uncertain.
+Scan areas can read the placed rectangle with Windows OCR. No OCR package was added. Every line is an `ObservedValue<T>`. Windows does not report a confidence, and decision 012 does not promote a line, so a reading stays Uncertain and does not change the crack check.
 
 ### F. Signature watch
 

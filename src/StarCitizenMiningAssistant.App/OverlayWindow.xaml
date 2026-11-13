@@ -1,0 +1,53 @@
+<Window x:Class="StarCitizenMiningAssistant.App.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:StarCitizenMiningAssistant.App"
+        Title="Mining overlay"
+        Height="720"
+        Width="440"
+        MinHeight="360"
+        MinWidth="320"
+        Background="#FF16191D"
+        FontFamily="Segoe UI"
+        TextOptions.TextFormattingMode="Display"
+        ResizeMode="CanResize"
+        ShowInTaskbar="False"
+        Loaded="Window_Loaded"
+        LocationChanged="Window_BoundsChanged"
+        SizeChanged="Window_BoundsChanged">
+    <Window.Resources>
+        <local:BooleanToVisibilityConverter x:Key="ShowWhenTrue" />
+    </Window.Resources>
+    <Grid Margin="20,16,20,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="Rock" FontSize="18" FontWeight="SemiBold" Foreground="#FFE6E8EB" />
+            <TextBlock Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" Text="{Binding OverlayNote}" />
+            <TextBlock Margin="0,16,0,6" Foreground="#FFA7B0BA" Text="Mass" />
+            <TextBox Text="{Binding MassText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Margin="0,14,0,6" Foreground="#FFA7B0BA" Text="Resistance %" />
+            <TextBox Text="{Binding ResistanceText, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Margin="0,14,0,6" Foreground="#FFA7B0BA" Text="Instability" />
+            <TextBox Text="{Binding InstabilityText, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" Margin="0,22,0,0" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding CrackRows}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,18">
+                            <TextBlock Text="{Binding Name}" Foreground="#FFE6E8EB" FontSize="16" />
+                            <TextBlock Margin="0,4,0,0" Text="{Binding Verdict}" FontSize="26" FontWeight="SemiBold" Foreground="{Binding Brush}" />
+                            <TextBlock Margin="0,2,0,0" Text="{Binding Boosts}" FontSize="16" FontWeight="SemiBold" Foreground="{Binding Brush}"
+                                       Visibility="{Binding HasBoosts, Converter={StaticResource ShowWhenTrue}}" />
+                            <TextBlock Margin="0,4,0,0" Text="{Binding Reading}" Foreground="#FFA7B0BA" TextWrapping="Wrap"
+                                       Visibility="{Binding HasReading, Converter={StaticResource ShowWhenTrue}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>

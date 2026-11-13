@@ -9,10 +9,10 @@ The assignment lists many logical components. A solo developer does not need an 
 | Logical component | Home in 0.1.0 | Later home |
 | --- | --- | --- |
 | Desktop window | App | App |
-| Overlay window | not built | App, separate window type |
+| Overlay window | App, separate window | App |
 | Application services / composition | App startup | App |
-| Screen capture | not built | Infrastructure |
-| OCR and image matching | not built | Infrastructure, behind a Core interface |
+| Screen capture | Infrastructure still of a user rectangle | Infrastructure |
+| OCR and image matching | Infrastructure `WindowsOcrReader`, behind `IScreenReader` | Infrastructure |
 | Recognition results | `Core.Recognition` | Core |
 | Mining data | `data/mining-equipment.json`, parsed in Core from a string | refresh stays a versioned file; App reads it |
 | Equipment profiles | not built | Core model, Infrastructure persistence |
@@ -44,9 +44,9 @@ The WPF `App` class is the composition root. It constructs the log and the main 
 
 ### StarCitizenMiningAssistant.App
 
-`net10.0-windows`, WPF. The window opens on Golem, Prospector, and Mole. The chosen ship moves to the top. A single-laser ship shows one head and its module slots. The Mole shows its three turrets side by side, and extra turrets start switched off. One gadget sits under the turrets. Each turret lists the combined catalog stats of its head, craft percent and fitted modules: power, minimum power, resistance, instability, optimal charge rate, all charge rates, charge-window size, overcharge rate, shatter, inert materials, extract power, and optimal and maximum range. Extract power stays separate from laser power. The open head, module and gadget lists show that item's own catalog numbers, including an active module's charges and duration. A higher power, charge rate, window, or extract figure is green. A lower resistance or instability figure is green. A left menu switches between ship selection, the loadout, and the signature list. The loadout page can store several named setups in `%LocalAppData%\StarCitizenMiningAssistant\loadout.json`. Saving under a new name leaves the other names unchanged. The screen that was open is restored on the next start, including an older file that had only one setup. Save configuration stores that file and opens the mineral list. That list is the catalog's deposit signatures. A tick marks a mineral for the future overlay. Clicking a name shows the numbers, and shift-click copies them. The crack calculator stays in Core. The window does not ask for a rock. The window reads `data/mining-equipment.json` from the output folder.
+`net10.0-windows10.0.19041.0`, WPF. The window opens on Golem, Prospector, and Mole. The chosen ship moves to the top. A single-laser ship shows one head and its module slots. The Mole shows its three turrets side by side, and extra turrets start switched off. One gadget sits under the turrets. Each turret lists the combined catalog stats of its head, craft percent and fitted modules: power, minimum power, resistance, instability, optimal charge rate, all charge rates, charge-window size, overcharge rate, shatter, inert materials, extract power, and optimal and maximum range. Extract power stays separate from laser power. The open head, module and gadget lists show that item's own catalog numbers, including an active module's charges and duration. A higher power, charge rate, window, or extract figure is green. A lower resistance or instability figure is green. A left menu switches between ship selection, the loadout, and the signature list. The loadout page can store several named setups in `%LocalAppData%\StarCitizenMiningAssistant\loadout.json`. Saving under a new name leaves the other names unchanged. The screen that was open is restored on the next start, including an older file that had only one setup. Save configuration stores that file and opens the mineral list. That list is the catalog's deposit signatures. A tick marks a mineral for the future overlay. Clicking a name shows the numbers, and shift-click copies them. The crack calculator stays in Core. A second window, opened from the Overlay menu, lists each saved loadout as Crackable, Difficult, Uncrackable, or Unknown. Its position and size are stored in the same loadout file. The main window does not ask for a rock. The overlay does, until a scan area can read one. Scan areas stores one signature rectangle and one rock rectangle per monitor in that same file. Show still copies those pixels into a bitmap under `%LocalAppData%\StarCitizenMiningAssistant\captures`. The window reads `data/mining-equipment.json` from the output folder.
 
-The overlay, when it exists, will be another window in this project: a separate topmost window owned by this process. It will not be a browser host and it will not be injected into Star Citizen. That choice is recorded in decision 002. Arkanis Overlay demonstrates that a separate WPF process can sit over the game; we are not using its Blazor/WebView2 stack, because a compact status overlay does not need a web view and transparent WebView2 is a known source of pain.
+The overlay is another window in this project, owned by the main window. It is not a browser host and it is not injected into Star Citizen. That choice is recorded in decision 002. Arkanis Overlay demonstrates that a separate WPF process can sit over the game; we are not using its Blazor/WebView2 stack, because a compact status overlay does not need a web view and transparent WebView2 is a known source of pain. The overlay stays a normal window. Only the rectangle-placement window is topmost, and only while the user is dragging.
 
 ### StarCitizenMiningAssistant.Core
 
@@ -58,6 +58,8 @@ The overlay, when it exists, will be another window in this project: a separate 
 - `Equipment.MiningCatalog` — ships, heads, modules, and gadgets parsed from a JSON string.
 - `Calculation.CrackabilityCalculator` — the SCMiner checker, including craft percent and the gadget / active-module comparison.
 - `Calculation.LoadoutComparison` — one confirmed rock against each saved loadout. The row is Crackable, Difficult, Uncrackable, or Unknown, and it names the boost that the crack needs.
+- `Capture.CaptureRectangle` — a signature rectangle and a rock rectangle, stored per monitor. Core does not capture pixels.
+- `Recognition.IScreenReader` — the OCR port. `OcrDocument` keeps every returned line Uncertain. `RockOcrFields` assigns a number to mass, resistance, or instability only when that word is on the line, and it does not raise the confidence.
 
 Future namespaces, added only with the milestone that needs them:
 
@@ -66,9 +68,7 @@ Future namespaces, added only with the milestone that needs them:
 
 ### StarCitizenMiningAssistant.Infrastructure
 
-`net10.0`. `FileDiagnosticLog` appends lines to `%LocalAppData%\StarCitizenMiningAssistant\logs\app.log`. If that folder cannot be created, startup uses `NullDiagnosticLog` and the window still opens.
-
-Capture and persistence will land here, implementing interfaces defined in Core when those interfaces exist.
+`net10.0-windows10.0.19041.0`. `FileDiagnosticLog` appends lines to `%LocalAppData%\StarCitizenMiningAssistant\logs\app.log`. If that folder cannot be created, startup uses `NullDiagnosticLog` and the window still opens. `DisplayMonitors` lists screens. `RegionImage` copies one rectangle with `BitBlt` and can save that bitmap beside the log. `WindowsOcrReader` implements `IScreenReader` with Windows.Media.Ocr. It does not hook the game. A reading stays Uncertain, per decision 012.
 
 ### StarCitizenMiningAssistant.Core.Tests
 

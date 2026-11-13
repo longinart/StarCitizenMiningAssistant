@@ -1,4 +1,5 @@
 using System.Text.Json;
+using StarCitizenMiningAssistant.Core.Capture;
 
 namespace StarCitizenMiningAssistant.Core.Equipment;
 
@@ -54,6 +55,16 @@ public sealed class LoadoutLibrary
     public string InstabilityText { get; set; } = "";
 
     public string SignatureText { get; set; } = "";
+
+    public double? OverlayLeft { get; set; }
+
+    public double? OverlayTop { get; set; }
+
+    public double? OverlayWidth { get; set; }
+
+    public double? OverlayHeight { get; set; }
+
+    public List<MonitorCapture> CaptureMonitors { get; set; } = [];
 
     public static LoadoutLibrary FromLegacy(
         StoredLoadout setup,
@@ -135,6 +146,56 @@ public sealed class LoadoutLibrary
         return true;
     }
 
+    public bool RememberCapture(string? deviceName, CaptureTarget target, CaptureRectangle rectangle)
+    {
+        ArgumentNullException.ThrowIfNull(rectangle);
+        var name = deviceName?.Trim() ?? "";
+        if (name.Length == 0 || !rectangle.IsPlaceable)
+        {
+            return false;
+        }
+
+        var monitor = CaptureMonitors.FirstOrDefault(item =>
+            string.Equals(item.DeviceName, name, StringComparison.OrdinalIgnoreCase));
+        if (monitor is null)
+        {
+            monitor = new MonitorCapture { DeviceName = name };
+            CaptureMonitors.Add(monitor);
+        }
+
+        var copy = Copy(rectangle);
+        if (target == CaptureTarget.Signatures)
+        {
+            monitor.Signatures = copy;
+        }
+        else
+        {
+            monitor.Rock = copy;
+        }
+
+        return true;
+    }
+
+    public MonitorCapture? FindCapture(string? deviceName)
+    {
+        var name = deviceName?.Trim() ?? "";
+        if (name.Length == 0)
+        {
+            return null;
+        }
+
+        return CaptureMonitors.FirstOrDefault(item =>
+            string.Equals(item.DeviceName, name, StringComparison.OrdinalIgnoreCase));
+    }
+
+    public static List<MonitorCapture> CloneCaptures(IEnumerable<MonitorCapture>? source) =>
+        (source ?? []).Select(monitor => new MonitorCapture
+        {
+            DeviceName = monitor.DeviceName ?? "",
+            Signatures = Copy(monitor.Signatures),
+            Rock = Copy(monitor.Rock)
+        }).ToList();
+
     public static StoredLoadout Clone(StoredLoadout source)
     {
         ArgumentNullException.ThrowIfNull(source);
@@ -214,6 +275,17 @@ public sealed class LoadoutLibrary
 
         return -1;
     }
+
+    private static CaptureRectangle? Copy(CaptureRectangle? source) =>
+        source is null
+            ? null
+            : new CaptureRectangle
+            {
+                Left = source.Left,
+                Top = source.Top,
+                Width = source.Width,
+                Height = source.Height
+            };
 
     private static bool HasProperty(JsonElement root, string name)
     {

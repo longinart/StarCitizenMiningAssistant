@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Media;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
+using StarCitizenMiningAssistant.Core.Capture;
 using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Core.Recognition;
 
@@ -30,6 +31,7 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _loadoutName = "";
     private LoadoutNameChoice? _selectedLoadoutName;
     private readonly LoadoutLibrary _library = new();
+    private IReadOnlyList<OverlayCrackRow> _crackRows = [];
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
     {
@@ -285,6 +287,11 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.ResistanceText = saved.ResistanceText;
             _library.InstabilityText = saved.InstabilityText;
             _library.SignatureText = saved.SignatureText;
+            _library.OverlayLeft = saved.OverlayLeft;
+            _library.OverlayTop = saved.OverlayTop;
+            _library.OverlayWidth = saved.OverlayWidth;
+            _library.OverlayHeight = saved.OverlayHeight;
+            _library.CaptureMonitors = LoadoutLibrary.CloneCaptures(saved.CaptureMonitors);
             MassText = string.IsNullOrWhiteSpace(saved.MassText) ? MassText : saved.MassText;
             ResistanceText = string.IsNullOrWhiteSpace(saved.ResistanceText) ? ResistanceText : saved.ResistanceText;
             InstabilityText = saved.InstabilityText ?? "";
@@ -309,6 +316,8 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             _suspendSave = false;
         }
+
+        RefreshCrackRows();
     }
 
     public bool SaveNamedLoadout()
@@ -428,8 +437,55 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public void CommitLoadout() => NotifyLoadout();
 
+    public IReadOnlyList<OverlayCrackRow> CrackRows => _crackRows;
+
+    public string OverlayNote { get; private set; } = "Type the rock here until the scan area can read it.";
+
+    public double? OverlayLeft => _library.OverlayLeft;
+
+    public double? OverlayTop => _library.OverlayTop;
+
+    public double? OverlayWidth => _library.OverlayWidth;
+
+    public double? OverlayHeight => _library.OverlayHeight;
+
+    public void RememberOverlay(double left, double top, double width, double height)
+    {
+        if (Near(_library.OverlayLeft, left)
+            && Near(_library.OverlayTop, top)
+            && Near(_library.OverlayWidth, width)
+            && Near(_library.OverlayHeight, height))
+        {
+            return;
+        }
+
+        _library.OverlayLeft = left;
+        _library.OverlayTop = top;
+        _library.OverlayWidth = width;
+        _library.OverlayHeight = height;
+        NotifyLoadout();
+    }
+
+    public bool RememberCapture(string deviceName, CaptureTarget target, CaptureRectangle rectangle)
+    {
+        if (!_library.RememberCapture(deviceName, target, rectangle))
+        {
+            return false;
+        }
+
+        NotifyLoadout();
+        return true;
+    }
+
+    public CaptureRectangle? CaptureOf(string deviceName, CaptureTarget target)
+    {
+        var monitor = _library.FindCapture(deviceName);
+        return target == CaptureTarget.Signatures ? monitor?.Signatures : monitor?.Rock;
+    }
+
     private void NotifyLoadout()
     {
+        RefreshCrackRows();
         if (_suspendSave || SelectedShip is null)
         {
             return;
@@ -437,6 +493,67 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         LoadoutChanged?.Invoke(this, EventArgs.Empty);
     }
+
+    private void RefreshCrackRows()
+    {
+        if (_catalog is null)
+        {
+            _crackRows = [];
+            OverlayNote = "The equipment catalog did not load.";
+        }
+        else
+        {
+            var loadouts = ComparisonLoadouts();
+            _crackRows = loadouts.Count == 0
+                ? []
+                : LoadoutComparison.Compare(_catalog, ReadRock(), loadouts).Select(OverlayCrackRow.From).ToList();
+            OverlayNote = RockIsReadable()
+                ? "Typed in until the scan area can read the rock."
+                : "Mass and resistance have to be numbers before a verdict.";
+        }
+
+        OnPropertyChanged(nameof(CrackRows));
+        OnPropertyChanged(nameof(OverlayNote));
+    }
+
+    private List<StoredLoadout> ComparisonLoadouts()
+    {
+        if (_library.Loadouts.Count > 0)
+        {
+            return _library.Loadouts;
+        }
+
+        if (SelectedShip is null)
+        {
+            return [];
+        }
+
+        var screen = CaptureScreen();
+        screen.Name = string.IsNullOrWhiteSpace(LoadoutName) ? "Current" : LoadoutName.Trim();
+        return [screen];
+    }
+
+    private RockReading ReadRock()
+    {
+        var mass = TryParseNumber(MassText, out var parsedMass)
+            ? ObservedValue<double>.Confirmed(parsedMass)
+            : ObservedValue<double>.Missing();
+        var resistance = TryParseNumber(ResistanceText, out var parsedResistance)
+            ? ObservedValue<double>.Confirmed(parsedResistance)
+            : ObservedValue<double>.Missing();
+        var instability = string.IsNullOrWhiteSpace(InstabilityText)
+            ? ObservedValue<double>.Missing()
+            : TryParseNumber(InstabilityText, out var parsedInstability)
+                ? ObservedValue<double>.Confirmed(parsedInstability)
+                : ObservedValue<double>.Missing();
+        return new RockReading(mass, resistance, instability);
+    }
+
+    private bool RockIsReadable() =>
+        TryParseNumber(MassText, out _) && TryParseNumber(ResistanceText, out _);
+
+    private static bool Near(double? stored, double value) =>
+        stored is double current && Math.Abs(current - value) < 0.5;
 
     public void Check()
     {

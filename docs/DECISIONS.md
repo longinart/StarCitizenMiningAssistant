@@ -75,3 +75,11 @@ The maintainer checked SCMiner in game and rejected the wiki scan signatures. Th
 Where the public SCMiner module and gadget list differs from the wiki `modifier_map`, the JSON stores the SCMiner number. Surge resistance is −16, not the wiki −15.5. SCMiner splits laser `power` from `extractPower`. Only `power` enters the crack formula. `extractPowerPercent` is stored and does not change the yes or no. The replaced fields are listed in `docs/WORK_REPORT.md`.
 
 Head laser power stayed on the wiki `mining_laser.laser_power` values. Those match the SCMiner Helix I page at 780–3900 W, and no second SCMiner head table was found that disagreed. Klein-S1 slots stay 0, which is the SCMiner page value for a null wiki field.
+
+## 012 — Windows OCR stays Uncertain
+
+Date: 2026-11-13.
+
+Text is read with Windows.Media.Ocr. That API is part of Windows, so no OCR package was added. The engine returns words and does not return a confidence. The data model says an OCR value stays Uncertain or Missing until a field-specific rule in a decision promotes it. This record does not add that rule. A blank image is a failure. A blank line is dropped. Any text the engine returns is Uncertain and must not feed the crack calculator.
+
+Mass, resistance and instability are chosen only by those words on a line. A number keeps the confidence of that line. An unlabelled number is not assigned to a field. The number is parsed with the Windows culture, then the invariant culture if that fails.

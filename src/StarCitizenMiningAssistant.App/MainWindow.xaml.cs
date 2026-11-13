@@ -1,9 +1,13 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using StarCitizenMiningAssistant.Core.Capture;
+using StarCitizenMiningAssistant.Core.Recognition;
+using StarCitizenMiningAssistant.Infrastructure.Capture;
 using System.Windows.Media.Animation;
 using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core.Equipment;
@@ -18,6 +22,7 @@ public partial class MainWindow : Window
     private bool _chosen;
     private bool _onPicker = true;
     private Button? _chosenButton;
+    private OverlayWindow? _overlay;
 
     private static SolidColorBrush Freeze(Color color)
     {
@@ -42,14 +47,7 @@ public partial class MainWindow : Window
     protected override void OnSourceInitialized(EventArgs e)
     {
         base.OnSourceInitialized(e);
-        var handle = new WindowInteropHelper(this).Handle;
-        var dark = 1;
-        var caption = 0x001D1916;
-        var text = 0x00EBE8E6;
-        DwmSetWindowAttribute(handle, 20, ref dark, sizeof(int));
-        DwmSetWindowAttribute(handle, 35, ref caption, sizeof(int));
-        DwmSetWindowAttribute(handle, 36, ref text, sizeof(int));
-        SetWindowPos(handle, IntPtr.Zero, 0, 0, 0, 0, 0x0027);
+        DarkCaption.Apply(this);
     }
 
     private void Choice_DropDownOpened(object sender, EventArgs e)
@@ -118,6 +116,7 @@ public partial class MainWindow : Window
         Stage.Opacity = 1;
         Stage.IsHitTestVisible = true;
         HideMinerals();
+        HideScan();
         foreach (var button in new[] { GolemButton, ProspectorButton, MoleButton })
         {
             button.IsHitTestVisible = true;
@@ -134,6 +133,8 @@ public partial class MainWindow : Window
         Loadout.IsHitTestVisible = false;
         NavLoadout.IsEnabled = false;
         NavSignatures.IsEnabled = false;
+        NavOverlay.IsEnabled = false;
+        NavScan.IsEnabled = false;
         MarkNav(NavSelectShip);
     }
 
@@ -145,6 +146,7 @@ public partial class MainWindow : Window
         }
 
         HideMinerals();
+        HideScan();
         Stage.Opacity = 1;
         Stage.IsHitTestVisible = true;
         Prompt.Opacity = 0;
@@ -175,6 +177,59 @@ public partial class MainWindow : Window
     }
 
     private void SaveConfiguration_Click(object sender, RoutedEventArgs e) => ShowSignatures_Click(sender, e);
+
+    private void ShowOverlay_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_chosen)
+        {
+            return;
+        }
+
+        if (_overlay is null)
+        {
+            _overlay = new OverlayWindow
+            {
+                DataContext = DataContext,
+                Owner = this
+            };
+            _overlay.Closed += (_, _) => _overlay = null;
+            _overlay.PlaceFromViewModel();
+            _overlay.Show();
+            return;
+        }
+
+        _overlay.Activate();
+    }
+
+    private void ShowScan_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_chosen)
+        {
+            return;
+        }
+
+        ShowScan();
+    }
+
+    private void ScanMonitor_Changed(object sender, SelectionChangedEventArgs e) => RefreshScanLabels();
+
+    private void PlaceSignatures_Click(object sender, RoutedEventArgs e) =>
+        PlaceRegion(CaptureTarget.Signatures, "Drag a rectangle around the signature list.");
+
+    private void PlaceRock_Click(object sender, RoutedEventArgs e) =>
+        PlaceRegion(CaptureTarget.Rock, "Drag a rectangle around the rock panel.");
+
+    private void SignatureStill_Click(object sender, RoutedEventArgs e) =>
+        ShowStill(CaptureTarget.Signatures, SignatureStill, SignatureStillNote);
+
+    private void RockStill_Click(object sender, RoutedEventArgs e) =>
+        ShowStill(CaptureTarget.Rock, RockStill, RockStillNote);
+
+    private async void SignatureRead_Click(object sender, RoutedEventArgs e) =>
+        await ReadTextAsync(CaptureTarget.Signatures, SignatureReadText);
+
+    private async void RockRead_Click(object sender, RoutedEventArgs e) =>
+        await ReadTextAsync(CaptureTarget.Rock, RockReadText);
 
     private void SaveLoadout_Click(object sender, RoutedEventArgs e)
     {
@@ -215,6 +270,7 @@ public partial class MainWindow : Window
 
     private void ShowMinerals()
     {
+        HideScan();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
@@ -236,9 +292,193 @@ public partial class MainWindow : Window
         MineralsPage.IsHitTestVisible = false;
     }
 
+    private void ShowScan()
+    {
+        HideMinerals();
+        Stage.Opacity = 0;
+        Stage.IsHitTestVisible = false;
+        Prompt.Opacity = 0;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
+        Loadout.IsHitTestVisible = false;
+        FillScanMonitors();
+        ScanPage.IsHitTestVisible = true;
+        ScanPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(120)
+        });
+        _onPicker = false;
+        MarkNav(NavScan);
+    }
+
+    private void HideScan()
+    {
+        ScanPage.BeginAnimation(OpacityProperty, null);
+        ScanPage.Opacity = 0;
+        ScanPage.IsHitTestVisible = false;
+    }
+
+    private void FillScanMonitors()
+    {
+        var monitors = DisplayMonitors.List();
+        var selected = (ScanMonitor.SelectedItem as MonitorInfo)?.DeviceName;
+        ScanMonitor.ItemsSource = monitors;
+        ScanMonitor.SelectedItem = monitors.FirstOrDefault(monitor =>
+            string.Equals(monitor.DeviceName, selected, StringComparison.OrdinalIgnoreCase))
+            ?? monitors.FirstOrDefault(monitor => monitor.IsPrimary)
+            ?? monitors.FirstOrDefault();
+        ScanMonitorNote.Text = monitors.Count == 0
+            ? "No monitor was found."
+            : "Rectangles are saved for the monitor you pick here.";
+        RefreshScanLabels();
+    }
+
+    private void RefreshScanLabels()
+    {
+        if (DataContext is not MainWindowViewModel viewModel || ScanMonitor.SelectedItem is not MonitorInfo monitor)
+        {
+            SignatureRegionText.Text = "Not placed";
+            RockRegionText.Text = "Not placed";
+            return;
+        }
+
+        SignatureRegionText.Text = Describe(viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Signatures));
+        RockRegionText.Text = Describe(viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Rock));
+    }
+
+    private void PlaceRegion(CaptureTarget target, string hint)
+    {
+        if (DataContext is not MainWindowViewModel viewModel || ScanMonitor.SelectedItem is not MonitorInfo monitor)
+        {
+            return;
+        }
+
+        var placed = RegionPlacementWindow.Ask(this, monitor, hint);
+        if (placed is null)
+        {
+            return;
+        }
+
+        viewModel.RememberCapture(monitor.DeviceName, target, placed);
+        RefreshScanLabels();
+    }
+
+    private void ShowStill(CaptureTarget target, Image image, TextBlock note)
+    {
+        if (!TryCapture(target, out var bmp, out var error))
+        {
+            note.Text = error;
+            image.Source = null;
+            return;
+        }
+
+        image.Source = BitmapFrom(bmp);
+        var label = target == CaptureTarget.Signatures ? "signatures" : "rock";
+        var path = RegionImage.SaveBmp(label, bmp);
+        note.Text = path is null ? "The still image is shown here. It could not be saved." : "Saved " + path;
+    }
+
+    private async Task ReadTextAsync(CaptureTarget target, TextBlock output)
+    {
+        if (!TryCapture(target, out var bmp, out var error))
+        {
+            output.Text = error;
+            return;
+        }
+
+        output.Text = "Reading...";
+        var document = await new WindowsOcrReader().ReadAsync(bmp);
+        if (document.Failure is not null)
+        {
+            output.Text = document.Failure;
+            return;
+        }
+
+        if (document.Lines.Count == 0)
+        {
+            output.Text = "No text was read.";
+            return;
+        }
+
+        if (target == CaptureTarget.Signatures)
+        {
+            output.Text = "Read with " + document.Language + ". These lines stay uncertain."
+                + Environment.NewLine
+                + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
+            return;
+        }
+
+        var rock = RockOcrFields.Read(document.Lines);
+        output.Text = "Read with " + document.Language + ". Uncertain numbers are not used for a crack check."
+            + Environment.NewLine + FormatField("Mass", rock.Mass)
+            + Environment.NewLine + FormatField("Resistance", rock.Resistance)
+            + Environment.NewLine + FormatField("Instability", rock.Instability)
+            + Environment.NewLine + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
+    }
+
+    private bool TryCapture(CaptureTarget target, out byte[] bmp, out string error)
+    {
+        bmp = [];
+        if (DataContext is not MainWindowViewModel viewModel || ScanMonitor.SelectedItem is not MonitorInfo monitor)
+        {
+            error = "Choose a monitor first.";
+            return false;
+        }
+
+        var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
+        if (rectangle is not { IsPlaceable: true })
+        {
+            error = "Place the rectangle first.";
+            return false;
+        }
+
+        var captured = RegionImage.CaptureBmp(
+            monitor.Left + (int)Math.Round(rectangle.Left),
+            monitor.Top + (int)Math.Round(rectangle.Top),
+            (int)Math.Round(rectangle.Width),
+            (int)Math.Round(rectangle.Height));
+        if (captured is null)
+        {
+            error = "The still image could not be captured.";
+            return false;
+        }
+
+        bmp = captured;
+        error = "";
+        return true;
+    }
+
+    private static string FormatLine(ObservedValue<string> line) =>
+        line.Value + "   " + ConfidenceWord(line.Confidence);
+
+    private static string FormatField(string name, ObservedValue<double> value) =>
+        value.Confidence == RecognitionConfidence.Missing
+            ? name + "   not found"
+            : name + "  " + value.Value.ToString("0.###", CultureInfo.CurrentCulture) + "   " + ConfidenceWord(value.Confidence);
+
+    private static string ConfidenceWord(RecognitionConfidence confidence) =>
+        confidence == RecognitionConfidence.Confirmed ? "confirmed" : "uncertain";
+
+    private static string Describe(CaptureRectangle? rectangle) =>
+        rectangle is { IsPlaceable: true }
+            ? Math.Round(rectangle.Left) + ", " + Math.Round(rectangle.Top)
+                + "    " + Math.Round(rectangle.Width) + " × " + Math.Round(rectangle.Height)
+            : "Not placed";
+
+    private static BitmapImage BitmapFrom(byte[] bmp)
+    {
+        var image = new BitmapImage();
+        using var stream = new MemoryStream(bmp);
+        image.BeginInit();
+        image.CacheOption = BitmapCacheOption.OnLoad;
+        image.StreamSource = stream;
+        image.EndInit();
+        image.Freeze();
+        return image;
+    }
+
     private void MarkNav(Button selected)
     {
-        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures })
+        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures, NavOverlay, NavScan })
         {
             var active = button == selected;
             button.Background = active ? NavSelectedBrush : Brushes.Transparent;
@@ -314,6 +554,8 @@ public partial class MainWindow : Window
         });
         NavLoadout.IsEnabled = true;
         NavSignatures.IsEnabled = true;
+        NavOverlay.IsEnabled = true;
+        NavScan.IsEnabled = true;
         _onPicker = false;
         MarkNav(NavLoadout);
     }
@@ -352,9 +594,4 @@ public partial class MainWindow : Window
         transform.Y = dy;
     }
 
-    [DllImport("dwmapi.dll")]
-    private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
-
-    [DllImport("user32.dll")]
-    private static extern bool SetWindowPos(IntPtr hwnd, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
 }
