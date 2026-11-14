@@ -140,6 +140,11 @@ public static class HudNumberReader
         }
 
         var holes = Holes(glyph);
+        if (holes.Count >= 2 && TailOnTheRight(glyph))
+        {
+            return '9';
+        }
+
         if (holes.Count >= 2 || (holes.Count == 1 && IsEight(glyph)))
         {
             return '8';
@@ -412,6 +417,23 @@ public static class HudNumberReader
         }
 
         return rightHook && leftHook && !leftStem;
+    }
+
+    private static bool TailOnTheRight(Glyph glyph)
+    {
+        var from = glyph.Top + (int)(glyph.Height * 0.62);
+        var rows = 0;
+        var open = 0;
+        for (var y = from; y <= glyph.Bottom; y++)
+        {
+            rows++;
+            if (!glyph.IsInk(glyph.Left, y))
+            {
+                open++;
+            }
+        }
+
+        return rows > 0 && open == rows;
     }
 
     private static bool IsFive(Glyph glyph)

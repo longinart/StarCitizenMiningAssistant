@@ -27,6 +27,11 @@ public static class SignatureOcr
         }
 
         var chosen = SignatureDigits.Choose(Text(smooth), Text(sharp), catalog);
+        if (!string.IsNullOrEmpty(prepared.Shapes))
+        {
+            chosen = SignatureDigits.Choose(chosen, prepared.Shapes, catalog) ?? SignatureDigits.Parse(prepared.Shapes);
+        }
+
         if (chosen is null)
         {
             return OcrDocument.FromEngine("signature digits", []);

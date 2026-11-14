@@ -28,13 +28,13 @@ public static class SignatureDigits
         var longest = groups.OrderByDescending(group => group.Length).First();
         if (longest.Length >= 4)
         {
-            return longest;
+            return TrimZero(longest);
         }
 
         if (groups.Count == 2 && groups[1].Length == 3 && groups[0].Length is >= 1 and <= 3)
         {
             var joined = groups[0] + groups[1];
-            return joined.Length >= 4 ? joined : null;
+            return joined.Length >= 4 ? TrimZero(joined) : null;
         }
 
         return null;
@@ -56,6 +56,13 @@ public static class SignatureDigits
 
         var longer = left.Length >= right.Length ? left : right;
         var shorter = left.Length >= right.Length ? right : left;
+        if (longer.Length == shorter.Length + 1
+            && longer[0] == '0'
+            && longer.EndsWith(shorter, StringComparison.Ordinal))
+        {
+            return shorter;
+        }
+
         if (shorter.Length >= 2
             && longer.Length - shorter.Length <= 3
             && (longer.StartsWith(shorter, StringComparison.Ordinal) || longer.EndsWith(shorter, StringComparison.Ordinal)))
@@ -72,6 +79,9 @@ public static class SignatureDigits
 
         return null;
     }
+
+    private static string TrimZero(string digits) =>
+        digits.Length > 4 && digits[0] == '0' ? digits.TrimStart('0') : digits;
 
     private static bool Known(MiningCatalog? catalog, string digits) =>
         catalog is not null

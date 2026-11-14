@@ -44,6 +44,8 @@ public class SignatureStillTests
         yield return ["signatures-20261114-071243.bmp", "6800", true];
         yield return ["signatures-20261114-071325.bmp", "6800", false];
         yield return ["signatures-20261114-071827.bmp", "6800", false];
+        yield return ["signatures-20261114-084617.bmp", "8000", true];
+        yield return ["signatures-20261114-084644.bmp", "59000", true];
     }
 
     [Theory]
