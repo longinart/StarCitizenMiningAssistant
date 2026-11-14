@@ -64,6 +64,18 @@ The rock rectangle is scaled up and read with Windows OCR. Mass, resistance, and
 
 The overlay stays above other windows and is slightly translucent. Clicks pass through the overlay only while that box is ticked on the assistant window. Untick it to move the overlay. The program does not send keyboard, mouse, or controller input.
 
+### M. Digit rectangle — in the app
+
+A rectangle that cuts through the bright digit band says so, and that frame is not applied as a signature. A looser rectangle is searched for the bright band inside it, so padding and a bright strip above the number do not hide the digits. A new misread of those shapes is locked with a test. Decision 017.
+
+### Signature digits — in the app
+
+The signature number is read from the bright digit row. The location pin is left out because it is taller than the digits, not because of its color, so a blue, orange, or other HUD can use the same path. Windows OCR reads that row at two sizes. A frame whose two readings disagree is ignored, and the last good number stays. The saved stills of 10,800, 7,200, 8,250, 3,400, 6,000, 2,000, and 6,800 are the tests. Decision 018.
+
+### N. Your layout check — waiting on you
+
+Place both rectangles on the borderless panels and leave the overlay where you want it. This program does not start Star Citizen. Success is a named mineral from the signature rectangle, rock fields filled from the rock rectangle, and the overlay staying where you left it.
+
 ## Later
 
 A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out.

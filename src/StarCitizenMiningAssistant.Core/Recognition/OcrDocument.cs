@@ -8,11 +8,12 @@ public sealed record OcrFragment(string Text, double? Confidence);
 /// </summary>
 public sealed class OcrDocument
 {
-    private OcrDocument(string? failure, string language, IReadOnlyList<ObservedValue<string>> lines)
+    private OcrDocument(string? failure, string language, IReadOnlyList<ObservedValue<string>> lines, bool clipped)
     {
         Failure = failure;
         Language = language;
         Lines = lines;
+        Clipped = clipped;
     }
 
     public string? Failure { get; }
@@ -21,10 +22,12 @@ public sealed class OcrDocument
 
     public IReadOnlyList<ObservedValue<string>> Lines { get; }
 
-    public static OcrDocument Failed(string reason) =>
-        new(reason, "", []);
+    public bool Clipped { get; }
 
-    public static OcrDocument FromEngine(string language, IReadOnlyList<OcrFragment> fragments)
+    public static OcrDocument Failed(string reason) =>
+        new(reason, "", [], false);
+
+    public static OcrDocument FromEngine(string language, IReadOnlyList<OcrFragment> fragments, bool clipped = false)
     {
         var lines = new List<ObservedValue<string>>();
         foreach (var fragment in fragments)
@@ -36,7 +39,7 @@ public sealed class OcrDocument
             }
         }
 
-        return new OcrDocument(null, language, lines);
+        return new OcrDocument(null, language, lines, clipped);
     }
 }
 

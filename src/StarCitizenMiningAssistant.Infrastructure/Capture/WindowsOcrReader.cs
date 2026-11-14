@@ -22,6 +22,12 @@ public sealed class WindowsOcrReader : IScreenReader
         return RecognizeAsync(ScaleBmp(image), digitsFirst: false, cancellationToken);
     }
 
+    public Task<OcrDocument> ReadPreparedAsync(byte[] image, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        return RecognizeAsync(image, digitsFirst: false, cancellationToken);
+    }
+
     private async Task<OcrDocument> RecognizeAsync(byte[] image, bool digitsFirst, CancellationToken cancellationToken)
     {
         if (image.Length < 54)
@@ -43,12 +49,13 @@ public sealed class WindowsOcrReader : IScreenReader
             cancellationToken.ThrowIfCancellationRequested();
             if (digitsFirst && TryReadBmp(image, out var luminance, out var width, out var height))
             {
-                var digits = HudNumberReader.Read(luminance, width, height);
-                if (digits.Any(line => line.Any(char.IsDigit)))
+                var digits = HudNumberReader.Inspect(luminance, width, height);
+                if (digits.Lines.Any(line => line.Any(char.IsDigit)))
                 {
                     return OcrDocument.FromEngine(
                         "interface digits",
-                        digits.Select(line => new OcrFragment(line, null)).ToList());
+                        digits.Lines.Select(line => new OcrFragment(line, null)).ToList(),
+                        digits.Clipped);
                 }
             }
 

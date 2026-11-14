@@ -5,13 +5,18 @@ namespace StarCitizenMiningAssistant.Core.Recognition;
 /// font: the glyphs are small and the colored edge splits each stroke.
 /// A result is still only a candidate. It is not a confirmed reading.
 /// </summary>
+public readonly record struct HudInspection(IReadOnlyList<string> Lines, bool Clipped);
+
 public static class HudNumberReader
 {
-    public static IReadOnlyList<string> Read(ReadOnlySpan<byte> luminance, int width, int height)
+    public static IReadOnlyList<string> Read(ReadOnlySpan<byte> luminance, int width, int height) =>
+        Inspect(luminance, width, height).Lines;
+
+    public static HudInspection Inspect(ReadOnlySpan<byte> luminance, int width, int height)
     {
         if (width < 8 || height < 8 || luminance.Length < width * height)
         {
-            return [];
+            return new HudInspection([], false);
         }
 
         var max = 0;
@@ -25,7 +30,7 @@ public static class HudNumberReader
 
         if (max < 80)
         {
-            return [];
+            return new HudInspection([], false);
         }
 
         var threshold = max - 25;
@@ -35,17 +40,42 @@ public static class HudNumberReader
             ink[i] = luminance[i] >= threshold;
         }
 
-        var lines = new List<string>();
+        string? best = null;
+        var bestDigits = 0;
+        var bestInk = 0;
+        var bestClipped = false;
+        var densest = 0;
+        var densestClipped = false;
         foreach (var band in Bands(ink, width, height))
         {
-            var text = ReadBand(ink, width, band.Top, band.Bottom);
-            if (text.Length > 0)
+            if (!TryInkBounds(ink, width, band.Top, band.Bottom, out var left, out var right, out var top, out var bottom, out var count))
             {
-                lines.Add(text);
+                continue;
             }
+
+            var touches = left == 0 || right == width - 1 || top == 0 || bottom == height - 1;
+            if (count > densest)
+            {
+                densest = count;
+                densestClipped = touches;
+            }
+
+            var text = ReadBand(ink, width, band.Top, band.Bottom);
+            var digits = text.Count(char.IsDigit);
+            if (digits == 0 || (best is not null && (digits < bestDigits || (digits == bestDigits && count <= bestInk))))
+            {
+                continue;
+            }
+
+            best = text;
+            bestDigits = digits;
+            bestInk = count;
+            bestClipped = touches;
         }
 
-        return lines;
+        return best is null
+            ? new HudInspection([], densestClipped)
+            : new HudInspection([best], bestClipped);
     }
 
     private static string ReadBand(bool[] ink, int width, int top, int bottom)
@@ -695,6 +725,57 @@ public static class HudNumberReader
         }
 
         glyph = new Glyph(ink, width, left, right, top, bottom, bandTop, bandBottom, count);
+        return count > 0;
+    }
+
+    private static bool TryInkBounds(
+        bool[] ink,
+        int width,
+        int bandTop,
+        int bandBottom,
+        out int left,
+        out int right,
+        out int top,
+        out int bottom,
+        out int count)
+    {
+        left = width;
+        right = 0;
+        top = bandBottom;
+        bottom = bandTop;
+        count = 0;
+        for (var y = bandTop; y <= bandBottom; y++)
+        {
+            for (var x = 0; x < width; x++)
+            {
+                if (!ink[y * width + x])
+                {
+                    continue;
+                }
+
+                count++;
+                if (x < left)
+                {
+                    left = x;
+                }
+
+                if (x > right)
+                {
+                    right = x;
+                }
+
+                if (y < top)
+                {
+                    top = y;
+                }
+
+                if (y > bottom)
+                {
+                    bottom = y;
+                }
+            }
+        }
+
         return count > 0;
     }
 

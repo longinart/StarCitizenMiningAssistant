@@ -364,6 +364,36 @@ public class HudNumberReaderTests
             "..####"))));
     }
 
+    [Fact]
+    public void A_loose_rectangle_finds_the_digit_band_and_a_cut_edge_is_clipped()
+    {
+        var digit = Row(Pad(), Glyph(
+            "...#...",
+            ".######",
+            ".######",
+            "##..###",
+            "....###",
+            "..####.",
+            ".####..",
+            "###....",
+            "###....",
+            "#######",
+            "#######"));
+        var cut = Inspect(digit);
+        Assert.Equal("2", Assert.Single(cut.Lines));
+        Assert.True(cut.Clipped);
+
+        var loose = Inspect(Frame(digit, 4));
+        Assert.Equal("2", Assert.Single(loose.Lines));
+        Assert.False(loose.Clipped);
+
+        var bar = new string('#', digit[0].Length);
+        var blank = new string('.', digit[0].Length);
+        var crowded = Inspect([bar, bar, bar, blank, blank, blank, .. Frame(digit, 4)]);
+        Assert.Equal("2", Assert.Single(crowded.Lines));
+        Assert.False(crowded.Clipped);
+    }
+
     private static string Read(string[] rows)
     {
         var width = rows.Max(row => row.Length);
@@ -377,6 +407,45 @@ public class HudNumberReaderTests
         }
 
         return Assert.Single(HudNumberReader.Read(data, width, rows.Length));
+    }
+
+    private static HudInspection Inspect(string[] rows)
+    {
+        var width = rows.Max(row => row.Length);
+        var data = new byte[width * rows.Length];
+        for (var y = 0; y < rows.Length; y++)
+        {
+            for (var x = 0; x < rows[y].Length; x++)
+            {
+                data[y * width + x] = rows[y][x] == '#' ? (byte)255 : (byte)0;
+            }
+        }
+
+        return HudNumberReader.Inspect(data, width, rows.Length);
+    }
+
+    private static string[] Frame(string[] rows, int pad)
+    {
+        var inner = rows.Max(row => row.Length);
+        var width = inner + (pad * 2);
+        var blank = new string('.', width);
+        var framed = new List<string>();
+        for (var i = 0; i < pad; i++)
+        {
+            framed.Add(blank);
+        }
+
+        foreach (var row in rows)
+        {
+            framed.Add(new string('.', pad) + row.PadRight(inner, '.') + new string('.', pad));
+        }
+
+        for (var i = 0; i < pad; i++)
+        {
+            framed.Add(blank);
+        }
+
+        return framed.ToArray();
     }
 
     private static string[] Glyph(params string[] rows) => rows;

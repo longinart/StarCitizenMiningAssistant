@@ -339,20 +339,22 @@ public partial class MainWindow : Window
         viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Signatures) is { IsPlaceable: true }
         || viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Rock) is { IsPlaceable: true };
 
-    private async Task<IReadOnlyList<ObservedValue<string>>?> ReadWatchAsync(
+    private readonly record struct WatchFrame(IReadOnlyList<ObservedValue<string>>? Lines, bool Clipped);
+
+    private async Task<WatchFrame> ReadWatchAsync(
         MainWindowViewModel viewModel,
         MonitorInfo? monitor,
         CaptureTarget target)
     {
         if (monitor is null)
         {
-            return null;
+            return new WatchFrame(null, false);
         }
 
         var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
         if (rectangle is not { IsPlaceable: true })
         {
-            return null;
+            return new WatchFrame(null, false);
         }
 
         var captured = RegionImage.CaptureBmp(
@@ -362,13 +364,14 @@ public partial class MainWindow : Window
             (int)Math.Round(rectangle.Height));
         if (captured is null)
         {
-            return null;
+            return new WatchFrame(null, false);
         }
 
         var document = target == CaptureTarget.Rock
             ? await new WindowsOcrReader().ReadLabelsAsync(captured)
-            : await new WindowsOcrReader().ReadAsync(captured);
-        return document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
+            : await SignatureOcr.ReadAsync(captured, viewModel.Catalog);
+        var lines = document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
+        return new WatchFrame(lines, document.Clipped);
     }
 
     private async Task<string> DescribeTarget(MainWindowViewModel viewModel, MonitorInfo? monitor, CaptureTarget target)
@@ -381,7 +384,7 @@ public partial class MainWindow : Window
             return "Watching. The " + label + " rectangle is not placed.";
         }
 
-        var lines = await ReadWatchAsync(viewModel, monitor, target);
+        var frame = await ReadWatchAsync(viewModel, monitor, target);
         if (_overlay is null)
         {
             return "";
@@ -389,12 +392,18 @@ public partial class MainWindow : Window
 
         if (target == CaptureTarget.Signatures)
         {
-            var reading = viewModel.WatchSignature(lines);
+            if (frame.Clipped)
+            {
+                return "Watching. The rectangle clips the digits. Draw it a little larger.";
+            }
+
+            var reading = viewModel.WatchSignature(frame.Lines);
             var names = string.Join(", ", viewModel.SignatureHits.Select(hit => hit.Name));
             return "Watching. " + DescribeHeld("Signature", reading)
                 + (names.Length == 0 ? "" : " " + names);
         }
 
+        var lines = frame.Lines;
         var rock = lines is null ? null : RockOcrFields.Read(lines);
         var held = viewModel.WatchRock(rock);
         return "Watching. "
@@ -606,13 +615,26 @@ public partial class MainWindow : Window
         }
 
         output.Text = "Reading...";
+        var catalog = DataContext is MainWindowViewModel model ? model.Catalog : null;
         var reader = new WindowsOcrReader();
         var document = target == CaptureTarget.Rock
             ? await reader.ReadLabelsAsync(bmp)
-            : await reader.ReadAsync(bmp);
+            : await SignatureOcr.ReadAsync(bmp, catalog);
         if (document.Failure is not null)
         {
             output.Text = document.Failure;
+            return;
+        }
+
+        if (target == CaptureTarget.Signatures && document.Clipped)
+        {
+            output.Text = "The rectangle clips the digits. Draw it a little larger.";
+            if (document.Lines.Count > 0)
+            {
+                output.Text += Environment.NewLine
+                    + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
+            }
+
             return;
         }
 

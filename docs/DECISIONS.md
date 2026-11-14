@@ -111,3 +111,15 @@ The rock image is scaled up to three times, without going past 2000 pixels on a 
 Date: 2026-11-13.
 
 The overlay window is topmost and drawn at 94 percent opacity so a borderless game can show behind it. The assistant window has a checkbox, Clicks pass through the overlay. While that box is ticked, the overlay's extended style includes WS_EX_TRANSPARENT, so the mouse hit test skips this window. The program does not call SendInput and does not synthesize a click. Untick the box to move or close the overlay. The choice is saved in the loadout file and starts unticked. The rectangle-placement window is unchanged: it is topmost only while a rectangle is being dragged.
+
+## 017 — A clipped digit rectangle is not a sample
+
+Date: 2026-11-13.
+
+`HudNumberReader` searches the capture for the bright band that contains the most digits, so a slightly loose rectangle and a bright strip above the number still yield the line. If that band's ink touches the edge of the image, the rectangle is cutting the glyphs. The scan page and the overlay watch say to draw the rectangle a little larger. That frame is not passed to the signature hold, so a partial number does not replace a previous reading. When no digits are read, the densest ink band is used for the same edge check. A dark frame is still a missing sample, not a clip.
+
+## 018 — Signature digits follow the bright row
+
+Date: 2026-11-14.
+
+The handwritten digit rules missed the paler numbers from other ships. A signature rectangle is now read from brightness, not from a ship color. The cutoff sits above the background, so black space and a brighter sky do not use the same sparkle pixel. The location pin is the taller mark on the left of the digit row and is left out. The digit row is drawn twice, once smoothed and once sharp, and Windows OCR reads both. The number is kept when the two readings agree, when one is blank, when one is the longer form of the other, or when they differ by one digit, share the rest of a non-zero run, and only one of those numbers is in the catalog. A disagreement is an empty sample, so the last good number stays. A mineral name still requires one exact catalog deposit. Decision 017's edge rejection is not used on this path: a tight box that still holds the whole number is read. No OCR package was added.

@@ -85,6 +85,8 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public string CatalogNote { get; }
 
+    public MiningCatalog? Catalog => _catalog;
+
     public ObservableCollection<MiningShip> Ships { get; }
 
     public ObservableCollection<CatalogChoice<MiningGadget>> Gadgets { get; }
