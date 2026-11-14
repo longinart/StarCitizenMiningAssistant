@@ -1,9 +1,12 @@
 ﻿using System.IO;
+using System.Text.Json;
 using System.Windows;
 using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Diagnostics;
+using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Infrastructure.Diagnostics;
+using StarCitizenMiningAssistant.Infrastructure.Persistence;
 
 namespace StarCitizenMiningAssistant.App;
 
@@ -18,7 +21,7 @@ public partial class App : Application
         _log = DiagnosticLogFactory.CreateDefault();
         WriteInformation($"{ApplicationInfo.Name} {ApplicationInfo.VersionText} started.");
 
-        var window = new MainWindow(MainWindowViewModel.Create());
+        var window = new MainWindow(CreateViewModel());
         MainWindow = window;
         window.Show();
     }
@@ -27,6 +30,42 @@ public partial class App : Application
     {
         WriteInformation($"{ApplicationInfo.Name} stopped.");
         base.OnExit(e);
+    }
+
+    private MainWindowViewModel CreateViewModel()
+    {
+        var catalogPath = Path.Combine(AppContext.BaseDirectory, "data", "mining-equipment.json");
+        try
+        {
+            var catalog = MiningCatalog.Parse(File.ReadAllText(catalogPath));
+            WriteInformation("Loaded equipment catalog " + catalog.GameVersion + ".");
+            var viewModel = MainWindowViewModel.Create(catalog);
+            var saved = LoadoutFile.TryLoad();
+            if (saved is not null)
+            {
+                viewModel.RestoreLibrary(saved);
+            }
+
+            viewModel.LoadoutChanged += (_, _) => SaveLoadout(viewModel);
+            return viewModel;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or JsonException)
+        {
+            WriteInformation("Equipment catalog failed to load: " + ex.Message);
+            return MainWindowViewModel.CreateMissing(ex.Message);
+        }
+    }
+
+    private void SaveLoadout(MainWindowViewModel viewModel)
+    {
+        try
+        {
+            LoadoutFile.Save(viewModel.CaptureLibrary());
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            WriteInformation("Loadout was not saved: " + ex.Message);
+        }
     }
 
     private void WriteInformation(string message)

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -20,6 +20,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\StarCitizenMiningAssistant.Core\StarCitizenMiningAssistant.Core.csproj" />
+    <ProjectReference Include="..\..\src\StarCitizenMiningAssistant.Infrastructure\StarCitizenMiningAssistant.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Fixtures\Signatures\*.bmp" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

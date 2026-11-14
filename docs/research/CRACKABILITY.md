@@ -1,8 +1,28 @@
 # Crackability research
 
-Status: **not verified, not implemented.** Checked 2026-11-12. No formula in this file is approved for the calculation engine.
+Status: **working model, implemented from the SCMiner checker.** Adopted 2026-11-12. The maintainer checked SCMiner's basic results in game. Where equipment numbers disagree, decision 011 uses the SCMiner value. Head laser power is the wiki `laser_power` field, which matches the SCMiner Helix I page. Peacefrog, DCal and UVerse remain a different model. They are not the engine.
 
-The engine has to match real rocks and the better public calculators on identical inputs. Where those sources disagree, the disagreement is the result of the research. It is not resolved by choosing the formula that appears most often.
+## Working model
+
+Source: the public calculator at <https://scminer.rocks/calculators/rock-crackability>. The expressions below were read from that page's script on 2026-11-12 and reimplemented in `CrackabilityCalculator`. The script was not copied into this repository.
+
+Resistance reduces delivered power. It does not change the power the rock requires.
+
+- Power required = `0.36 × mass`. The page default, 5,000 kg at 0% resistance, requires 1,800 W.
+- Each active laser contributes `maxPower × (1 + craftPercent / 100) ×` the product of that laser's module power multipliers. The craft percent is our extension. SCMiner has no crafting field.
+- A laser's resistance, instability, green-zone and charge-rate multipliers start at `1 + headPercent / 100` and are multiplied by that laser's passive modules.
+- Across lasers, power is summed. The other multipliers are averaged.
+- One rock gadget and one active consumable, such as Surge, multiply the fleet totals after that average. Using both multiplies both. SCMiner's suggestion list tries them separately. This engine also reports the pair.
+- Effective resistance = rock resistance × the combined resistance multiplier, clamped to 0–98.
+- Power delivered = summed power × `(1 − effectiveResistance / 100)`.
+- The rock is crackable when delivered power is at least required power.
+- Power ratio = delivered / required. At least 160% is trivial, at least 115% is comfortable, at least 100% is borderline, at least 70% needs a gadget or consumable, and below 70% needs more lasers.
+- Instability and the green zone are reported. They do not change the crackable result. Green-zone width starts at 18 and is clamped to 4–65. Instability is clamped to 0–99.
+- When the rock is crackable, recommended throttle is `108 / powerRatio` percent, clamped to 5–100. A 3,900 W laser against 1,800 W required is about 50%, which is the throttle on the page.
+- Charge time uses `optimal_charge_rate` only. `all_charge_rates` is stored on the head and is not applied. See [GAME_DATA.md](GAME_DATA.md).
+- A missing or unconfirmed mass or resistance returns Unknown. Only `ObservedValue<T>.IsConfirmed` feeds the arithmetic.
+
+Checked against the published default table: Arbor MH1 at 2,340 W on that 5,000 kg / 0% rock is a 130% ratio and a 6,500 kg maximum. Helix I's catalog sentence of about 32,000 kg at 35% resistance does not match this checker. The tests follow the checker.
 
 ## What "crackable" has to answer
 
@@ -78,9 +98,7 @@ At 0% resistance this is `mass / 5`, the same as the Peacefrog formula. At 50% r
 
 <https://scminer.rocks/calculators/rock-crackability>
 
-Fetched page text, which labels itself Star Citizen 4.10.2, shows a 5,000 kg rock at 0% resistance with dissipation threshold 1,800 W and a 3,900 W Helix I. `3900 / 1800` is about 217%, which matches the displayed power ratio. `5000 / 5` is 1,000, not 1,800. This snippet therefore does not match the Peacefrog, DCal or UVerse examples.
-
-The surrounding page copy ("thermal dissipation", gadget bands at 70% and 115%) may be promotional text rather than the calculator's real expression. The live page source was not extracted. SCMINER is a required comparison target, and this snippet is not usable as a formula.
+The page default is a 5,000 kg rock at 0% resistance, threshold 1,800 W, and a 3,900 W laser at a 217% ratio. `0.36 × 5000 = 1800` and `3900 / 1800 = 2.166…`. That is the working model above. It does not match Peacefrog's `mass / 5` at 0% resistance, which would be 1,000 W. The maintainer's in-game checks follow this page, so the engine follows this page.
 
 ### Other calculators, not yet opened in source form
 
@@ -97,16 +115,7 @@ The surrounding page copy ("thermal dissipation", gadget bands at 70% and 115%) 
 | Resistance modifiers | Peacefrog multiplies the rock resistance by a factor. DCal multiplies the factors together. | not verified | not verified |
 | Instability | reported separately from required power | described as a player choice, not the break check | page also shows a green-zone width |
 
-Until SCMINER and Peacefrog are compared on the same rock with the same loadout, there is no approved formula.
-
-## Next research steps
-
-1. Open Peacefrog, SCMINER and Rockbreaker in a browser. Enter the same three rocks (include the 8,000 kg / 95% case and the 50,000 kg / 25% case) with no modules, and write the three outputs here.
-2. Repeat with one known modifier, such as a single Helix and no modules, then with two modifiers whose stacking we can see.
-3. Repeat with one active module that changes power, one gadget, and a crafted laser, each in isolation.
-4. Read the mort13 research write-up linked from the Breakability Chart and quote the part that justifies `0.2 * mass * (1 + resistance/100)` or a newer formula.
-5. For equipment stats, take one laser from a named `scunpacked-data` or Wiki build and compare it with the calculator's laser page. Record the build id.
-6. Only after two independent sources match a case, add that case as an xUnit fixture and implement that case.
+The working engine is the SCMiner checker. Peacefrog stays in this file as a recorded disagreement. A crafted head that disagrees with the `craftPercent` power multiplier, or a size 0 laser whose power scale is confirmed, is the next correction. Those gaps are listed in [GAME_DATA.md](GAME_DATA.md).
 
 ## Primary data sources for stats, not for the formula
 

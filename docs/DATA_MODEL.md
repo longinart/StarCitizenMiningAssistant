@@ -57,7 +57,9 @@ data/
   materials.json
 ```
 
-Candidate sources, none of them wired in:
+The first catalog is `data/mining-equipment.json`. Ship, head, module, and gadget rows started from the Star Citizen Wiki API for game version `4.10.2-LIVE.12881860`. Signatures, and any modifier that disagrees with SCMiner, follow decision 011. The pull and the records left out are in `docs/research/GAME_DATA.md`.
+
+Candidate sources for a later refresh:
 
 - [Star Citizen Wiki API](https://api.star-citizen.wiki/) and [its docs](https://docs.star-citizen.wiki/)
 - [scunpacked-data](https://github.com/StarCitizenWiki/scunpacked-data)
@@ -67,14 +69,8 @@ Check the licence before redistributing a dump. Prefer storing the attributes we
 
 ## Calculation result
 
-A future result is explicit about ignorance:
-
-- `Crackable`
-- `NotCrackable`
-- `Unknown` — missing input, uncertain input, or an unverified mechanic
-
-Each result names the formula version, the turrets included, the power available, the power required when the formula can produce it, and the warnings (charges, instability, distance, gadget). A recommendation is a separate object and may only contain items from the user's available set.
+`CrackAssessment` is explicit about ignorance. `CanCrack` is true, false, or null when the band is `Unknown` (missing input, uncertain input, or a value outside 0 to 100 resistance). The result names the formula version, the power delivered, the power required, the ratio, and the band. A recommendation over the user's owned equipment is still a later object.
 
 ## What is deliberately absent
 
-No laser powers, no module percentages, and no fracture formula are stored in this milestone. The research notes explain why.
+Size 0 lasers, ROC and ATLS GEO lasers, and hand lasers are in the research file and not in the catalog. Scan signatures in the catalog are the SCMiner bases and, where published, the ten deposit readings. `all_charge_rates` is stored on each head and is not used by the crack check. `extractPowerPercent` is stored on modules and is not laser power.
