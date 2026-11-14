@@ -13,6 +13,32 @@ public static class SignatureDigitStrip
         public static Prepared Empty { get; } = new([], [], null);
     }
 
+    public static IReadOnlyList<string> CoreSamples(ReadOnlySpan<byte> bmp)
+    {
+        if (!TryBrightness(bmp, out var maxChannel, out _, out var width, out var height))
+        {
+            return [];
+        }
+
+        var samples = new List<string>();
+        foreach (var cut in new[] { 160, 180, 200, 220 })
+        {
+            var painted = new byte[maxChannel.Length];
+            for (var i = 0; i < maxChannel.Length; i++)
+            {
+                painted[i] = maxChannel[i] >= cut ? (byte)255 : (byte)0;
+            }
+
+            var line = HudNumberReader.Read(painted, width, height).FirstOrDefault();
+            if (!string.IsNullOrEmpty(line))
+            {
+                samples.Add(line);
+            }
+        }
+
+        return samples;
+    }
+
     public static Prepared Prepare(ReadOnlySpan<byte> bmp)
     {
         if (!TryBrightness(bmp, out var maxChannel, out var minChannel, out var width, out var height))
@@ -60,9 +86,20 @@ public static class SignatureDigitStrip
         }
 
         var shapes = brightGround ? ReadShapes(crop, cropWidth, cropHeight, threshold) : null;
+        var merged = MergedGlow(kept);
+        if (merged)
+        {
+            // The halo of 3 and 4 joins them into one wide mark and fills the open
+            // side of the 4. Two core cutoffs leave that side open. Decision 018.
+            return new Prepared(
+                Render(crop, cropWidth, cropHeight, 56, smooth: true, binary: false, threshold, CoreFloor(crop, threshold, 30)),
+                Render(crop, cropWidth, cropHeight, 56, smooth: true, binary: false, threshold, CoreFloor(crop, threshold, 60)),
+                shapes);
+        }
+
         return new Prepared(
-            Render(crop, cropWidth, cropHeight, brightGround ? 64 : 56, smooth: true, brightGround, threshold),
-            Render(crop, cropWidth, cropHeight, brightGround ? 80 : 96, smooth: false, brightGround, threshold),
+            Render(crop, cropWidth, cropHeight, brightGround ? 64 : 56, smooth: true, brightGround, threshold, 0),
+            Render(crop, cropWidth, cropHeight, brightGround ? 80 : 96, smooth: false, brightGround, threshold, 0),
             shapes);
     }
 
@@ -226,7 +263,8 @@ public static class SignatureDigitStrip
         var current = new List<Mark> { row[0] };
         for (var i = 1; i < row.Count; i++)
         {
-            var gap = row[i].Left - current[^1].Right - 1;
+            var edge = current.Max(mark => mark.Right);
+            var gap = row[i].Left - edge - 1;
             var typical = current.Average(mark => mark.Right - mark.Left + 1);
             if (gap > Math.Max(10, typical * 1.6))
             {
@@ -286,8 +324,51 @@ public static class SignatureDigitStrip
         return kept;
     }
 
-    private static byte[] Render(byte[] crop, int cropWidth, int cropHeight, int targetHeight, bool smooth, bool binary, int inkThreshold)
+    private static bool MergedGlow(List<Mark> kept)
     {
+        if (kept.Count != 1)
+        {
+            return false;
+        }
+
+        var width = kept[0].Right - kept[0].Left + 1;
+        var height = kept[0].Bottom - kept[0].Top + 1;
+        return width > height * 1.8;
+    }
+
+    private static int CoreFloor(byte[] crop, int threshold, int percent)
+    {
+        var values = new List<byte>();
+        foreach (var value in crop)
+        {
+            if (value >= threshold)
+            {
+                values.Add(value);
+            }
+        }
+
+        if (values.Count < 20)
+        {
+            return 0;
+        }
+
+        values.Sort();
+        return values[Math.Clamp(values.Count * percent / 100, 0, values.Count - 1)];
+    }
+
+    private static byte[] Render(byte[] crop, int cropWidth, int cropHeight, int targetHeight, bool smooth, bool binary, int inkThreshold, int floor)
+    {
+        if (floor > 0)
+        {
+            var opened = new byte[crop.Length];
+            for (var i = 0; i < crop.Length; i++)
+            {
+                opened[i] = crop[i] >= floor ? crop[i] : (byte)0;
+            }
+
+            crop = opened;
+        }
+
         var low = (int)crop.Min();
         var high = (int)crop.Max();
         var span = Math.Max(1, high - low);

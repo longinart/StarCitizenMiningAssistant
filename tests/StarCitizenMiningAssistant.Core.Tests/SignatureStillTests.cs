@@ -46,6 +46,31 @@ public class SignatureStillTests
         yield return ["signatures-20261114-071827.bmp", "6800", false];
         yield return ["signatures-20261114-084617.bmp", "8000", true];
         yield return ["signatures-20261114-084644.bmp", "59000", true];
+        yield return ["signatures-20261114-114936.bmp", "", true];
+        yield return ["signatures-20261114-115734.bmp", "6800", true];
+        yield return ["signatures-20261114-115845.bmp", "3400", true];
+        yield return ["signatures-20261114-115857.bmp", "3400", true];
+        yield return ["signatures-20261114-115905.bmp", "3400", true];
+        yield return ["signatures-20261114-115913.bmp", "8250", true];
+        yield return ["signatures-20261114-115922.bmp", "3400", true];
+        yield return ["signatures-20261114-115932.bmp", "6800", true];
+        yield return ["signatures-20261114-120018.bmp", "3400", true];
+        yield return ["signatures-20261114-120023.bmp", "3400", true];
+        yield return ["signatures-20261114-123303.bmp", "3400", true];
+        yield return ["signatures-20261114-123309.bmp", "3400", true];
+        yield return ["signatures-20261114-123313.bmp", "3400", true];
+        yield return ["signatures-20261114-123316.bmp", "3400", true];
+        yield return ["signatures-20261114-123319.bmp", "6800", true];
+        yield return ["signatures-20261114-123325.bmp", "3400", true];
+        yield return ["signatures-20261114-123330.bmp", "3400", true];
+        yield return ["signatures-20261114-123339.bmp", "3400", true];
+        yield return ["signatures-20261114-123351.bmp", "3400", true];
+        yield return ["signatures-20261114-123355.bmp", "", true];
+        yield return ["signatures-20261114-123403.bmp", "8250", true];
+        yield return ["signatures-20261114-123406.bmp", "3400", true];
+        yield return ["signatures-20261114-123415.bmp", "6800", true];
+        yield return ["signatures-20261114-123418.bmp", "3400", true];
+        yield return ["signatures-20261114-123422.bmp", "6800", true];
     }
 
     [Theory]

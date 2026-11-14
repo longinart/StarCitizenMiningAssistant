@@ -31,6 +31,17 @@ public class SignatureDigitsTests
         Assert.Null(SignatureDigits.Choose(null, null, catalog));
     }
 
+    [Fact]
+    public void A_blank_strip_keeps_a_core_reading_only_when_it_is_not_one_digit_off()
+    {
+        var catalog = Catalog();
+        Assert.Equal("3400", SignatureDigits.FromCoreSamples(["2400", "3400"], catalog));
+        Assert.Equal("3400", SignatureDigits.FromCoreSamples(["3400"], catalog));
+        Assert.Null(SignatureDigits.FromCoreSamples(["8800"], catalog));
+        Assert.Null(SignatureDigits.FromCoreSamples(["2000"], catalog));
+        Assert.Null(SignatureDigits.FromCoreSamples(["8250"], catalog));
+    }
+
     private static MiningCatalog Catalog()
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);

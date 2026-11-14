@@ -66,7 +66,7 @@ The overlay is another window in this project, owned by the main window. It is n
 - `Recognition.SignatureWatch` — a confirmed signature against the catalog. The hit is labelled with the deposit count, such as 2 × Bexalite. A ticked mineral blinks. Sound is requested only when the user enabled it. An uncertain signature produces no hit.
 - `Recognition.RockScan` — keeps a rock field at the confidence it was saved with. An uncertain scan is not a confirmed mass or resistance.
 - `Recognition.HudNumberReader` — the earlier bright-core digit rules. Signature capture no longer uses it. Decision 018.
-- `Recognition.SignatureDigitStrip` — finds the bright digit row in a signature rectangle and leaves out the taller location pin. Ship color is not used.
+- `Recognition.SignatureDigitStrip` — finds the bright digit row in a signature rectangle and leaves out the taller location pin. Ship color is not used. A glow that joins the digits into one wide mark is read from the bright core, so an open 4 stays open. A blank drawing can be filled from that core when the number is one catalog deposit.
 - `Recognition.SignatureDigits` — keeps a signature number only when two readings of that frame agree. A disagreement is an empty sample. Decision 018.
 
 Future namespaces, added only with the milestone that needs them:

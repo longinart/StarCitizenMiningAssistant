@@ -80,8 +80,75 @@ public static class SignatureDigits
         return null;
     }
 
+    /// <summary>
+    /// Picks a number from core cutoffs when the drawn strips were blank.
+    /// A lone miss that is one digit from a catalog deposit is left out.
+    /// </summary>
+    public static string? FromCoreSamples(IEnumerable<string?> samples, MiningCatalog? catalog)
+    {
+        var parsed = new List<string>();
+        foreach (var sample in samples)
+        {
+            var digits = Parse(sample);
+            if (digits is not null && !parsed.Contains(digits))
+            {
+                parsed.Add(digits);
+            }
+        }
+
+        if (parsed.Count == 0)
+        {
+            return null;
+        }
+
+        var unique = parsed.Where(digits => Unique(catalog, digits)).ToList();
+        if (unique.Count == 1 && parsed.TrueForAll(digits => digits == unique[0] || Close(digits, unique[0])))
+        {
+            return unique[0];
+        }
+
+        return parsed.Count == 1 && !OneDigitFromCatalog(catalog, parsed[0]) ? parsed[0] : null;
+    }
+
     private static string TrimZero(string digits) =>
         digits.Length > 4 && digits[0] == '0' ? digits.TrimStart('0') : digits;
+
+    private static bool Unique(MiningCatalog? catalog, string digits) =>
+        catalog is not null
+        && double.TryParse(digits, NumberStyles.None, CultureInfo.InvariantCulture, out var number)
+        && catalog.MatchSignature(number).Count == 1;
+
+    private static bool OneDigitFromCatalog(MiningCatalog? catalog, string digits)
+    {
+        if (catalog is null)
+        {
+            return false;
+        }
+
+        foreach (var material in catalog.Materials)
+        {
+            if (Slip(material.Signature, digits))
+            {
+                return true;
+            }
+
+            foreach (var deposit in material.DepositSignatures)
+            {
+                if (Slip(deposit, digits))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static bool Slip(double signature, string digits)
+    {
+        var text = signature.ToString("0", CultureInfo.InvariantCulture);
+        return text.Length >= 4 && text != digits && Distance(text, digits) == 1;
+    }
 
     private static bool Known(MiningCatalog? catalog, string digits) =>
         catalog is not null
