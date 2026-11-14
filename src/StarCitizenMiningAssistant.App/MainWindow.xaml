@@ -110,6 +110,11 @@
                 <Button x:Name="NavOverlay" Content="Overlay" Style="{StaticResource NavButton}" Click="ShowOverlay_Click" IsEnabled="False" />
                 <CheckBox Margin="16,0,0,12" Foreground="#FFE6E8EB" Content="Clicks pass through the overlay"
                           IsChecked="{Binding ClickThrough}" />
+                <CheckBox Margin="16,0,0,4" Foreground="#FFE6E8EB" IsChecked="{Binding ScanLogEnabled}">
+                    <TextBlock Text="Log scans" TextWrapping="Wrap" />
+                </CheckBox>
+                <TextBlock Margin="16,0,8,16" Foreground="#FFA7B0BA" FontSize="12" TextWrapping="Wrap"
+                           Text="While this is ticked, placed rectangles are saved with what was read. Untick to stop." />
                 <Button x:Name="NavScan" Content="Scan areas" Style="{StaticResource NavButton}" Click="ShowScan_Click" IsEnabled="False" />
             </StackPanel>
         </Border>

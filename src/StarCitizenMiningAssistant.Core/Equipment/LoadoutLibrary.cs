@@ -68,6 +68,8 @@ public sealed class LoadoutLibrary
 
     public bool ClickThrough { get; set; }
 
+    public bool ScanLogEnabled { get; set; } = true;
+
     public double? OverlayLeft { get; set; }
 
     public double? OverlayTop { get; set; }

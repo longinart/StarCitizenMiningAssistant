@@ -322,6 +322,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.SignatureConfidence = saved.SignatureConfidence ?? "";
             _library.SoundEnabled = saved.SoundEnabled;
             _library.ClickThrough = saved.ClickThrough;
+            _library.ScanLogEnabled = saved.ScanLogEnabled;
             _library.OverlayLeft = saved.OverlayLeft;
             _library.OverlayTop = saved.OverlayTop;
             _library.OverlayWidth = saved.OverlayWidth;
@@ -333,6 +334,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             SignatureText = saved.SignatureText ?? "";
             OnPropertyChanged(nameof(SoundEnabled));
             OnPropertyChanged(nameof(ClickThrough));
+            OnPropertyChanged(nameof(ScanLogEnabled));
 
             var screen = _library.Draft ?? _library.Find(_library.ActiveName);
             if (screen is not null)
@@ -491,6 +493,25 @@ public sealed class MainWindowViewModel : ViewModelBase
 
             _library.SoundEnabled = value;
             OnPropertyChanged(nameof(SoundEnabled));
+            NotifyLoadout();
+        }
+    }
+
+    public event EventHandler? ScanLogChanged;
+
+    public bool ScanLogEnabled
+    {
+        get => _library.ScanLogEnabled;
+        set
+        {
+            if (_library.ScanLogEnabled == value)
+            {
+                return;
+            }
+
+            _library.ScanLogEnabled = value;
+            OnPropertyChanged(nameof(ScanLogEnabled));
+            ScanLogChanged?.Invoke(this, EventArgs.Empty);
             NotifyLoadout();
         }
     }

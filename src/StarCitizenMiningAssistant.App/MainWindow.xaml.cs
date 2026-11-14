@@ -28,6 +28,9 @@ public partial class MainWindow : Window
     private OverlayWindow? _overlay;
     private DispatcherTimer? _watch;
     private bool _watchBusy;
+    private DispatcherTimer? _scanLog;
+    private bool _scanLogBusy;
+    private readonly Dictionary<CaptureTarget, (string Reading, DateTimeOffset At)> _scanLogLast = [];
 
     private static SolidColorBrush Freeze(Color color)
     {
@@ -47,6 +50,9 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = viewModel;
         viewModel.ClickThroughChanged += (_, _) => ApplyOverlayClickThrough();
+        viewModel.ScanLogChanged += (_, _) => ApplyScanLog();
+        Closed += (_, _) => StopScanLog();
+        ApplyScanLog();
         SizeChanged += Window_SizeChanged;
         if (FindRequestedMonitor() is MonitorInfo monitor)
         {
@@ -292,6 +298,113 @@ public partial class MainWindow : Window
 
         _watch.Stop();
         _watch.Tick -= WatchTick;
+    }
+
+    private void ApplyScanLog()
+    {
+        if (DataContext is MainWindowViewModel { ScanLogEnabled: true })
+        {
+            StartScanLog();
+            return;
+        }
+
+        StopScanLog();
+    }
+
+    private void StartScanLog()
+    {
+        _scanLog ??= new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        if (_scanLog.IsEnabled)
+        {
+            return;
+        }
+
+        _scanLog.Tick += ScanLogTick;
+        _scanLog.Start();
+    }
+
+    private void StopScanLog()
+    {
+        if (_scanLog is null)
+        {
+            return;
+        }
+
+        _scanLog.Stop();
+        _scanLog.Tick -= ScanLogTick;
+    }
+
+    private async void ScanLogTick(object? sender, EventArgs e)
+    {
+        if (_scanLogBusy || DataContext is not MainWindowViewModel viewModel || !viewModel.ScanLogEnabled)
+        {
+            return;
+        }
+
+        _scanLogBusy = true;
+        try
+        {
+            var monitor = WatchMonitor(viewModel);
+            await LogTarget(viewModel, monitor, CaptureTarget.Signatures);
+            await LogTarget(viewModel, monitor, CaptureTarget.Rock);
+        }
+        finally
+        {
+            _scanLogBusy = false;
+        }
+    }
+
+    private async Task LogTarget(MainWindowViewModel viewModel, MonitorInfo? monitor, CaptureTarget target)
+    {
+        if (monitor is null)
+        {
+            return;
+        }
+
+        var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
+        if (rectangle is not { IsPlaceable: true })
+        {
+            return;
+        }
+
+        var captured = RegionImage.CaptureBmp(
+            monitor.Left + (int)Math.Round(rectangle.Left),
+            monitor.Top + (int)Math.Round(rectangle.Top),
+            (int)Math.Round(rectangle.Width),
+            (int)Math.Round(rectangle.Height));
+        if (captured is null)
+        {
+            return;
+        }
+
+        var document = target == CaptureTarget.Rock
+            ? await new WindowsOcrReader().ReadLabelsAsync(captured)
+            : await SignatureOcr.ReadAsync(captured, viewModel.Catalog);
+        var lines = document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
+        var record = target == CaptureTarget.Signatures
+            ? ScanLogText.Signature(viewModel.Catalog, lines, document.Clipped)
+            : ScanLogText.Rock(lines);
+        var now = DateTimeOffset.Now;
+        DateTimeOffset? previousAt = null;
+        string? previous = null;
+        if (_scanLogLast.TryGetValue(target, out var prior))
+        {
+            previous = prior.Reading;
+            previousAt = prior.At;
+        }
+
+        if (!ScanLogPolicy.ShouldSave(previous, previousAt, record.Reading, now))
+        {
+            return;
+        }
+
+        var label = target == CaptureTarget.Signatures ? "signature" : "rock";
+        if (ScanLogFile.Save(label, captured, record.Reading, record.Confidence, record.Detail) is null)
+        {
+            return;
+        }
+
+        _scanLogLast[target] = (record.Reading, now);
     }
 
     private async void WatchTick(object? sender, EventArgs e)

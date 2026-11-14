@@ -172,6 +172,15 @@ public class LoadoutLibraryTests
         Assert.True(restored.ClickThrough);
     }
 
+    [Fact]
+    public void Scan_log_stays_on_when_an_older_file_does_not_mention_it()
+    {
+        var restored = LoadoutLibrary.TryParse("{\"loadouts\":[],\"clickThrough\":false}");
+
+        Assert.NotNull(restored);
+        Assert.True(restored.ScanLogEnabled);
+    }
+
     private static StoredLoadout Screen(string shipId, string headId, params string[] modules) =>
         new()
         {
