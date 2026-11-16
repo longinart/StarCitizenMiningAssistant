@@ -1,0 +1,4 @@
+The signature reader is a C# port of the SCO digit reader and glyph samples from
+Smart Citizen (https://github.com/Osiris-DevWorks/smart-citizen), which is
+licensed under the Apache License, Version 2.0. The license text is in
+third-party/smart-citizen/LICENSE. The rest of that product is not included.

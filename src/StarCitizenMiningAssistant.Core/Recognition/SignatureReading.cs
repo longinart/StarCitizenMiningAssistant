@@ -9,7 +9,10 @@ namespace StarCitizenMiningAssistant.Core.Recognition;
 /// </summary>
 public static class SignatureReading
 {
-    public static ObservedValue<double> FromLines(MiningCatalog catalog, IReadOnlyList<ObservedValue<string>> lines)
+    public static ObservedValue<double> FromLines(
+        MiningCatalog catalog,
+        IReadOnlyList<ObservedValue<string>> lines,
+        ScanSignatureChart? chart = null)
     {
         ArgumentNullException.ThrowIfNull(catalog);
         ArgumentNullException.ThrowIfNull(lines);
@@ -35,7 +38,9 @@ public static class SignatureReading
             return ObservedValue<double>.Uncertain(reading);
         }
 
-        return catalog.MatchSignature(reading).Count == 1
+        var chartCount = chart?.Matches((int)Math.Round(reading)).Count ?? 0;
+        var confirmed = chartCount == 1 || (chartCount == 0 && catalog.MatchSignature(reading).Count == 1);
+        return confirmed
             ? ObservedValue<double>.Confirmed(reading)
             : ObservedValue<double>.Uncertain(reading);
     }

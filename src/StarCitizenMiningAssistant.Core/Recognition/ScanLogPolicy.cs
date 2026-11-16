@@ -39,7 +39,11 @@ public readonly record struct ScanLogRecord(string Reading, string Confidence, s
 /// </summary>
 public static class ScanLogText
 {
-    public static ScanLogRecord Signature(MiningCatalog? catalog, IReadOnlyList<ObservedValue<string>>? lines, bool clipped)
+    public static ScanLogRecord Signature(
+        MiningCatalog? catalog,
+        IReadOnlyList<ObservedValue<string>>? lines,
+        bool clipped,
+        ScanSignatureChart? chart = null)
     {
         var reading = Join(lines);
         if (clipped)
@@ -52,14 +56,22 @@ public static class ScanLogText
             return new ScanLogRecord(reading, RecognitionConfidence.Missing.ToString(), "");
         }
 
-        var observed = SignatureReading.FromLines(catalog, lines);
+        var observed = SignatureReading.FromLines(catalog, lines, chart);
         var detail = "";
         if (observed.Confidence != RecognitionConfidence.Missing)
         {
-            var matches = catalog.MatchSignature(observed.Value);
-            detail = matches.Count == 0
-                ? "no catalog deposit"
-                : string.Join("; ", matches.Select(match => match.DepositNumber + " x " + match.Material.Name));
+            var decoded = chart?.Matches((int)Math.Round(observed.Value)) ?? [];
+            if (decoded.Count > 0)
+            {
+                detail = string.Join("; ", decoded.Select(match => match.Count + " x " + match.Kind));
+            }
+            else
+            {
+                var matches = catalog.MatchSignature(observed.Value);
+                detail = matches.Count == 0
+                    ? "no catalog deposit"
+                    : string.Join("; ", matches.Select(match => match.DepositNumber + " x " + match.Material.Name));
+            }
         }
 
         return new ScanLogRecord(reading, observed.Confidence.ToString(), detail);

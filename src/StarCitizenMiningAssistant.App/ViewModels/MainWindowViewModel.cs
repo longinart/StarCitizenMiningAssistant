@@ -13,6 +13,7 @@ namespace StarCitizenMiningAssistant.App.ViewModels;
 public sealed class MainWindowViewModel : ViewModelBase
 {
     private readonly MiningCatalog? _catalog;
+    private readonly RepeatedReading _signatureRepeat = new();
     private bool _suspendSave;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
@@ -86,6 +87,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     public string CatalogNote { get; }
 
     public MiningCatalog? Catalog => _catalog;
+
+    public ScanSignatureChart? SignatureChart { get; set; }
 
     public ObservableCollection<MiningShip> Ships { get; }
 
@@ -599,7 +602,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         ArgumentNullException.ThrowIfNull(lines);
         var reading = _catalog is null
             ? ObservedValue<double>.Missing()
-            : SignatureReading.FromLines(_catalog, lines);
+            : SignatureReading.FromLines(_catalog, lines, SignatureChart);
         ApplySignature(reading);
         return reading;
     }
@@ -608,9 +611,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         var sample = lines is null || _catalog is null
             ? ObservedValue<double>.Missing()
-            : SignatureReading.FromLines(_catalog, lines);
+            : SignatureReading.FromLines(_catalog, lines, SignatureChart);
         var previous = RockScan.Value(SignatureText, _library.SignatureConfidence);
-        var held = ReadingHold.Next(previous, sample);
+        var held = ReadingHold.Next(previous, _signatureRepeat.Gate(sample));
         if (!held.Equals(previous))
         {
             ApplySignature(held);
@@ -716,7 +719,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             var signature = RockScan.Value(SignatureText, _library.SignatureConfidence);
             var tracked = Minerals.Where(row => row.IsTracked).Select(row => row.Name);
-            var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled);
+            var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled, SignatureChart);
             _signatureHits = result.Hits.Select(OverlaySignatureHit.From).ToList();
             var key = string.Join("|", result.Hits.Where(hit => hit.Blink).Select(hit => hit.Mineral));
             if (!_suspendSave)
@@ -1113,6 +1116,13 @@ public sealed class MainWindowViewModel : ViewModelBase
     {
         if (signature is not double reading || _catalog is null)
         {
+            return;
+        }
+
+        var decoded = SignatureChart?.Matches((int)Math.Round(reading)) ?? [];
+        if (decoded.Count > 0)
+        {
+            text.AppendLine("Signature " + Format(reading) + ": " + string.Join("; ", decoded.Select(match => match.Count + " x " + match.Kind)));
             return;
         }
 

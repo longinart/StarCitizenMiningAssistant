@@ -5,6 +5,7 @@ using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Diagnostics;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Recognition;
 using StarCitizenMiningAssistant.Infrastructure.Diagnostics;
 using StarCitizenMiningAssistant.Infrastructure.Persistence;
 
@@ -40,6 +41,11 @@ public partial class App : Application
             var catalog = MiningCatalog.Parse(File.ReadAllText(catalogPath));
             WriteInformation("Loaded equipment catalog " + catalog.GameVersion + ".");
             var viewModel = MainWindowViewModel.Create(catalog);
+            var chartPath = Path.Combine(AppContext.BaseDirectory, "data", "scan-signatures.json");
+            if (File.Exists(chartPath))
+            {
+                viewModel.SignatureChart = ScanSignatureChart.Parse(File.ReadAllText(chartPath));
+            }
             var saved = LoadoutFile.TryLoad();
             if (saved is not null)
             {

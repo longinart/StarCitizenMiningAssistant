@@ -60,10 +60,14 @@ The overlay is another window in this project, owned by the main window. It is n
 - `Calculation.LoadoutComparison` — one confirmed rock against each saved loadout. The row is Crackable, Difficult, Uncrackable, or Unknown, and it names the boost that the crack needs.
 - `Capture.CaptureRectangle` — a signature rectangle and a rock rectangle, stored per monitor. Core does not capture pixels.
 - `Recognition.IScreenReader` — the OCR port. `OcrDocument` keeps every returned line Uncertain. `RockOcrFields` assigns a number to mass, resistance, or instability only when that word is on the line, and it does not raise the confidence.
-- `Recognition.SignatureReading` — one digit line becomes a confirmed signature only when it matches exactly one catalog deposit. Decision 013. Any other reading stays Uncertain or Missing.
+- `Recognition.ScanPatch` — the fixed signature patch under the radar, as a fraction of the chosen monitor. Decision 021.
+- `Recognition.HudSignatureReader` — reads that patch by matching glyphs. A comma before the last three digits is required. Decision 021.
+- `Recognition.ScanSignatureChart` — `data/scan-signatures.json`. One match confirms the signature. Several matches stay uncertain.
+- `Recognition.RepeatedReading` — while the overlay watches, a new signature is kept only after two identical frames. Decision 021.
+- `Recognition.SignatureReading` — one digit line becomes a confirmed signature when the chart has one match, or when the chart has none and the catalog has one deposit. Decision 013 and decision 021. Any other reading stays Uncertain or Missing.
 - `Recognition.ReadingHold` — a missing sample keeps the previous signature or rock field. A sample that contains a number replaces it. Decision 014. The overlay timer in the App calls this about twice a second and stops when the overlay closes.
 - `Recognition.ScanLogPolicy` — while Log scans is ticked, a placed rectangle is written to `scan-log` with the reading from that frame. A repeat waits. Decision 019.
-- `Recognition.StableReading` — two identical labelled samples confirm mass, resistance, or instability. One sample stays Uncertain. Decision 015. `WindowsOcrReader.ReadLabelsAsync` scales the rock image up to three times before Windows OCR. Signature digits use `SignatureOcr` instead. Decision 018.
+- `Recognition.StableReading` — two identical labelled samples confirm mass, resistance, or instability. One sample stays Uncertain. Decision 015. `WindowsOcrReader.ReadLabelsAsync` scales the rock image up to three times before Windows OCR. The live signature path uses `HudSignatureReader`. Decision 021. `SignatureOcr` remains and is not the live path.
 - `Recognition.SignatureWatch` — a confirmed signature against the catalog. The hit is labelled with the deposit count, such as 2 × Bexalite. A ticked mineral blinks. Sound is requested only when the user enabled it. An uncertain signature produces no hit.
 - `Recognition.RockScan` — keeps a rock field at the confidence it was saved with. An uncertain scan is not a confirmed mass or resistance.
 - `Recognition.HudNumberReader` — the earlier bright-core digit rules. Signature capture no longer uses it. Decision 018.
@@ -77,7 +81,7 @@ Future namespaces, added only with the milestone that needs them:
 
 ### StarCitizenMiningAssistant.Infrastructure
 
-`net10.0-windows10.0.19041.0`. `FileDiagnosticLog` appends lines to `%LocalAppData%\StarCitizenMiningAssistant\logs\app.log`. If that folder cannot be created, startup uses `NullDiagnosticLog` and the window still opens. `DisplayMonitors` lists screens. `RegionImage` copies one rectangle with `BitBlt` and can save that bitmap beside the log. `WindowsOcrReader` implements `IScreenReader` with Windows.Media.Ocr. `SignatureOcr` cleans a signature rectangle and reads it twice. It does not hook the game. An OCR line stays Uncertain, per decision 012. A signature that matches one catalog deposit is confirmed by decision 013.
+`net10.0-windows10.0.19041.0`. `FileDiagnosticLog` appends lines to `%LocalAppData%\StarCitizenMiningAssistant\logs\app.log`. If that folder cannot be created, startup uses `NullDiagnosticLog` and the window still opens. `DisplayMonitors` lists screens. `RegionImage` copies one rectangle with `BitBlt` and can save that bitmap beside the log. `WindowsOcrReader` implements `IScreenReader` with Windows.Media.Ocr. The live signature capture is the radar patch, read by `HudSignatureReader`. `SignatureOcr` remains and is not the live path. It does not hook the game. An OCR line stays Uncertain, per decision 012. A signature that matches one catalog deposit is confirmed by decision 013.
 
 ### StarCitizenMiningAssistant.Core.Tests
 

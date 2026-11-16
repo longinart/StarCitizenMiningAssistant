@@ -68,13 +68,13 @@ The overlay stays above other windows and is slightly translucent. Clicks pass t
 
 A rectangle that cuts through the bright digit band says so, and that frame is not applied as a signature. A looser rectangle is searched for the bright band inside it, so padding and a bright strip above the number do not hide the digits. A new misread of those shapes is locked with a test. Decision 017.
 
-### Signature digits — in the app
+### Signature digits — replaced
 
-The signature number is read from the bright digit row. The location pin is left out because it is taller than the digits, not because of its color, so a blue, orange, or other HUD can use the same path. Windows OCR reads that row at two sizes. A frame whose two readings disagree is ignored, and the last good number stays. The saved stills of 10,800, 7,200, 8,250, 3,400, 6,000, 2,000, and 6,800 are the tests. Decision 018.
+The live signature path reads the fixed patch under the radar and matches glyphs. Their readout crops are the tests. Decision 021. The earlier bright-row reader is still in the project and is not used for the live scan. Decision 018.
 
 ### N. Your layout check — waiting on you
 
-Place both rectangles on the borderless panels and leave the overlay where you want it. This program does not start Star Citizen. Success is a named mineral from the signature rectangle, rock fields filled from the rock rectangle, and the overlay staying where you left it.
+Choose the monitor the game is on. The signature does not need a rectangle. Place the rock rectangle on the rock panel and leave the overlay where you want it. This program does not start Star Citizen. Success is a named mineral from the radar patch, rock fields filled from the rock rectangle, and the overlay staying where you left it.
 
 ## Later
 
@@ -82,4 +82,4 @@ A per-user installer or a portable build. No admin rights for normal use. Rankin
 
 ## Explicitly out of scope
 
-Memory reading, injection, renderer hooks, input automation, editing game files, and copying another project's source.
+Memory reading, injection, renderer hooks, input automation, editing game files, and copying another project's source. The signature reader in decision 021 is the one exception, and it stops at that reader.

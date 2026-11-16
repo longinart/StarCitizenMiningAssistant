@@ -32,7 +32,8 @@ public static class SignatureWatch
         MiningCatalog catalog,
         ObservedValue<double> signature,
         IEnumerable<string>? trackedMinerals,
-        bool soundEnabled)
+        bool soundEnabled,
+        ScanSignatureChart? chart = null)
     {
         ArgumentNullException.ThrowIfNull(catalog);
         if (!signature.IsConfirmed)
@@ -41,11 +42,20 @@ public static class SignatureWatch
         }
 
         var tracked = new HashSet<string>(trackedMinerals ?? [], StringComparer.OrdinalIgnoreCase);
-        var hits = catalog.MatchSignature(signature.Value).Select(match => new SignatureWatchHit(
-            match.Material.Name,
-            match.DepositNumber,
-            tracked.Contains(match.Material.Name))).ToList();
+        var decoded = chart?.Matches((int)Math.Round(signature.Value)) ?? [];
+        var hits = decoded.Count > 0
+            ? decoded.Select(match => new SignatureWatchHit(
+                Title(match.Kind),
+                match.Count,
+                tracked.Contains(Title(match.Kind)))).ToList()
+            : catalog.MatchSignature(signature.Value).Select(match => new SignatureWatchHit(
+                match.Material.Name,
+                match.DepositNumber,
+                tracked.Contains(match.Material.Name))).ToList();
         var playSound = soundEnabled && hits.Exists(hit => hit.Blink);
         return new SignatureWatchResult(hits, playSound);
     }
+
+    private static string Title(string kind) =>
+        kind.Length == 0 ? kind : char.ToUpperInvariant(kind[0]) + kind[1..];
 }

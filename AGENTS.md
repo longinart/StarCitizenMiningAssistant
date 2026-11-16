@@ -26,7 +26,7 @@ Forbidden:
 - Gameplay automation.
 - Modifying Star Citizen files, including `user.ini`, `Data.p4k` and the install directory.
 - Undocumented private game APIs.
-- Copying source code from other projects into this repository. Public projects may be studied for approach and licensing constraints. Arkanis Overlay is PolyForm Noncommercial; do not copy it. Smart Citizen is a separate product; do not copy it.
+- Copying source code from other projects into this repository. Public projects may be studied for approach and licensing constraints. Arkanis Overlay is PolyForm Noncommercial; do not copy it. Smart Citizen is a separate product; do not copy it, except the signature reader in decision 021. That reader is a C# port of their SCO digit reader, Apache-2.0, with attribution in NOTICE and third-party/smart-citizen/LICENSE. Do not copy the rest of that product.
 
 If a requested change would cross that boundary, stop and ask.
 
