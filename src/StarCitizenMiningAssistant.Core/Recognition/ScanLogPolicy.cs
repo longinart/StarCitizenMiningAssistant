@@ -85,15 +85,11 @@ public static class ScanLogText
         }
 
         var fields = RockOcrFields.Read(lines, CultureInfo.InvariantCulture);
-        var raw = Join(lines);
-        var allMissing = fields.Mass.Confidence == RecognitionConfidence.Missing
-            && fields.Resistance.Confidence == RecognitionConfidence.Missing
-            && fields.Instability.Confidence == RecognitionConfidence.Missing;
-        var reading = allMissing
-            ? raw
-            : "mass=" + Part(fields.Mass) + " resistance=" + Part(fields.Resistance) + " instability=" + Part(fields.Instability);
+        var reading = fields.HasPanel
+            ? "mass=" + Part(fields.Mass) + " resistance=" + Part(fields.Resistance) + " instability=" + Part(fields.Instability)
+            : "";
         var confidence = fields.Mass.Confidence + ";" + fields.Resistance.Confidence + ";" + fields.Instability.Confidence;
-        return new ScanLogRecord(reading, confidence, raw);
+        return new ScanLogRecord(reading, confidence, "");
     }
 
     private static string Join(IReadOnlyList<ObservedValue<string>>? lines) =>

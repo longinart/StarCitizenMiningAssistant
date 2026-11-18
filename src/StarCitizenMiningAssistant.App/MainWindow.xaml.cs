@@ -31,6 +31,8 @@ public partial class MainWindow : Window
     private DispatcherTimer? _scanLog;
     private bool _scanLogBusy;
     private readonly Dictionary<CaptureTarget, (string Reading, DateTimeOffset At)> _scanLogLast = [];
+    private readonly SignatureAim _signatureAim = new();
+    private readonly SignatureAim _rockAim = new();
 
     private static SolidColorBrush Freeze(Color color)
     {
@@ -366,30 +368,15 @@ public partial class MainWindow : Window
         var clipped = false;
         if (target == CaptureTarget.Signatures)
         {
-            captured = CapturePatch(monitor);
-            lines = captured is null ? null : ReadPatch(captured, monitor, viewModel.SignatureChart);
+            var sought = SeekSignature(monitor, viewModel.SignatureChart);
+            captured = sought.Bmp;
+            lines = sought.Lines;
         }
         else
         {
-            var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
-            if (rectangle is not { IsPlaceable: true })
-            {
-                return;
-            }
-
-            captured = RegionImage.CaptureBmp(
-                monitor.Left + (int)Math.Round(rectangle.Left),
-                monitor.Top + (int)Math.Round(rectangle.Top),
-                (int)Math.Round(rectangle.Width),
-                (int)Math.Round(rectangle.Height));
-            if (captured is null)
-            {
-                return;
-            }
-
-            var document = await new WindowsOcrReader().ReadLabelsAsync(captured);
-            clipped = document.Clipped;
-            lines = document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
+            var sought = await SeekRock(monitor);
+            captured = sought.Bmp;
+            lines = sought.Lines;
         }
 
         if (captured is null)
@@ -482,30 +469,12 @@ public partial class MainWindow : Window
 
         if (target == CaptureTarget.Signatures)
         {
-            var patch = CapturePatch(monitor);
-            var read = patch is null ? null : ReadPatch(patch, monitor, viewModel.SignatureChart);
-            return new WatchFrame(read, false);
+            var sought = SeekSignature(monitor, viewModel.SignatureChart);
+            return new WatchFrame(sought.Lines, false);
         }
 
-        var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
-        if (rectangle is not { IsPlaceable: true })
-        {
-            return new WatchFrame(null, false);
-        }
-
-        var captured = RegionImage.CaptureBmp(
-            monitor.Left + (int)Math.Round(rectangle.Left),
-            monitor.Top + (int)Math.Round(rectangle.Top),
-            (int)Math.Round(rectangle.Width),
-            (int)Math.Round(rectangle.Height));
-        if (captured is null)
-        {
-            return new WatchFrame(null, false);
-        }
-
-        var document = await new WindowsOcrReader().ReadLabelsAsync(captured);
-        var lines = document.Failure is null && document.Lines.Count > 0 ? document.Lines : null;
-        return new WatchFrame(lines, document.Clipped);
+        var rockFrame = await SeekRock(monitor);
+        return new WatchFrame(rockFrame.Lines, false);
     }
 
     private async Task<string> DescribeTarget(MainWindowViewModel viewModel, MonitorInfo? monitor, CaptureTarget target)
@@ -513,13 +482,6 @@ public partial class MainWindow : Window
         if (target == CaptureTarget.Signatures && monitor is null)
         {
             return "Watching. Choose the monitor the game is on.";
-        }
-
-        var placed = monitor is not null
-            && viewModel.CaptureOf(monitor.DeviceName, target) is { IsPlaceable: true };
-        if (target != CaptureTarget.Signatures && !placed)
-        {
-            return "Watching. The rock rectangle is not placed.";
         }
 
         var frame = await ReadWatchAsync(viewModel, monitor, target);
@@ -574,9 +536,6 @@ public partial class MainWindow : Window
     }
 
     private void ScanMonitor_Changed(object sender, SelectionChangedEventArgs e) => RefreshScanLabels();
-
-    private void PlaceRock_Click(object sender, RoutedEventArgs e) =>
-        PlaceRegion(CaptureTarget.Rock, "Drag a rectangle around the rock panel.");
 
     private void SignatureStill_Click(object sender, RoutedEventArgs e) =>
         ShowStill(CaptureTarget.Signatures, SignatureStill, SignatureStillNote);
@@ -687,38 +646,14 @@ public partial class MainWindow : Window
             ?? monitors.FirstOrDefault();
         ScanMonitorNote.Text = monitors.Count == 0
             ? "No monitor was found."
-            : "The signature patch uses the monitor you pick here. The rock rectangle is saved for it.";
+            : "The signature and the scan results use the monitor you pick here.";
         RefreshScanLabels();
     }
 
     private void RefreshScanLabels()
     {
-        if (DataContext is not MainWindowViewModel viewModel || ScanMonitor.SelectedItem is not MonitorInfo monitor)
-        {
-            SignatureRegionText.Text = "Fixed patch under the radar.";
-            RockRegionText.Text = "Not placed";
-            return;
-        }
-
         SignatureRegionText.Text = "Fixed patch under the radar.";
-        RockRegionText.Text = Describe(viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Rock));
-    }
-
-    private void PlaceRegion(CaptureTarget target, string hint)
-    {
-        if (DataContext is not MainWindowViewModel viewModel || ScanMonitor.SelectedItem is not MonitorInfo monitor)
-        {
-            return;
-        }
-
-        var placed = RegionPlacementWindow.Ask(this, monitor, hint);
-        if (placed is null)
-        {
-            return;
-        }
-
-        viewModel.RememberCapture(monitor.DeviceName, target, placed);
-        RefreshScanLabels();
+        RockRegionText.Text = "Fixed patch on the scan results. A miss also checks one step away.";
     }
 
     private void ShowStill(CaptureTarget target, Image image, TextBlock note)
@@ -738,13 +673,6 @@ public partial class MainWindow : Window
 
     private async Task ReadTextAsync(CaptureTarget target, TextBlock output)
     {
-        if (!TryCapture(target, out var bmp, out var error))
-        {
-            output.Text = error;
-            return;
-        }
-
-        output.Text = "Reading...";
         if (target == CaptureTarget.Signatures)
         {
             if (DataContext is not MainWindowViewModel signatureModel || ScanMonitor.SelectedItem is not MonitorInfo gameMonitor)
@@ -753,12 +681,15 @@ public partial class MainWindow : Window
                 return;
             }
 
-            var lines = ReadPatch(bmp, gameMonitor, signatureModel.SignatureChart);
-            if (lines is null)
+            output.Text = "Reading...";
+            var sought = SeekSignature(gameMonitor, signatureModel.SignatureChart);
+            if (sought.Lines is null)
             {
                 output.Text = "No signature number was read.";
                 return;
             }
+
+            var lines = sought.Lines;
 
             var signature = signatureModel.ApplySignatureScan(lines);
             var names = string.Join(", ", signatureModel.SignatureHits.Select(hit => hit.Name));
@@ -769,31 +700,19 @@ public partial class MainWindow : Window
             return;
         }
 
-        var document = await new WindowsOcrReader().ReadLabelsAsync(bmp);
-        if (document.Failure is not null)
+        if (DataContext is not MainWindowViewModel rockModel || ScanMonitor.SelectedItem is not MonitorInfo rockMonitor)
         {
-            output.Text = document.Failure;
+            output.Text = "Choose a monitor first.";
             return;
         }
 
-        if (document.Lines.Count == 0)
-        {
-            output.Text = "No text was read.";
-            return;
-        }
-
-        var rock = RockOcrFields.Read(document.Lines);
-        var shown = rock;
-        if (DataContext is MainWindowViewModel viewModel)
-        {
-            shown = viewModel.WatchRock(rock);
-        }
-
-        output.Text = "Read with " + document.Language + ". Two identical reads confirm a rock number."
-            + Environment.NewLine + FormatField("Mass", shown.Mass)
-            + Environment.NewLine + FormatField("Resistance", shown.Resistance)
-            + Environment.NewLine + FormatField("Instability", shown.Instability)
-            + Environment.NewLine + string.Join(Environment.NewLine, document.Lines.Select(FormatLine));
+        output.Text = "Reading...";
+        var rockFrame = await SeekRock(rockMonitor);
+        var sample = rockFrame.Lines is null ? null : RockOcrFields.Read(rockFrame.Lines);
+        var shown = sample is { HasPanel: true } ? rockModel.WatchRock(sample) : sample;
+        output.Text = FormatField("Mass", shown?.Mass ?? ObservedValue<double>.Missing())
+            + Environment.NewLine + FormatField("Resistance", shown?.Resistance ?? ObservedValue<double>.Missing())
+            + Environment.NewLine + FormatField("Instability", shown?.Instability ?? ObservedValue<double>.Missing());
     }
 
     private bool TryCapture(CaptureTarget target, out byte[] bmp, out string error)
@@ -807,7 +726,8 @@ public partial class MainWindow : Window
 
         if (target == CaptureTarget.Signatures)
         {
-            var patch = CapturePatch(monitor);
+            var patch = CaptureShifted(monitor, _signatureAim.X, _signatureAim.Y)
+                ?? CaptureShifted(monitor, 0, 0);
             if (patch is null)
             {
                 error = "The signature patch could not be captured.";
@@ -819,18 +739,15 @@ public partial class MainWindow : Window
             return true;
         }
 
-        var rectangle = viewModel.CaptureOf(monitor.DeviceName, target);
-        if (rectangle is not { IsPlaceable: true })
-        {
-            error = "Place the rectangle first.";
-            return false;
-        }
-
-        var captured = RegionImage.CaptureBmp(
-            monitor.Left + (int)Math.Round(rectangle.Left),
-            monitor.Top + (int)Math.Round(rectangle.Top),
-            (int)Math.Round(rectangle.Width),
-            (int)Math.Round(rectangle.Height));
+        var shifted = RockPatch.Shifted(monitor.Width, monitor.Height, _rockAim.X, _rockAim.Y)
+            ?? RockPatch.Shifted(monitor.Width, monitor.Height, 0, 0);
+        var captured = shifted is null
+            ? null
+            : RegionImage.CaptureBmp(
+                monitor.Left + shifted.Value.X,
+                monitor.Top + shifted.Value.Y,
+                shifted.Value.Width,
+                shifted.Value.Height);
         if (captured is null)
         {
             error = "The still image could not be captured.";
@@ -842,10 +759,101 @@ public partial class MainWindow : Window
         return true;
     }
 
-    private static byte[]? CapturePatch(MonitorInfo monitor)
+    private (byte[]? Bmp, IReadOnlyList<ObservedValue<string>>? Lines) SeekSignature(MonitorInfo monitor, ScanSignatureChart? chart)
     {
-        var patch = ScanPatch.Of(monitor.Width, monitor.Height);
-        return RegionImage.CaptureBmp(monitor.Left + patch.X, monitor.Top + patch.Y, patch.Width, patch.Height);
+        byte[]? center = null;
+        foreach (var (offsetX, offsetY) in _signatureAim.Order(monitor.Height))
+        {
+            var captured = CaptureShifted(monitor, offsetX, offsetY);
+            if (offsetX == 0 && offsetY == 0)
+            {
+                center = captured;
+            }
+
+            if (captured is null)
+            {
+                continue;
+            }
+
+            var lines = ReadPatch(captured, monitor, chart);
+            if (lines is null)
+            {
+                continue;
+            }
+
+            _signatureAim.Remember(offsetX, offsetY);
+            return (captured, lines);
+        }
+
+        return (center ?? CaptureShifted(monitor, 0, 0), null);
+    }
+
+    private async Task<(byte[]? Bmp, IReadOnlyList<ObservedValue<string>>? Lines)> SeekRock(MonitorInfo monitor)
+    {
+        byte[]? center = null;
+        foreach (var (offsetX, offsetY) in _rockAim.Order(monitor.Height))
+        {
+            var shifted = RockPatch.Shifted(monitor.Width, monitor.Height, offsetX, offsetY);
+            if (shifted is null)
+            {
+                continue;
+            }
+
+            var captured = RegionImage.CaptureBmp(
+                monitor.Left + shifted.Value.X,
+                monitor.Top + shifted.Value.Y,
+                shifted.Value.Width,
+                shifted.Value.Height);
+            if (offsetX == 0 && offsetY == 0)
+            {
+                center = captured;
+            }
+
+            if (captured is null)
+            {
+                continue;
+            }
+
+            var words = await new WindowsOcrReader().ReadWordsAsync(captured);
+            var fields = RockFrame.Read(captured, words);
+            if (!fields.HasPanel)
+            {
+                continue;
+            }
+
+            _rockAim.Remember(offsetX, offsetY);
+            return (captured, RockFrame.Lines(fields));
+        }
+
+        var home = center ?? CaptureRock(monitor, 0, 0);
+        return (home, null);
+    }
+
+    private static byte[]? CaptureRock(MonitorInfo monitor, int offsetX, int offsetY)
+    {
+        var shifted = RockPatch.Shifted(monitor.Width, monitor.Height, offsetX, offsetY);
+        return shifted is null
+            ? null
+            : RegionImage.CaptureBmp(
+                monitor.Left + shifted.Value.X,
+                monitor.Top + shifted.Value.Y,
+                shifted.Value.Width,
+                shifted.Value.Height);
+    }
+
+    private static byte[]? CaptureShifted(MonitorInfo monitor, int offsetX, int offsetY)
+    {
+        var patch = ScanPatch.Shifted(monitor.Width, monitor.Height, offsetX, offsetY);
+        if (patch is null)
+        {
+            return null;
+        }
+
+        return RegionImage.CaptureBmp(
+            monitor.Left + patch.Value.X,
+            monitor.Top + patch.Value.Y,
+            patch.Value.Width,
+            patch.Value.Height);
     }
 
     private static IReadOnlyList<ObservedValue<string>>? ReadPatch(byte[] bmp, MonitorInfo monitor, ScanSignatureChart? chart)
@@ -882,12 +890,6 @@ public partial class MainWindow : Window
 
     private static string ConfidenceWord(RecognitionConfidence confidence) =>
         confidence == RecognitionConfidence.Confirmed ? "confirmed" : "uncertain";
-
-    private static string Describe(CaptureRectangle? rectangle) =>
-        rectangle is { IsPlaceable: true }
-            ? Math.Round(rectangle.Left) + ", " + Math.Round(rectangle.Top)
-                + "    " + Math.Round(rectangle.Width) + " × " + Math.Round(rectangle.Height)
-            : "Not placed";
 
     private static BitmapImage BitmapFrom(byte[] bmp)
     {

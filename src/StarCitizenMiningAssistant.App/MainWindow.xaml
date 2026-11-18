@@ -345,13 +345,13 @@
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
                 <TextBlock Text="Scan areas" FontSize="28" Foreground="#FFE08A3C" HorizontalAlignment="Center" />
                 <TextBlock Margin="0,16,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" TextAlignment="Center"
-                           Text="Choose the monitor the game is on. The signature is read from the fixed patch under the radar, where the pin and the number sit. Place one rectangle on the rock panel. While the overlay is open, both are read twice a second. A dark frame keeps the last number. A new signature is kept after it appears twice. A rock mass or resistance is confirmed after two identical reads, and one read stays uncertain." />
+                           Text="Choose the monitor the game is on. The signature is read from the fixed patch under the radar. If that patch is empty, the same patch is tried one step up, down, left, and right, and a tilted pill is turned level. Mass, resistance, and instability are read from a fixed patch on the scan results. If those two numbers are not in the still, the same patch is tried one step away. Composition and cargo are not read. While the overlay is open, both are read twice a second. A dark frame keeps the last number. A new signature is kept after it appears twice. A rock mass or resistance is confirmed after two identical reads, and one read stays uncertain." />
                 <TextBlock Margin="0,28,0,8" Foreground="#FFA7B0BA" Text="Monitor" />
                 <ComboBox x:Name="ScanMonitor" Width="460" HorizontalAlignment="Left" SelectionChanged="ScanMonitor_Changed" />
                 <TextBlock x:Name="ScanMonitorNote" Margin="0,10,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
 
                 <TextBlock Margin="0,32,0,8" FontSize="18" Text="Signature" />
-                <TextBlock x:Name="SignatureRegionText" Foreground="#FFA7B0BA" Text="Fixed patch under the radar." />
+                <TextBlock x:Name="SignatureRegionText" Foreground="#FFA7B0BA" Text="Fixed patch under the radar. A miss also checks one step away." />
                 <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                     <Button Content="Show still" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="SignatureStill_Click" />
                     <Button Content="Read text" MinWidth="140" MinHeight="44" FontSize="16" FontWeight="SemiBold" Click="SignatureRead_Click" />
@@ -360,10 +360,9 @@
                 <TextBlock x:Name="SignatureStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
                 <TextBlock x:Name="SignatureReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
 
-                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Rock panel" />
-                <TextBlock x:Name="RockRegionText" Foreground="#FFA7B0BA" Text="Not placed" />
+                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Scan results" />
+                <TextBlock x:Name="RockRegionText" Foreground="#FFA7B0BA" Text="Fixed patch on the scan results. A miss also checks one step away." />
                 <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                    <Button Content="Place rock panel" MinWidth="190" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="PlaceRock_Click" />
                     <Button Content="Show still" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="16" FontWeight="SemiBold" Click="RockStill_Click" />
                     <Button Content="Read text" MinWidth="140" MinHeight="44" FontSize="16" FontWeight="SemiBold" Click="RockRead_Click" />
                 </StackPanel>

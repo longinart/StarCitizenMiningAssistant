@@ -10,6 +10,16 @@ public sealed class RockOcrFields
 
     public required ObservedValue<double> Instability { get; init; }
 
+    /// <summary>
+    /// The scan-results panel is present when any of the three numbers was read.
+    /// A missing resistance does not hide a mass that was read. Crackability still
+    /// needs both mass and resistance before it calls the rock crackable.
+    /// </summary>
+    public bool HasPanel =>
+        Mass.Confidence != RecognitionConfidence.Missing
+        || Resistance.Confidence != RecognitionConfidence.Missing
+        || Instability.Confidence != RecognitionConfidence.Missing;
+
     public static RockOcrFields Read(IReadOnlyList<ObservedValue<string>> lines) =>
         Read(lines, CultureInfo.CurrentCulture);
 

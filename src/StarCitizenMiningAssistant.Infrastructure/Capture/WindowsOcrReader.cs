@@ -22,6 +22,60 @@ public sealed class WindowsOcrReader : IScreenReader
         return RecognizeAsync(ScaleBmp(image), digitsFirst: false, cancellationToken);
     }
 
+    public async Task<IReadOnlyList<RockPanel.Word>> ReadWordsAsync(byte[] image, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(image);
+        var factor = ScaleFactor(image);
+        var english = new Language("en");
+        var engine = OcrEngine.IsLanguageSupported(english)
+            ? OcrEngine.TryCreateFromLanguage(english)
+            : OcrEngine.TryCreateFromUserProfileLanguages();
+        if (engine is null)
+        {
+            return [];
+        }
+
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            using var memory = new MemoryStream(factor == 1 ? image : ScaleBmp(image));
+            using var stream = memory.AsRandomAccessStream();
+            var decoder = await BitmapDecoder.CreateAsync(stream);
+            using var bitmap = await decoder.GetSoftwareBitmapAsync(
+                BitmapPixelFormat.Bgra8,
+                BitmapAlphaMode.Premultiplied);
+            var result = await engine.RecognizeAsync(bitmap);
+            var words = new List<RockPanel.Word>();
+            foreach (var line in result.Lines)
+            {
+                foreach (var word in line.Words)
+                {
+                    if (string.IsNullOrWhiteSpace(word.Text))
+                    {
+                        continue;
+                    }
+
+                    var box = word.BoundingRect;
+                    words.Add(new RockPanel.Word(
+                        word.Text,
+                        (int)(box.X / factor),
+                        (int)(box.Y / factor),
+                        Math.Max(1, (int)(box.Height / factor))));
+                }
+            }
+
+            return words;
+        }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            return [];
+        }
+    }
+
     public Task<OcrDocument> ReadPreparedAsync(byte[] image, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(image);
@@ -81,11 +135,11 @@ public sealed class WindowsOcrReader : IScreenReader
         }
     }
 
-    private static byte[] ScaleBmp(byte[] image)
+    private static int ScaleFactor(byte[] image)
     {
-        if (!TryMetrics(image, out var pixelOffset, out var width, out var height, out var stride))
+        if (!TryMetrics(image, out _, out var width, out var height, out _))
         {
-            return image;
+            return 1;
         }
 
         var factor = 3;
@@ -93,6 +147,18 @@ public sealed class WindowsOcrReader : IScreenReader
         {
             factor--;
         }
+
+        return factor;
+    }
+
+    private static byte[] ScaleBmp(byte[] image)
+    {
+        if (!TryMetrics(image, out var pixelOffset, out var width, out var height, out var stride))
+        {
+            return image;
+        }
+
+        var factor = ScaleFactor(image);
 
         if (factor <= 1)
         {

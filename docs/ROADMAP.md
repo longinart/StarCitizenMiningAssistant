@@ -70,15 +70,19 @@ A rectangle that cuts through the bright digit band says so, and that frame is n
 
 ### Signature digits — replaced
 
-The live signature path reads the fixed patch under the radar and matches glyphs. Their readout crops are the tests. Decision 021. The earlier bright-row reader is still in the project and is not used for the live scan. Decision 018.
+The live signature path reads the fixed patch under the radar and matches glyphs. A miss checks one step up, down, left, and right, and a tilted row is turned flat once. Their readout crops are the tests. Decision 021. The earlier bright-row reader is still in the project and is not used for the live scan. Decision 018.
+
+### Rock scan results — in the app
+
+Mass, resistance, and instability are read from a fixed patch on the scan results. No rectangle is placed. If none of the three numbers is in that still, the same patch is tried one step up, down, left, and right. A number that was read is shown even when another of the three is missing. The reading lists only those three fields. Composition and cargo are not read. Instability is shown and does not decide whether the rock can crack. Decision 022.
 
 ### N. Your layout check — waiting on you
 
-Choose the monitor the game is on. The signature does not need a rectangle. Place the rock rectangle on the rock panel and leave the overlay where you want it. This program does not start Star Citizen. Success is a named mineral from the radar patch, rock fields filled from the rock rectangle, and the overlay staying where you left it.
+Choose the monitor the game is on. The signature does not need a rectangle. If the radar patch is empty, the same patch is tried one step away, and a tilted row is turned flat. Place the rock rectangle on the rock panel and leave the overlay where you want it. This program does not start Star Citizen. Success is a named mineral from the radar patch, rock fields filled from the rock rectangle, and the overlay staying where you left it.
 
 ## Later
 
-A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out.
+A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out. Reading the ore composition inside the scan results stays out until crackability from mass and resistance is doing what it should.
 
 ## Explicitly out of scope
 
