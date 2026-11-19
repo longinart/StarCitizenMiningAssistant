@@ -5,6 +5,7 @@ using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Diagnostics;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Navigation;
 using StarCitizenMiningAssistant.Core.Recognition;
 using StarCitizenMiningAssistant.Infrastructure.Diagnostics;
 using StarCitizenMiningAssistant.Infrastructure.Persistence;
@@ -45,6 +46,12 @@ public partial class App : Application
             if (File.Exists(chartPath))
             {
                 viewModel.SignatureChart = ScanSignatureChart.Parse(File.ReadAllText(chartPath));
+            }
+
+            var haloPath = Path.Combine(AppContext.BaseDirectory, "data", "aaron-halo-band5.json");
+            if (File.Exists(haloPath))
+            {
+                viewModel.UseAaronHalo(AaronHaloChart.Parse(File.ReadAllText(haloPath)));
             }
             var saved = LoadoutFile.TryLoad();
             if (saved is not null)

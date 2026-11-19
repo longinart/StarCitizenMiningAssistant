@@ -60,6 +60,37 @@ public class SignatureReadingTests
         Assert.Empty(SignatureWatch.Evaluate(catalog, shared, ["Alpha", "Beta"], soundEnabled: true).Hits);
     }
 
+    [Fact]
+    public void A_multiple_of_2000_or_3000_is_confirmed_past_the_chart_cap()
+    {
+        var catalog = Catalog();
+        var chart = Chart();
+        var sixty = SignatureReading.FromLines(catalog, [Line("60000")], chart);
+        var eightyOne = SignatureReading.FromLines(catalog, [Line("81000")], chart);
+
+        Assert.True(sixty.IsConfirmed);
+        Assert.Equal(60000, sixty.Value);
+        Assert.True(eightyOne.IsConfirmed);
+        Assert.Equal(81000, eightyOne.Value);
+    }
+
+    private static ScanSignatureChart Chart()
+    {
+        var directory = new DirectoryInfo(AppContext.BaseDirectory);
+        while (directory is not null)
+        {
+            var candidate = Path.Combine(directory.FullName, "data", "scan-signatures.json");
+            if (File.Exists(candidate))
+            {
+                return ScanSignatureChart.Parse(File.ReadAllText(candidate));
+            }
+
+            directory = directory.Parent;
+        }
+
+        throw new FileNotFoundException("data/scan-signatures.json was not found above the test output.");
+    }
+
     private static ObservedValue<string> Line(string text) => ObservedValue<string>.Uncertain(text);
 
     private static MiningCatalog Catalog() => MiningCatalog.Parse(File.ReadAllText(FindCatalog()));

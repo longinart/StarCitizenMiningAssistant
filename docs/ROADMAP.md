@@ -12,6 +12,8 @@ Solution, three projects, xUnit, documentation, foundation window, file log, rec
 
 The formula stays the one in `docs/research/CRACKABILITY.md`. A new rock number still needs a source. An uncertain reading stays Unknown.
 
+Aaron Halo Band 5 routes are a side page. They read `data/aaron-halo-band5.json`. They are not part of the overlay sequence below.
+
 ## Next sequence
 
 This is the order for the overlay. Finish and test one item before the next. The process stays external: screen capture of a region the user places, no game memory, no injected input.

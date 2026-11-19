@@ -70,6 +70,10 @@ public partial class MainWindow : Window
         base.OnSourceInitialized(e);
         DarkCaption.Apply(this);
         PlaceOnRequestedMonitor();
+        if (PresentationSource.FromVisual(this) is HwndSource source)
+        {
+            source.AddHook(WindowHitTest);
+        }
     }
 
     private static int? RequestedMonitor()
@@ -98,11 +102,149 @@ public partial class MainWindow : Window
             return;
         }
 
-        var width = Math.Min(1420, Math.Max(1340, monitor.Width - 80));
-        var height = Math.Min(860, Math.Max(720, monitor.Height - 80));
+        const int width = 1440;
+        const int height = 900;
         var handle = new WindowInteropHelper(this).Handle;
         SetWindowPos(handle, IntPtr.Zero, monitor.Left + 40, monitor.Top + 40, width, height, 0x0014);
     }
+
+    private void Window_StateChanged(object sender, EventArgs e)
+    {
+        ApplyEdge();
+        var maximized = WindowState == WindowState.Maximized;
+        MaxBox.Visibility = maximized ? Visibility.Collapsed : Visibility.Visible;
+        RestoreBack.Visibility = maximized ? Visibility.Visible : Visibility.Collapsed;
+        RestoreFront.Visibility = maximized ? Visibility.Visible : Visibility.Collapsed;
+        MaximizeButton.ToolTip = WindowState == WindowState.Maximized ? "Restore" : "Maximize";
+    }
+
+    private void Minimize_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
+
+    private void Maximize_Click(object sender, RoutedEventArgs e) =>
+        WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+
+    private void Close_Click(object sender, RoutedEventArgs e) => Close();
+
+    private void ApplyEdge()
+    {
+        WindowBody.OpacityMask = null;
+        var clear = WindowState == WindowState.Maximized || ActualWidth < 80 || ActualHeight < 80;
+        WindowBody.Clip = clear
+            ? null
+            : new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight), 16, 16);
+    }
+
+    private IntPtr WindowHitTest(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (msg == 0x0024)
+        {
+            LimitMaximizedSize(hwnd, lParam);
+            var limits = Marshal.PtrToStructure<MinMax>(lParam);
+            var dpi = VisualTreeHelper.GetDpi(this);
+            limits.MinTrack.X = (int)Math.Ceiling(MinWidth * dpi.DpiScaleX);
+            limits.MinTrack.Y = (int)Math.Ceiling(MinHeight * dpi.DpiScaleY);
+            Marshal.StructureToPtr(limits, lParam, true);
+            handled = true;
+            return IntPtr.Zero;
+        }
+
+        if (msg != 0x0084 || WindowState == WindowState.Maximized)
+        {
+            return IntPtr.Zero;
+        }
+
+        var packed = lParam.ToInt32();
+        var screen = new Point((short)(packed & 0xFFFF), (short)((packed >> 16) & 0xFFFF));
+        var point = PointFromScreen(screen);
+        const double grip = 8;
+        var left = point.X < grip;
+        var right = point.X > ActualWidth - grip;
+        var top = point.Y < grip;
+        var bottom = point.Y > ActualHeight - grip;
+        var hit = (left, right, top, bottom) switch
+        {
+            (true, _, true, _) => 13,
+            (_, true, true, _) => 14,
+            (true, _, _, true) => 16,
+            (_, true, _, true) => 17,
+            (true, _, _, _) => 10,
+            (_, true, _, _) => 11,
+            (_, _, true, _) => 12,
+            (_, _, _, true) => 15,
+            _ => 0
+        };
+        var inset = WindowContent.Margin.Left;
+        if (hit == 0 && point.Y >= inset && point.Y < inset + 46 && point.X < ActualWidth - inset - 168)
+        {
+            hit = 2;
+        }
+
+        if (hit == 0)
+        {
+            return IntPtr.Zero;
+        }
+
+        handled = true;
+        return new IntPtr(hit);
+    }
+
+    private static void LimitMaximizedSize(IntPtr hwnd, IntPtr lParam)
+    {
+        var monitor = MonitorFromWindow(hwnd, 2);
+        var info = new MonitorRect { cbSize = Marshal.SizeOf<MonitorRect>() };
+        if (monitor == IntPtr.Zero || !GetMonitorInfo(monitor, ref info))
+        {
+            return;
+        }
+
+        var limits = Marshal.PtrToStructure<MinMax>(lParam);
+        limits.MaxPosition.X = info.Work.Left - info.Monitor.Left;
+        limits.MaxPosition.Y = info.Work.Top - info.Monitor.Top;
+        limits.MaxSize.X = info.Work.Right - info.Work.Left;
+        limits.MaxSize.Y = info.Work.Bottom - info.Work.Top;
+        Marshal.StructureToPtr(limits, lParam, true);
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativePoint
+    {
+        public int X;
+        public int Y;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct NativeRect
+    {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct MinMax
+    {
+        public NativePoint Reserved;
+        public NativePoint MaxSize;
+        public NativePoint MaxPosition;
+        public NativePoint MinTrack;
+        public NativePoint MaxTrack;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    private struct MonitorRect
+    {
+        public int cbSize;
+        public NativeRect Monitor;
+        public NativeRect Work;
+        public int Flags;
+    }
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint flags);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto)]
+    private static extern bool GetMonitorInfo(IntPtr monitor, ref MonitorRect info);
 
     [DllImport("user32.dll")]
     private static extern bool SetWindowPos(IntPtr hwnd, IntPtr insertAfter, int x, int y, int width, int height, uint flags);
@@ -147,6 +289,7 @@ public partial class MainWindow : Window
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        ApplyEdge();
         MarkNav(NavSelectShip);
         if (DataContext is MainWindowViewModel { SelectedShip: { } ship })
         {
@@ -164,6 +307,11 @@ public partial class MainWindow : Window
     {
         if (_onPicker)
         {
+            HideSettings();
+            Stage.Opacity = 1;
+            Stage.IsHitTestVisible = true;
+            Prompt.Opacity = 1;
+            MarkNav(NavSelectShip);
             return;
         }
 
@@ -174,6 +322,7 @@ public partial class MainWindow : Window
         Stage.IsHitTestVisible = true;
         HideMinerals();
         HideScan();
+        HideSettings();
         foreach (var button in new[] { GolemButton, ProspectorButton, MoleButton })
         {
             button.IsHitTestVisible = true;
@@ -204,6 +353,7 @@ public partial class MainWindow : Window
 
         HideMinerals();
         HideScan();
+        HideSettings();
         Stage.Opacity = 1;
         Stage.IsHitTestVisible = true;
         Prompt.Opacity = 0;
@@ -525,6 +675,55 @@ public partial class MainWindow : Window
             ? ""
             : reading.Value.ToString("0.###", CultureInfo.InvariantCulture);
 
+    private void ShowSettings_Click(object sender, RoutedEventArgs e) => ShowSettings();
+
+    private void ShowAaron_Click(object sender, RoutedEventArgs e) => ShowAaron();
+
+    private double _aaronScroll;
+
+    private void AaronPage_BringIntoView(object sender, RequestBringIntoViewEventArgs e) => e.Handled = true;
+
+    private void ReverseRoute_Preview(object sender, MouseButtonEventArgs e) => _aaronScroll = AaronPage.VerticalOffset;
+
+    private void ReverseRoute_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not Button button || button.DataContext is not AaronHaloRouteRow row || !row.HasReverse)
+        {
+            return;
+        }
+
+        FrameworkElement? card = button;
+        while (card is not null && card.Tag as string != "route")
+        {
+            card = VisualTreeHelper.GetParent(card) as FrameworkElement;
+        }
+
+        if (card is null)
+        {
+            row.Toggle();
+            return;
+        }
+
+        button.IsEnabled = false;
+        var scale = card.RenderTransform as ScaleTransform ?? new ScaleTransform(1, 1);
+        card.RenderTransform = scale;
+        var close = new DoubleAnimation(1, 0, TimeSpan.FromMilliseconds(160));
+        close.Completed += (_, _) =>
+        {
+            row.Toggle();
+            AaronPage.UpdateLayout();
+            AaronPage.ScrollToVerticalOffset(_aaronScroll);
+            var open = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(160));
+            open.Completed += (_, _) =>
+            {
+                AaronPage.ScrollToVerticalOffset(_aaronScroll);
+                button.IsEnabled = true;
+            };
+            scale.BeginAnimation(ScaleTransform.ScaleXProperty, open);
+        };
+        scale.BeginAnimation(ScaleTransform.ScaleXProperty, close);
+    }
+
     private void ShowScan_Click(object sender, RoutedEventArgs e)
     {
         if (!_chosen)
@@ -559,10 +758,38 @@ public partial class MainWindow : Window
 
     private void DeleteLoadout_Click(object sender, RoutedEventArgs e)
     {
-        if (DataContext is MainWindowViewModel viewModel)
+        if (DataContext is not MainWindowViewModel viewModel)
         {
-            viewModel.DeleteNamedLoadout();
+            return;
         }
+
+        var name = viewModel.SelectedLoadoutName?.Name;
+        if (string.IsNullOrWhiteSpace(name) || !ConfirmDelete(name))
+        {
+            return;
+        }
+
+        viewModel.DeleteNamedLoadout();
+    }
+
+    private void DeleteLoadoutRow_Click(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        if (sender is not FrameworkElement { DataContext: LoadoutNameChoice choice } || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        if (ConfirmDelete(choice.Name))
+        {
+            viewModel.DeleteNamedLoadout(choice.Name);
+        }
+    }
+
+    private bool ConfirmDelete(string name)
+    {
+        var dialog = new ConfirmWindow("Delete \"" + name + "\"?") { Owner = this };
+        return dialog.ShowDialog() == true;
     }
 
     private void MineralName_Click(object sender, RoutedEventArgs e)
@@ -586,9 +813,61 @@ public partial class MainWindow : Window
         row.IsExpanded = !row.IsExpanded;
     }
 
+    private void ShowAaron()
+    {
+        HideMinerals();
+        HideScan();
+        HideSettings();
+        Stage.Opacity = 0;
+        Stage.IsHitTestVisible = false;
+        Prompt.Opacity = 0;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
+        Loadout.IsHitTestVisible = false;
+        AaronPage.IsHitTestVisible = true;
+        AaronPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(120)
+        });
+        MarkNav(NavAaron);
+    }
+
+    private void HideAaron()
+    {
+        AaronPage.BeginAnimation(OpacityProperty, null);
+        AaronPage.Opacity = 0;
+        AaronPage.IsHitTestVisible = false;
+    }
+
+    private void ShowSettings()
+    {
+        HideMinerals();
+        HideScan();
+        HideAaron();
+        Stage.Opacity = 0;
+        Stage.IsHitTestVisible = false;
+        Prompt.Opacity = 0;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
+        Loadout.IsHitTestVisible = false;
+        SettingsPage.IsHitTestVisible = true;
+        SettingsPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(120)
+        });
+        MarkNav(NavSettings);
+    }
+
+    private void HideSettings()
+    {
+        HideAaron();
+        SettingsPage.BeginAnimation(OpacityProperty, null);
+        SettingsPage.Opacity = 0;
+        SettingsPage.IsHitTestVisible = false;
+    }
+
     private void ShowMinerals()
     {
         HideScan();
+        HideSettings();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
@@ -613,6 +892,7 @@ public partial class MainWindow : Window
     private void ShowScan()
     {
         HideMinerals();
+        HideSettings();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
@@ -905,7 +1185,7 @@ public partial class MainWindow : Window
 
     private void MarkNav(Button selected)
     {
-        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures, NavOverlay, NavScan })
+        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures, NavOverlay, NavScan, NavAaron, NavSettings })
         {
             var active = button == selected;
             button.Background = active ? NavSelectedBrush : Brushes.Transparent;
@@ -949,6 +1229,7 @@ public partial class MainWindow : Window
 
     private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
     {
+        ApplyEdge();
         if (_chosen && _chosenButton is not null)
         {
             PlaceChosen(_chosenButton, animate: false);
@@ -983,6 +1264,7 @@ public partial class MainWindow : Window
         NavSignatures.IsEnabled = true;
         NavOverlay.IsEnabled = true;
         NavScan.IsEnabled = true;
+        HideSettings();
         _onPicker = false;
         MarkNav(NavLoadout);
     }

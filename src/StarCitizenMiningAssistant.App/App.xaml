@@ -5,8 +5,15 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/BladeRunner2049.Lapd.Styles;component/Themes/BladeRunner2049Lapd.xaml" />
                 <ResourceDictionary Source="Themes/Dark.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBox" BasedOn="{StaticResource Lapd.TextBox}" />
+            <Style TargetType="CheckBox" BasedOn="{StaticResource Lapd.CheckBox}" />
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource Lapd.Teal}" />
+                <Setter Property="FontFamily" Value="{StaticResource Lapd.FontMono}" />
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

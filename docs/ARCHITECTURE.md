@@ -15,6 +15,7 @@ The assignment lists many logical components. A solo developer does not need an 
 | OCR and image matching | Infrastructure `WindowsOcrReader`, behind `IScreenReader` | Infrastructure |
 | Recognition results | `Core.Recognition` | Core |
 | Mining data | `data/mining-equipment.json`, parsed in Core from a string | refresh stays a versioned file; App reads it |
+| Aaron Halo Band 5 routes | `data/aaron-halo-band5.json`, parsed in Core from a string | the file is BandHopper's precomputed Band 5 table |
 | Equipment profiles | not built | Core model, Infrastructure persistence |
 | Crackability | `Core.Calculation` | Core, pure functions |
 | Recommendations | not built | Core, uses the crackability engine and the user's available equipment |

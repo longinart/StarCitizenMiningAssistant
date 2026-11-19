@@ -54,6 +54,31 @@ public class SignatureWatchTests
     }
 
     [Fact]
+    public void Multiples_of_2000_and_3000_name_salvage_and_hand_deposits_when_ticked()
+    {
+        var catalog = Catalog();
+        var salvage = SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(10000), [SignatureGroups.Salvage], soundEnabled: true);
+        var salvageHit = Assert.Single(salvage.Hits);
+        Assert.Equal("5 × Salvage", salvageHit.Label);
+        Assert.True(salvageHit.Blink);
+        Assert.True(salvage.PlaySound);
+
+        var hand = SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(81000), [SignatureGroups.HandAndRoc], soundEnabled: false);
+        var handHit = Assert.Single(hand.Hits);
+        Assert.Equal("27 × Hand & ROC", handHit.Label);
+        Assert.True(handHit.Blink);
+        Assert.False(hand.PlaySound);
+
+        var chart = Chart();
+        var tracked = new[] { SignatureGroups.Salvage, SignatureGroups.HandAndRoc, "Bexalite", "Savrilium", "Lindinium" };
+        Assert.Equal("5 × Bexalite", Assert.Single(SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(18000), tracked, false, chart).Hits).Label);
+        Assert.Equal("5 × Savrilium", Assert.Single(SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(16000), tracked, false, chart).Hits).Label);
+        Assert.Equal("5 × Lindinium", Assert.Single(SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(17000), tracked, false, chart).Hits).Label);
+        Assert.Empty(SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(6000), tracked, false, chart).Hits);
+        Assert.Empty(SignatureWatch.Evaluate(catalog, ObservedValue<double>.Confirmed(81000), [], soundEnabled: true).Hits);
+    }
+
+    [Fact]
     public void An_unknown_confirmed_number_has_no_mineral()
     {
         var result = SignatureWatch.Evaluate(
@@ -66,14 +91,16 @@ public class SignatureWatchTests
         Assert.False(result.PlaySound);
     }
 
-    private static MiningCatalog Catalog() => MiningCatalog.Parse(File.ReadAllText(FindCatalog()));
+    private static MiningCatalog Catalog() => MiningCatalog.Parse(File.ReadAllText(FindData("mining-equipment.json")));
 
-    private static string FindCatalog()
+    private static ScanSignatureChart Chart() => ScanSignatureChart.Parse(File.ReadAllText(FindData("scan-signatures.json")));
+
+    private static string FindData(string fileName)
     {
         var directory = new DirectoryInfo(AppContext.BaseDirectory);
         while (directory is not null)
         {
-            var candidate = Path.Combine(directory.FullName, "data", "mining-equipment.json");
+            var candidate = Path.Combine(directory.FullName, "data", fileName);
             if (File.Exists(candidate))
             {
                 return candidate;
@@ -82,6 +109,6 @@ public class SignatureWatchTests
             directory = directory.Parent;
         }
 
-        throw new FileNotFoundException("data/mining-equipment.json was not found above the test output.");
+        throw new FileNotFoundException("data/" + fileName + " was not found above the test output.");
     }
 }

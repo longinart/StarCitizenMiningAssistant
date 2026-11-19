@@ -6,12 +6,27 @@ using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
 using StarCitizenMiningAssistant.Core.Capture;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Navigation;
 using StarCitizenMiningAssistant.Core.Recognition;
 
 namespace StarCitizenMiningAssistant.App.ViewModels;
 
 public sealed class MainWindowViewModel : ViewModelBase
 {
+    private static readonly HashSet<string> HandAndRocRocks = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Janalite",
+        "Hadanite",
+        "Aphorite",
+        "Dolivine",
+        "Jaclium",
+        "Sadaryx",
+        "Saldynium",
+        "Feynmaline",
+        "Glacosite",
+        "Beradom"
+    };
+
     private readonly MiningCatalog? _catalog;
     private readonly RepeatedReading _signatureRepeat = new();
     private bool _suspendSave;
@@ -31,8 +46,12 @@ public sealed class MainWindowViewModel : ViewModelBase
     private string _copyStatus = "";
     private string _loadoutName = "";
     private LoadoutNameChoice? _selectedLoadoutName;
+    private AaronHaloChart _aaronHalo = AaronHaloChart.Empty;
+    private AaronHaloPlace? _selectedAaronHaloHome;
     private readonly LoadoutLibrary _library = new();
     private bool _applyingScan;
+    private bool _trackSalvage;
+    private bool _trackHandAndRoc;
     private ObservedValue<double>? _lastMassSample;
     private ObservedValue<double>? _lastResistanceSample;
     private ObservedValue<double>? _lastInstabilitySample;
@@ -70,6 +89,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         ActiveTurrets = [];
         Minerals = new ObservableCollection<MineralRow>(
             (catalog?.Materials ?? [])
+            .Where(material => !HandAndRocRocks.Contains(material.Name))
             .OrderBy(material => material.Name, StringComparer.OrdinalIgnoreCase)
             .Select(material => new MineralRow(material, NotifyLoadout)));
         MineralsView = System.Windows.Data.CollectionViewSource.GetDefaultView(Minerals);
@@ -294,10 +314,60 @@ public sealed class MainWindowViewModel : ViewModelBase
         private set => Set(ref _selectedLoadoutName, value);
     }
 
+    public IReadOnlyList<AaronHaloPlace> AaronHaloHomes => _aaronHalo.Homes;
+
+    public AaronHaloPlace? SelectedAaronHaloHome
+    {
+        get => _selectedAaronHaloHome;
+        set
+        {
+            if (Set(ref _selectedAaronHaloHome, value))
+            {
+                FillAaronRoutes();
+            }
+        }
+    }
+
+    public ObservableCollection<AaronHaloRouteRow> AaronHaloRoutes { get; } = [];
+
+    public void UseAaronHalo(AaronHaloChart chart)
+    {
+        _aaronHalo = chart ?? AaronHaloChart.Empty;
+        _selectedAaronHaloHome = null;
+        FillAaronRoutes();
+        OnPropertyChanged(nameof(AaronHaloHomes));
+        OnPropertyChanged(nameof(SelectedAaronHaloHome));
+    }
+
+    private void FillAaronRoutes()
+    {
+        AaronHaloRoutes.Clear();
+        if (_selectedAaronHaloHome is null)
+        {
+            return;
+        }
+
+        foreach (var route in _aaronHalo.From(_selectedAaronHaloHome.Id))
+        {
+            AaronHaloRoutes.Add(new AaronHaloRouteRow(route));
+        }
+    }
+
     public LoadoutLibrary CaptureLibrary()
     {
         _library.RememberDraft(CaptureScreen());
-        _library.TrackedMinerals = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList();
+        var trackedNames = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList();
+        if (TrackSalvage)
+        {
+            trackedNames.Add(SignatureGroups.Salvage);
+        }
+
+        if (TrackHandAndRoc)
+        {
+            trackedNames.Add(SignatureGroups.HandAndRoc);
+        }
+
+        _library.TrackedMinerals = trackedNames;
         _library.MassText = MassText;
         _library.ResistanceText = ResistanceText;
         _library.InstabilityText = InstabilityText;
@@ -351,6 +421,9 @@ public sealed class MainWindowViewModel : ViewModelBase
             {
                 row.SetTracked(tracked.Contains(row.Name));
             }
+
+            TrackSalvage = tracked.Contains(SignatureGroups.Salvage);
+            TrackHandAndRoc = tracked.Contains(SignatureGroups.HandAndRoc);
 
             RefreshLoadoutNames();
         }
@@ -417,14 +490,20 @@ public sealed class MainWindowViewModel : ViewModelBase
         NotifyLoadout();
     }
 
-    public void DeleteNamedLoadout()
+    public void DeleteNamedLoadout() => DeleteNamedLoadout(_library.ActiveName);
+
+    public void DeleteNamedLoadout(string? name)
     {
-        if (!_library.Delete(_library.ActiveName))
+        if (!_library.Delete(name))
         {
             return;
         }
 
-        _library.RememberDraft(CaptureScreen());
+        if (string.IsNullOrWhiteSpace(_library.ActiveName))
+        {
+            _library.RememberDraft(CaptureScreen());
+        }
+
         RefreshLoadoutNames();
         NotifyLoadout();
     }
@@ -483,6 +562,30 @@ public sealed class MainWindowViewModel : ViewModelBase
     public IReadOnlyList<OverlayCrackRow> CrackRows => _crackRows;
 
     public IReadOnlyList<OverlaySignatureHit> SignatureHits => _signatureHits;
+
+    public bool TrackSalvage
+    {
+        get => _trackSalvage;
+        set
+        {
+            if (Set(ref _trackSalvage, value))
+            {
+                NotifyLoadout();
+            }
+        }
+    }
+
+    public bool TrackHandAndRoc
+    {
+        get => _trackHandAndRoc;
+        set
+        {
+            if (Set(ref _trackHandAndRoc, value))
+            {
+                NotifyLoadout();
+            }
+        }
+    }
 
     public bool SoundEnabled
     {
@@ -718,7 +821,17 @@ public sealed class MainWindowViewModel : ViewModelBase
         else
         {
             var signature = RockScan.Value(SignatureText, _library.SignatureConfidence);
-            var tracked = Minerals.Where(row => row.IsTracked).Select(row => row.Name);
+            var tracked = Minerals.Where(row => row.IsTracked).Select(row => row.Name).ToList();
+            if (TrackSalvage)
+            {
+                tracked.Add(SignatureGroups.Salvage);
+            }
+
+            if (TrackHandAndRoc)
+            {
+                tracked.Add(SignatureGroups.HandAndRoc);
+            }
+
             var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled, SignatureChart);
             _signatureHits = result.Hits.Select(OverlaySignatureHit.From).ToList();
             var key = string.Join("|", result.Hits.Where(hit => hit.Blink).Select(hit => hit.Mineral));
@@ -1204,6 +1317,43 @@ public sealed class LoadoutNameChoice
     }
 
     public string Name { get; }
+}
+
+public sealed class AaronHaloRouteRow : ViewModelBase
+{
+    private readonly AaronHaloRoute _route;
+    private bool _reversed;
+
+    public AaronHaloRouteRow(AaronHaloRoute route) => _route = route;
+
+    public string DestinationShort => _reversed ? _route.ReverseName! : _route.DestinationShort;
+
+    public string Exit => _reversed ? _route.ReverseExit! : _route.Exit;
+
+    public string Margin => _reversed ? _route.ReverseMargin! : _route.Margin;
+
+    public string? Note => _reversed ? _route.ReverseNote : _route.Note;
+
+    public bool HasNote => Note is not null;
+
+    public bool HasReverse => _route.HasReverse;
+
+    public string RecommendedLabel => _route.RecommendedLabel;
+
+    public void Toggle()
+    {
+        if (!_route.HasReverse)
+        {
+            return;
+        }
+
+        _reversed = !_reversed;
+        OnPropertyChanged(nameof(DestinationShort));
+        OnPropertyChanged(nameof(Exit));
+        OnPropertyChanged(nameof(Margin));
+        OnPropertyChanged(nameof(Note));
+        OnPropertyChanged(nameof(HasNote));
+    }
 }
 
 public sealed class CatalogChoice<T>

@@ -38,8 +38,11 @@ public static class SignatureReading
             return ObservedValue<double>.Uncertain(reading);
         }
 
-        var chartCount = chart?.Matches((int)Math.Round(reading)).Count ?? 0;
-        var confirmed = chartCount == 1 || (chartCount == 0 && catalog.MatchSignature(reading).Count == 1);
+        var rounded = (int)Math.Round(reading);
+        var shipCount = chart?.Matches(rounded).Count(match => !SignatureGroups.IsChartGroup(match.Kind)) ?? 0;
+        var grouped = SignatureGroups.Multiple(rounded, SignatureGroups.SalvageBase) is not null
+            || SignatureGroups.Multiple(rounded, SignatureGroups.HandAndRocBase) is not null;
+        var confirmed = shipCount == 1 || (shipCount == 0 && (grouped || catalog.MatchSignature(reading).Count == 1));
         return confirmed
             ? ObservedValue<double>.Confirmed(reading)
             : ObservedValue<double>.Uncertain(reading);

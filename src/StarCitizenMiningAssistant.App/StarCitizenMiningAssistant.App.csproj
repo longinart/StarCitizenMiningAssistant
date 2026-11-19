@@ -8,9 +8,14 @@
   <ItemGroup>
     <Content Include="..\..\data\mining-equipment.json" Link="data\mining-equipment.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\data\scan-signatures.json" Link="data\scan-signatures.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\data\aaron-halo-band5.json" Link="data\aaron-halo-band5.json" CopyToOutputDirectory="PreserveNewest" />
     <Resource Include="..\..\media\golem.png" Link="Media\golem.png" />
     <Resource Include="..\..\media\Prospector.png" Link="Media\Prospector.png" />
     <Resource Include="..\..\media\MOLE.png" Link="Media\MOLE.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BladeRunner2049.Lapd.Styles" Version="0.1.0" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -7,10 +7,10 @@
         Width="440"
         MinHeight="360"
         MinWidth="320"
-        Background="#FF16191D"
+        Background="{StaticResource Lapd.BgDeep}"
         Opacity="0.94"
         Topmost="True"
-        FontFamily="Segoe UI"
+        FontFamily="{StaticResource Lapd.FontMono}"
         TextOptions.TextFormattingMode="Display"
         ResizeMode="CanResize"
         ShowInTaskbar="False"
@@ -44,7 +44,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,4,0,0">
-                            <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="SemiBold" Foreground="#FFE08A3C">
+                            <TextBlock Text="{Binding Name}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Lapd.TealBright}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>

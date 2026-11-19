@@ -1,0 +1,811 @@
+{
+  "source": "https://bandhopper.peacefroggaming.com/",
+  "bundle": "assets/index-BgM79sbo.js",
+  "retrieved": "2026-11-19",
+  "gameBuild": null,
+  "bandId": 5,
+  "bandName": "Band 5",
+  "notice": "All Aaron Halo routes target Band 5, the most popular mining region.",
+  "margin": "marginKm is BandHopper exitWidth: the smaller gap between this exit and the neighboring bands on the same precomputed route, in kilometres. The app does not recalculate it.",
+  "counter": "BandHopper tells the player to watch the remaining distance to the destination. distanceToDestinationKm is that reading.",
+  "places": [
+    {
+      "id": "arc-l1",
+      "name": "ARC-L1 Wide Forest Station",
+      "shortName": "ARC-L1",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "arc-l2",
+      "name": "ARC-L2 Lively Pathway Station",
+      "shortName": "ARC-L2",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "arc-l3",
+      "name": "ARC-L3 Modern Express Station",
+      "shortName": "ARC-L3",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "arc-l4",
+      "name": "ARC-L4 Faint Glen Station",
+      "shortName": "ARC-L4",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "arc-l5",
+      "name": "ARC-L5 Yellow Core Station",
+      "shortName": "ARC-L5",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "arccorp",
+      "name": "ArcCorp",
+      "shortName": "ArcCorp",
+      "kind": "planet",
+      "note": null
+    },
+    {
+      "id": "cru-l1",
+      "name": "CRU-L1 Ambitious Dream Station",
+      "shortName": "CRU-L1",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "cru-l3",
+      "name": "CRU-L3 Bold Vantage Station",
+      "shortName": "CRU-L3",
+      "kind": "station",
+      "note": "Target via HUD - Not selectable on map"
+    },
+    {
+      "id": "cru-l4",
+      "name": "CRU-L4 Shallow Fields Station",
+      "shortName": "CRU-L4",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "cru-l5",
+      "name": "CRU-L5 Beautiful Glen Station",
+      "shortName": "CRU-L5",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "crusader",
+      "name": "Crusader",
+      "shortName": "Crusader",
+      "kind": "planet",
+      "note": null
+    },
+    {
+      "id": "hur-l1",
+      "name": "HUR-L1 Green Glade Station",
+      "shortName": "HUR-L1",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "hur-l2",
+      "name": "HUR-L2 Faithful Dream Station",
+      "shortName": "HUR-L2",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "hur-l4",
+      "name": "HUR-L4 Melodic Fields Station",
+      "shortName": "HUR-L4",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "hur-l5",
+      "name": "HUR-L5 High Course Station",
+      "shortName": "HUR-L5",
+      "kind": "station",
+      "note": null
+    },
+    {
+      "id": "hurston",
+      "name": "Hurston",
+      "shortName": "Hurston",
+      "kind": "planet",
+      "note": null
+    },
+    {
+      "id": "mic-l1",
+      "name": "MIC-L1 Shallow Frontier Station",
+      "shortName": "MIC-L1",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "mic-l2",
+      "name": "MIC-L2 Long Forest Station",
+      "shortName": "MIC-L2",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "mic-l5",
+      "name": "MIC-L5 Modern Icarus Station",
+      "shortName": "MIC-L5",
+      "kind": "refinery",
+      "note": null
+    },
+    {
+      "id": "microtech",
+      "name": "microTech",
+      "shortName": "microTech",
+      "kind": "planet",
+      "note": null
+    }
+  ],
+  "routes": [
+    {
+      "from": "arc-l1",
+      "to": "cru-l4",
+      "distanceToDestinationKm": 14292609,
+      "distanceFromStartKm": 6709156,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 344637
+    },
+    {
+      "from": "arc-l1",
+      "to": "crusader",
+      "distanceToDestinationKm": 33207787,
+      "distanceFromStartKm": 8443213,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 177111
+    },
+    {
+      "from": "arc-l1",
+      "to": "cru-l5",
+      "distanceToDestinationKm": 39461005,
+      "distanceFromStartKm": 5706995,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 151027
+    },
+    {
+      "from": "arc-l1",
+      "to": "hurston",
+      "distanceToDestinationKm": 13476792,
+      "distanceFromStartKm": 6834208,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 192160
+    },
+    {
+      "from": "arc-l1",
+      "to": "cru-l3",
+      "distanceToDestinationKm": 12679383,
+      "distanceFromStartKm": 10032617,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 368941
+    },
+    {
+      "from": "arc-l2",
+      "to": "cru-l4",
+      "distanceToDestinationKm": 10213088,
+      "distanceFromStartKm": 18786912,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 406446
+    },
+    {
+      "from": "arc-l2",
+      "to": "crusader",
+      "distanceToDestinationKm": 32090899,
+      "distanceFromStartKm": 8909101,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 182974
+    },
+    {
+      "from": "arc-l2",
+      "to": "hur-l5",
+      "distanceToDestinationKm": 7671815,
+      "distanceFromStartKm": 16328185,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135455
+    },
+    {
+      "from": "arc-l2",
+      "to": "hurston",
+      "distanceToDestinationKm": 12373993,
+      "distanceFromStartKm": 12626007,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 168786
+    },
+    {
+      "from": "crusader",
+      "to": "arc-l1",
+      "distanceToDestinationKm": 6443104,
+      "distanceFromStartKm": 35207896,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 177111
+    },
+    {
+      "from": "crusader",
+      "to": "arc-l2",
+      "distanceToDestinationKm": 12898644,
+      "distanceFromStartKm": 28101356,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 163134
+    },
+    {
+      "from": "cru-l3",
+      "to": "arc-l1",
+      "distanceToDestinationKm": 10032626,
+      "distanceFromStartKm": 12679374,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 368942
+    },
+    {
+      "from": "cru-l4",
+      "to": "arc-l1",
+      "distanceToDestinationKm": 9709155,
+      "distanceFromStartKm": 11290845,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 344637
+    },
+    {
+      "from": "cru-l4",
+      "to": "arc-l2",
+      "distanceToDestinationKm": 18187496,
+      "distanceFromStartKm": 10812504,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 378360
+    },
+    {
+      "from": "cru-l5",
+      "to": "arc-l1",
+      "distanceToDestinationKm": 5706713,
+      "distanceFromStartKm": 39461287,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 151027
+    },
+    {
+      "from": "hurston",
+      "to": "arc-l1",
+      "distanceToDestinationKm": 6834002,
+      "distanceFromStartKm": 13476998,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 192160
+    },
+    {
+      "from": "hurston",
+      "to": "arc-l2",
+      "distanceToDestinationKm": 13150031,
+      "distanceFromStartKm": 11849969,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 168786
+    },
+    {
+      "from": "hur-l5",
+      "to": "arc-l2",
+      "distanceToDestinationKm": 11611945,
+      "distanceFromStartKm": 12388055,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135455
+    },
+    {
+      "from": "arccorp",
+      "to": "cru-l1",
+      "distanceToDestinationKm": 31241101,
+      "distanceFromStartKm": 9518924,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 175351
+    },
+    {
+      "from": "arccorp",
+      "to": "hur-l1",
+      "distanceToDestinationKm": 13574323,
+      "distanceFromStartKm": 9663995,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 179482
+    },
+    {
+      "from": "arccorp",
+      "to": "hur-l2",
+      "distanceToDestinationKm": 12075650,
+      "distanceFromStartKm": 10519241,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 205811
+    },
+    {
+      "from": "arccorp",
+      "to": "mic-l1",
+      "distanceToDestinationKm": 27472312,
+      "distanceFromStartKm": 28170495,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 453003
+    },
+    {
+      "from": "arc-l3",
+      "to": "cru-l1",
+      "distanceToDestinationKm": 6794395,
+      "distanceFromStartKm": 11855245,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 255489
+    },
+    {
+      "from": "arc-l3",
+      "to": "hur-l1",
+      "distanceToDestinationKm": 30627735,
+      "distanceFromStartKm": 8732988,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 154386
+    },
+    {
+      "from": "arc-l4",
+      "to": "crusader",
+      "distanceToDestinationKm": 39459902,
+      "distanceFromStartKm": 8599287,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 133797
+    },
+    {
+      "from": "arc-l4",
+      "to": "hurston",
+      "distanceToDestinationKm": 7701368,
+      "distanceFromStartKm": 8713462,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 136422
+    },
+    {
+      "from": "arc-l4",
+      "to": "hur-l1",
+      "distanceToDestinationKm": 8964537,
+      "distanceFromStartKm": 8678114,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 153006
+    },
+    {
+      "from": "arc-l4",
+      "to": "hur-l2",
+      "distanceToDestinationKm": 6434391,
+      "distanceFromStartKm": 8762084,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 155123
+    },
+    {
+      "from": "arc-l4",
+      "to": "hur-l4",
+      "distanceToDestinationKm": 12845579,
+      "distanceFromStartKm": 10037597,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 169940
+    },
+    {
+      "from": "arc-l4",
+      "to": "hur-l5",
+      "distanceToDestinationKm": 17194167,
+      "distanceFromStartKm": 10140306,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 173261
+    },
+    {
+      "from": "arc-l5",
+      "to": "cru-l1",
+      "distanceToDestinationKm": 13483537,
+      "distanceFromStartKm": 12309915,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 275529
+    },
+    {
+      "from": "arc-l5",
+      "to": "hur-l1",
+      "distanceToDestinationKm": 25346970,
+      "distanceFromStartKm": 9276208,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 168620
+    },
+    {
+      "from": "arc-l5",
+      "to": "hur-l2",
+      "distanceToDestinationKm": 26705478,
+      "distanceFromStartKm": 9566505,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 176683
+    },
+    {
+      "from": "cru-l1",
+      "to": "arccorp",
+      "distanceToDestinationKm": 9518924,
+      "distanceFromStartKm": 31241101,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 175351
+    },
+    {
+      "from": "cru-l1",
+      "to": "arc-l3",
+      "distanceToDestinationKm": 11855245,
+      "distanceFromStartKm": 6794395,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 255489
+    },
+    {
+      "from": "cru-l1",
+      "to": "arc-l5",
+      "distanceToDestinationKm": 12309915,
+      "distanceFromStartKm": 13483537,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 275529
+    },
+    {
+      "from": "cru-l1",
+      "to": "microtech",
+      "distanceToDestinationKm": 24716593,
+      "distanceFromStartKm": 31224096,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 175425
+    },
+    {
+      "from": "cru-l3",
+      "to": "mic-l2",
+      "distanceToDestinationKm": 35402700,
+      "distanceFromStartKm": 3266924,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 316008
+    },
+    {
+      "from": "cru-l3",
+      "to": "mic-l5",
+      "distanceToDestinationKm": 23506777,
+      "distanceFromStartKm": 1217595,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 139339
+    },
+    {
+      "from": "cru-l4",
+      "to": "mic-l5",
+      "distanceToDestinationKm": 26766574,
+      "distanceFromStartKm": 26589888,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 192441
+    },
+    {
+      "from": "cru-l5",
+      "to": "mic-l1",
+      "distanceToDestinationKm": 26876793,
+      "distanceFromStartKm": 10029216,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 409301
+    },
+    {
+      "from": "cru-l5",
+      "to": "mic-l2",
+      "distanceToDestinationKm": 36931602,
+      "distanceFromStartKm": 7773605,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 407582
+    },
+    {
+      "from": "crusader",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 8599287,
+      "distanceFromStartKm": 39459902,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 133797
+    },
+    {
+      "from": "crusader",
+      "to": "mic-l1",
+      "distanceToDestinationKm": 20398469,
+      "distanceFromStartKm": 32897299,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 178631
+    },
+    {
+      "from": "crusader",
+      "to": "mic-l2",
+      "distanceToDestinationKm": 29633996,
+      "distanceFromStartKm": 32054865,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 163641
+    },
+    {
+      "from": "crusader",
+      "to": "mic-l5",
+      "distanceToDestinationKm": 23182564,
+      "distanceFromStartKm": 39241166,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135084
+    },
+    {
+      "from": "hur-l1",
+      "to": "arccorp",
+      "distanceToDestinationKm": 9663995,
+      "distanceFromStartKm": 13574323,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 179482
+    },
+    {
+      "from": "hur-l1",
+      "to": "arc-l3",
+      "distanceToDestinationKm": 8732988,
+      "distanceFromStartKm": 30627735,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 154386
+    },
+    {
+      "from": "hur-l1",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 8678114,
+      "distanceFromStartKm": 8964537,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 153006
+    },
+    {
+      "from": "hur-l1",
+      "to": "arc-l5",
+      "distanceToDestinationKm": 9276208,
+      "distanceFromStartKm": 25346970,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 168620
+    },
+    {
+      "from": "hur-l1",
+      "to": "microtech",
+      "distanceToDestinationKm": 24980372,
+      "distanceFromStartKm": 13768907,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 179983
+    },
+    {
+      "from": "hur-l2",
+      "to": "arccorp",
+      "distanceToDestinationKm": 10519241,
+      "distanceFromStartKm": 12075650,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 205811
+    },
+    {
+      "from": "hur-l2",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 8762084,
+      "distanceFromStartKm": 6434391,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 155123
+    },
+    {
+      "from": "hur-l2",
+      "to": "arc-l5",
+      "distanceToDestinationKm": 9566505,
+      "distanceFromStartKm": 26705478,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 176683
+    },
+    {
+      "from": "hur-l2",
+      "to": "microtech",
+      "distanceToDestinationKm": 26274360,
+      "distanceFromStartKm": 11832090,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 204997
+    },
+    {
+      "from": "hur-l4",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 10037597,
+      "distanceFromStartKm": 12845579,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 169940
+    },
+    {
+      "from": "hur-l4",
+      "to": "mic-l1",
+      "distanceToDestinationKm": 18780596,
+      "distanceFromStartKm": 7471595,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 151026
+    },
+    {
+      "from": "hur-l4",
+      "to": "mic-l2",
+      "distanceToDestinationKm": 27470949,
+      "distanceFromStartKm": 7470755,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 133348
+    },
+    {
+      "from": "hur-l4",
+      "to": "mic-l5",
+      "distanceToDestinationKm": 25615458,
+      "distanceFromStartKm": 13285238,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 172041
+    },
+    {
+      "from": "hurston",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 8713462,
+      "distanceFromStartKm": 7701368,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 136422
+    },
+    {
+      "from": "hurston",
+      "to": "mic-l1",
+      "distanceToDestinationKm": 21048826,
+      "distanceFromStartKm": 13219133,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 191561
+    },
+    {
+      "from": "hurston",
+      "to": "mic-l2",
+      "distanceToDestinationKm": 30025591,
+      "distanceFromStartKm": 12563803,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 169851
+    },
+    {
+      "from": "hurston",
+      "to": "mic-l5",
+      "distanceToDestinationKm": 23124541,
+      "distanceFromStartKm": 7472053,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135086
+    },
+    {
+      "from": "hur-l5",
+      "to": "arc-l4",
+      "distanceToDestinationKm": 10140306,
+      "distanceFromStartKm": 17194167,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 173260
+    },
+    {
+      "from": "microtech",
+      "to": "cru-l1",
+      "distanceToDestinationKm": 31224096,
+      "distanceFromStartKm": 24716593,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 175426
+    },
+    {
+      "from": "microtech",
+      "to": "hur-l1",
+      "distanceToDestinationKm": 13768907,
+      "distanceFromStartKm": 24980372,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 179983
+    },
+    {
+      "from": "microtech",
+      "to": "hur-l2",
+      "distanceToDestinationKm": 11832090,
+      "distanceFromStartKm": 26274360,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 204996
+    },
+    {
+      "from": "mic-l1",
+      "to": "arccorp",
+      "distanceToDestinationKm": 28170495,
+      "distanceFromStartKm": 27472312,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 453003
+    },
+    {
+      "from": "mic-l1",
+      "to": "crusader",
+      "distanceToDestinationKm": 32897299,
+      "distanceFromStartKm": 20398469,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 178631
+    },
+    {
+      "from": "mic-l1",
+      "to": "cru-l5",
+      "distanceToDestinationKm": 10029216,
+      "distanceFromStartKm": 26876793,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 409301
+    },
+    {
+      "from": "mic-l1",
+      "to": "hurston",
+      "distanceToDestinationKm": 13219133,
+      "distanceFromStartKm": 21048826,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 191561
+    },
+    {
+      "from": "mic-l1",
+      "to": "hur-l4",
+      "distanceToDestinationKm": 7471595,
+      "distanceFromStartKm": 18780596,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 151026
+    },
+    {
+      "from": "mic-l2",
+      "to": "crusader",
+      "distanceToDestinationKm": 32054865,
+      "distanceFromStartKm": 29633996,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 163641
+    },
+    {
+      "from": "mic-l2",
+      "to": "cru-l3",
+      "distanceToDestinationKm": 3266924,
+      "distanceFromStartKm": 35402700,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 316008
+    },
+    {
+      "from": "mic-l2",
+      "to": "cru-l5",
+      "distanceToDestinationKm": 7773605,
+      "distanceFromStartKm": 36931602,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 407581
+    },
+    {
+      "from": "mic-l2",
+      "to": "hurston",
+      "distanceToDestinationKm": 12563803,
+      "distanceFromStartKm": 30025591,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 169851
+    },
+    {
+      "from": "mic-l2",
+      "to": "hur-l4",
+      "distanceToDestinationKm": 7470755,
+      "distanceFromStartKm": 27470949,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 133347
+    },
+    {
+      "from": "mic-l5",
+      "to": "crusader",
+      "distanceToDestinationKm": 39241166,
+      "distanceFromStartKm": 23182564,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135084
+    },
+    {
+      "from": "mic-l5",
+      "to": "cru-l3",
+      "distanceToDestinationKm": 1217595,
+      "distanceFromStartKm": 23506777,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 139339
+    },
+    {
+      "from": "mic-l5",
+      "to": "cru-l4",
+      "distanceToDestinationKm": 24787068,
+      "distanceFromStartKm": 26589888,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 192441
+    },
+    {
+      "from": "mic-l5",
+      "to": "hurston",
+      "distanceToDestinationKm": 7472053,
+      "distanceFromStartKm": 23124541,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 135085
+    },
+    {
+      "from": "mic-l5",
+      "to": "hur-l4",
+      "distanceToDestinationKm": 13285238,
+      "distanceFromStartKm": 25615458,
+      "distanceFromStantonKm": 20320000,
+      "marginKm": 172041
+    }
+  ]
+}
