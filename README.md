@@ -1,66 +1,52 @@
 # Star Citizen Mining Assistant
 
-A small Windows window that sits beside Star Citizen and helps you decide whether your mining ship can crack the rock you are looking at.
+An external Windows desktop utility designed to assist with Star Citizen mining. The application overlays the game to provide real-time information, helping you assess rock crackability, track deposit signatures, and manage refinery expectations.
 
-It watches your screen. It does not join the game. Nothing here reads the game's memory, injects into the game, or flies the ship for you.
+## 📋 Features
 
-Star Citizen is a trademark of Cloud Imperium Games. This is an unofficial fan tool and is not affiliated with Cloud Imperium Games.
+*   **📡 Signature Scanning:** Uses OCR to read deposit signatures from the radar HUD, identifying minerals when they match the provided signature list.
+*   **🔨 Automated Crackability:** Reads rock mass and resistance from scan results to determine if your current ship configuration can fracture the rock.
+*   **📊 Composition Analysis:** Uses OCR to detect Total SCU and mineral percentages directly from the scan interface.
+*   **💰 Refinery & Pricing:** Calculates potential yields and profit based on selected refinery methods and current market prices.
+*   **🛠️ Loadout Management:** Saves and switches between ship loadouts, including installed heads, modules, and gadgets.
+*   **🖼️ Configurable Overlays:** Separate, customizable windows for signature and rock data, supporting independent position, opacity, and click-through settings.
 
-## Key features
+## ⬇️ How to Download and Run
 
-- **Signature reading.** While the signature overlay is open, the app reads the number under the radar and names the deposit when that number matches one known mineral.
-- **Crack check.** Mass and resistance from the scan panel are compared with the ship loadout you saved. The overlay says whether that setup can crack the rock.
-- **Composition reading.** Mineral rows under the scan panel are filled in when the name matches the mineral list. Cargo, such as `1.33 / 96 SCU`, is the ship's hold and is ignored.
-- **Refinery and sell totals.** Refined SCU and a sell total are worked out from the rock size on the COMPOSITION line and from each mineral's own best price.
-- **Overlays you can place.** The rock overlay and the signature overlay are separate windows. Each keeps its own size, opacity, and position.
+1.  **Download:** Get the latest `StarCitizenMiningAssistant-x.x.x.zip` from the [Releases](../../releases) page.
+2.  **Extract:** Extract the ZIP folder to a convenient location on your computer.
+3.  **Run:** Open the folder and run `StarCitizenMiningAssistant.App.exe`.
+4.  *Note:* You do not need to install .NET. All required dependencies are included.
 
-The same window also stores named ship loadouts, a mining-equipment shop list, and the Aaron Halo Band 5 route table.
+> **Windows SmartScreen:** Because this is an independent project, you may see an "Unknown publisher" warning when launching the app for the first time. To continue, click **"More info"** and then **"Run anyway."**
 
-## How to download and run
+## ⚙️ Quick Setup
 
-You need 64-bit Windows 10 or Windows 11. You do not need to install .NET.
+1.  **System:** In the app Settings, select the monitor where you run Star Citizen.
+2.  **Loadout:** On the "Select ship" page, configure your ship, laser heads, and installed modules to match your in-game setup.
+3.  **Overlay:** In "Overlay Setup," enable the desired overlays. Position them over the game window and set your transparency preferences.
+4.  **Game Settings:** Run Star Citizen in **Borderless Windowed** mode on the same monitor configured in the app.
+5.  **Mining:** Once in Mining Mode, open your scan results panel. The overlay will automatically detect and read the data while the overlay window is active.
 
-**[Download StarCitizenMiningAssistant-0.2.0-win-x64.zip](https://github.com/longinart/StarCitizenMiningAssistant/releases/download/v0.2.0/StarCitizenMiningAssistant-0.2.0-win-x64.zip)**
+*Tip: Scan readings are most accurate when the HUD contrast is high. Darker game environments often improve OCR recognition.*
 
-1. Click the link above and save the ZIP.
-2. Right-click the ZIP and choose **Extract All**. Put it in a folder you can write to, such as `Documents\StarCitizenMiningAssistant`. Do not run the app from inside the ZIP.
-3. Open that folder and double-click `StarCitizenMiningAssistant.App.exe`. Leave the other files next to it. The app will not start correctly if you move only the exe.
+## 🛡️ Safety and Compliance
 
-Windows SmartScreen may say the app is unrecognized. That happens because this build is not signed with a paid certificate. Choose **More info**, then **Run anyway**.
+This application is a read-only, external tool.
 
-Windows SmartScreen may say the app is unrecognized. That happens because this build is not signed with a paid certificate. Choose **More info**, then **Run anyway**.
+*   It does **not** inject code, read game memory, hook rendering APIs, or modify game files.
+*   It does **not** send keyboard, mouse, or controller input to the game.
+*   It does **not** perform gameplay automation.
+*   The only write operation is an optional setting to simplify in-game mineral names in `global.ini`, which the user must explicitly confirm.
 
-You do not need to install .NET. The ZIP already contains everything the app needs to start.
+## ⚖️ License
 
-## Quick setup
+MIT. See `LICENSE`.
 
-- In **Settings**, choose the monitor the game is on.
-- On **Select ship**, pick the ship, then open **Ship loadouts** and save the lasers and modules you actually have fitted.
-- Open **Overlay Setup**. Turn on the rock overlay, move it where you want it, and set the size and transparency. Turn on click-through only after it is in the right place.
-- Run the game in **borderless** or **windowed** mode on that same monitor, not exclusive fullscreen. The panels have to be visible. The app does not start the game.
-- Open the mining screen so the scan results are showing, then open the rock overlay. It reads about twice a second while that overlay is open, and it stops when you close it.
-- The label in the bottom-left corner, such as `v.0.2`, is the version you are running.
+***
 
-Long ore names can scroll off the scan row. **Overlay Setup → Simplify mineral names** can shorten those names in the game's English text. It asks before it writes anything. Restart the game afterward. `Data.p4k` is not changed.
+### Instructions for implementation:
 
-## Safety and compliance
-
-This program stays outside the game.
-
-It does not:
-
-- read or write the game's memory
-- inject a DLL, hook DirectX or Vulkan, or modify the game executable
-- send keyboard, mouse, or controller input
-- automate mining, flying, or any other gameplay
-- edit `user.ini` or `Data.p4k`
-
-The only optional write is **Simplify mineral names**. After you click Yes, it updates the loose English `global.ini` for the LIVE or PTU folder it found, and it adds `g_language = english` to `user.cfg` only when that line is missing. A backup of an existing `global.ini` is kept next to it.
-
-An uncertain reading is not treated as a confirmed fact. A crack answer uses a mass and a resistance only after each has been read the same way twice.
-
-## License
-
-MIT. See [LICENSE](LICENSE).
-
-If you want to build the app from source instead of using the ZIP, the developer notes are in [AGENTS.md](AGENTS.md).
+1.  **Update `README.md`:** Overwrite your current file with the text above.
+2.  **Create `.cursorrules`:** As we discussed, create this file in your root directory and paste the technical "how to work" instructions from `AGENTS.md` (the "Take one small, verifiable task" section) into it. This will prevent Cursor from reading `AGENTS.md` in every single chat, significantly reducing your token usage.
+3.  **Final Polish:** Before you create your release, run the `dotnet publish` command I gave you earlier to ensure your `publish` folder is clean and ready for zipping.
