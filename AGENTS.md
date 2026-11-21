@@ -24,7 +24,7 @@ Forbidden:
 - DLL injection, code injection, or hooking DirectX, Vulkan or the game executable.
 - Sending keyboard, mouse or controller input to the game.
 - Gameplay automation.
-- Modifying Star Citizen files, including `user.ini`, `Data.p4k` and the install directory.
+- Modifying Star Citizen files, including `user.ini`, `Data.p4k` and the install directory. The one exception is Overlay Setup → Simplify mineral names. After the user confirms, that action may write the loose english `global.ini` and add a missing `g_language` line to `user.cfg`. It does not change `Data.p4k` or `user.ini`.
 - Undocumented private game APIs.
 - Copying source code from other projects into this repository. Public projects may be studied for approach and licensing constraints. Arkanis Overlay is PolyForm Noncommercial; do not copy it. Smart Citizen is a separate product; do not copy it, except the signature reader in decision 021. That reader is a C# port of their SCO digit reader, Apache-2.0, with attribution in NOTICE and third-party/smart-citizen/LICENSE. Do not copy the rest of that product.
 
@@ -40,6 +40,8 @@ If a requested change would cross that boundary, stop and ask.
 6. Review the diff yourself before handing it back. Check names, nullability, and whether uncertain data can be mistaken for a confirmed fact.
 7. Update `docs/ARCHITECTURE.md` and `docs/DECISIONS.md` when the architecture changes. Update `docs/ROADMAP.md` when a milestone moves.
 8. Ask before a major architectural change, a new project, a new dependency, system-wide software installation, changes outside this repository, paid services, or a switch away from C# / WPF / .NET 10 / xUnit.
+
+When a new version is released, bump `<Version>` in `Directory.Build.props` and the `ApplicationInfo` assertions in `ObservedValueTests`. The bottom-left label is `v.{major}.{minor}` from that version. A build that leaves it on the previous label is not the new version.
 
 Prefer the smallest design that stays testable. Do not add a package for something the BCL already does. Do not add empty projects "for later".
 
@@ -62,8 +64,11 @@ Success means the process exit code is 0, the build reports `Build succeeded`, a
 The desktop app:
 
 ```powershell
+$env:SCMA_MONITOR = "3"
 dotnet run --project src/StarCitizenMiningAssistant.App
 ```
+
+After a task that changes the app, stop every running `StarCitizenMiningAssistant.App` process, build, and start that command again. Leave it running. The window opens on the monitor in `SCMA_MONITOR`.
 
 ## Repository map
 

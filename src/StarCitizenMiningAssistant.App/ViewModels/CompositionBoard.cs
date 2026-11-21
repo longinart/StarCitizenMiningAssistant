@@ -120,10 +120,22 @@ public sealed class CompositionBoard : ViewModelBase
             }
         }
 
-        var incoming = shares
-            .Where(share => share.Percent.Confidence != RecognitionConfidence.Missing)
-            .Select(share => share with { Name = CompositionShares.DisplayName(share.Name, MineralNames) })
-            .ToList();
+        var incoming = new List<ObservedShare>();
+        foreach (var share in shares)
+        {
+            if (share.Percent.Confidence == RecognitionConfidence.Missing)
+            {
+                continue;
+            }
+
+            var name = CompositionShares.DisplayName(share.Name, MineralNames);
+            if (name is null)
+            {
+                continue;
+            }
+
+            incoming.Add(share with { Name = name });
+        }
         if (incoming.Count == 0)
         {
             Recalculate(_method, _home, _showRefined);

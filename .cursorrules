@@ -1,0 +1,37 @@
+# Star Citizen Mining Assistant
+
+External read-only Windows mining assistant. App → Infrastructure → Core, and App → Core. Tests talk only to Core. Core never captures the screen or opens files.
+
+Before editing, read `docs/ARCHITECTURE.md`, `docs/DECISIONS.md`, and `docs/ROADMAP.md`. If the task touches mining numbers or game mechanics, also read `docs/DATA_MODEL.md` and `docs/research/CRACKABILITY.md`. Do not invent game statistics, patch numbers, or formulas. Uncertain game data stays in versioned data files with a source, a verification date, and a patch label.
+
+## How to work
+
+1. Read those docs and the code you are about to change.
+2. Take one small, verifiable task. Leave unrelated code alone.
+3. Keep mining calculations, recognition, and recommendation logic out of WPF event handlers. Put them in `StarCitizenMiningAssistant.Core` behind a clear type.
+4. Write or update an automated test for behaviour you change in Core.
+5. From the repository root, run `dotnet test`. Fix failures caused by your change. Success is exit code 0, `Build succeeded`, and all tests passed.
+6. Review the diff. Check names, nullability, and whether uncertain data can be mistaken for a confirmed fact.
+7. Update `docs/ARCHITECTURE.md` and `docs/DECISIONS.md` when the architecture changes. Update `docs/ROADMAP.md` when a milestone moves.
+8. Ask before a major architectural change, a new project, a new dependency, system-wide software installation, changes outside this repository, paid services, or a switch away from C# / WPF / .NET 10 / xUnit.
+
+Prefer the smallest design that stays testable. Do not add a package for something the BCL already does. Do not add empty projects for later. Never silently remove or replace existing behaviour. If a behaviour must change, say so and cover it with a test.
+
+When a new version is released, bump `<Version>` in `Directory.Build.props` and the `ApplicationInfo` assertions in `ObservedValueTests`. The bottom-left label is `v.{major}.{minor}`.
+
+After a task that changes the app, stop every running `StarCitizenMiningAssistant.App` process, build, and start it again. Leave it running.
+
+```powershell
+$env:SCMA_MONITOR = "3"
+dotnet run --project src/StarCitizenMiningAssistant.App
+```
+
+## Recognition
+
+Every recognised field uses `ObservedValue<T>` and `RecognitionConfidence` (`Missing`, `Uncertain`, `Confirmed`). Only `IsConfirmed` may feed a calculation. An uncertain OCR guess stays uncertain.
+
+## Do not cross
+
+No game memory, injection, renderer hooks, gameplay input, or gameplay automation. Do not modify `user.ini` or `Data.p4k`. The one exception is Overlay Setup → Simplify mineral names: after the user confirms, it may write the loose English `global.ini` and add a missing `g_language` line to `user.cfg`.
+
+Do not copy source from other projects. The signature reader in decision 021 is the only allowed port, and it stops at that reader.

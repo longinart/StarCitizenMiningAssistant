@@ -162,6 +162,14 @@ Date: 2026-11-19.
 
 The rock overlay and the signature overlay are separate topmost windows. The signature window prints one confirmed reading, such as 2x Stileron, and nothing else. That line stays up for 10 seconds and does not appear again until the confirmed text changes. Its font size, color, opacity, lock, and position are stored in the loadout file. The rock window is 360 pixels wide before a size slider in that same file scales it from 70 to 150 percent. A keyboard hotkey can show or hide each overlay, and the screen watch runs while either one is on. The same key can be saved for both, and then one press changes both. Joystick and HOTAS buttons are not read. Show positioning preview draws a green box and the sample text 2x Stileron so the window can be dragged. That box is not shown during a real reading. Locking removes the preview and, when clicks pass through, the mouse skips the signature window. Unlocking makes it draggable again. The preview stays clickable even when the click-through box is ticked.
 
+## 027 — Short ore names and a catalog-only composition row
+
+Date: 2026-11-21.
+
+An OCR mineral is filled only when it matches one name on the mineral list. The match is the exact name, a token of that name, a reading of at least four letters that begins exactly one name, or the closest name at 60 percent or above when the next name is at least 8 points behind. Haestamte, THaestanite, and Hepha match Hephaestanite. SILICON sle matches Silicon. A reading that is not that close is left off the row. INERT is still dropped before that match.
+
+The Overlay Setup button Simplify mineral names writes the short names in `data/mineral-shortcuts.json` into the loose english `global.ini`. That file is the localization override Star Citizen already loads. LIVE and PTU are separate folders under the install that contains `Data.p4k`. If the loose file is missing, the stock english `global.ini` is read out of that channel's `Data.p4k` and written beside it. An existing loose file is copied to a timestamped backup first. The archive itself is not modified. If `user.cfg` has no `g_language` line, `g_language = english` is added. The button asks first. The game has to be restarted before the short names show on the scan row.
+
 ## 026 — Refinery yield and sell price
 
 Date: 2026-11-20.

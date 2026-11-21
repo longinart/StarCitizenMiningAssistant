@@ -11,6 +11,7 @@
     <Content Include="..\..\data\refinery-data.json" Link="data\refinery-data.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\data\scan-signatures.json" Link="data\scan-signatures.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\data\aaron-halo-band5.json" Link="data\aaron-halo-band5.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\data\mineral-shortcuts.json" Link="data\mineral-shortcuts.json" CopyToOutputDirectory="PreserveNewest" />
     <Resource Include="..\..\media\golem.png" Link="Media\golem.png" />
     <Resource Include="..\..\media\Prospector.png" Link="Media\Prospector.png" />
     <Resource Include="..\..\media\MOLE.png" Link="Media\MOLE.png" />

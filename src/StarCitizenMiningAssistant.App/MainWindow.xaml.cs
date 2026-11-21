@@ -16,6 +16,8 @@ using System.Windows.Threading;
 using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core.Equipment;
 using StarCitizenMiningAssistant.Core.Input;
+using StarCitizenMiningAssistant.Core.Localization;
+using StarCitizenMiningAssistant.Infrastructure.Localization;
 
 namespace StarCitizenMiningAssistant.App;
 
@@ -1094,6 +1096,48 @@ public partial class MainWindow : Window
     }
 
     private void ShowOverlaySetup_Click(object sender, RoutedEventArgs e) => ShowOverlaySetup();
+
+    private async void SimplifyMineralNames_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var channels = GameLocalization.Find();
+            if (channels.Count == 0)
+            {
+                Notice("Simplify mineral names", "No Star Citizen folder with Data.p4k was found.");
+                return;
+            }
+
+            var where = string.Join("\n\n", channels.Select(channel => channel.Name + "\n" + channel.Folder));
+            var ask = new ConfirmWindow(
+                "Simplify mineral names",
+                "Write the short ore names into the english localization of:\n\n" + where
+                + "\n\nAn existing global.ini is backed up in that folder first. Data.p4k is not changed. If user.cfg has no language line, english is added. Restart the game afterwards.",
+                choice: true)
+            {
+                Owner = this
+            };
+            if (ask.ShowDialog() != true)
+            {
+                return;
+            }
+
+            var jsonPath = Path.Combine(AppContext.BaseDirectory, "data", "mineral-shortcuts.json");
+            var names = MineralShortcuts.Parse(File.ReadAllText(jsonPath));
+            var results = await Task.Run(() => GameLocalization.Apply(names));
+            var report = string.Join("\n\n", results.Select(result => result.Name + "\n" + result.Detail));
+            Notice("Mineral names", report.Length == 0 ? "No channel was updated." : report);
+        }
+        catch (Exception ex) when (ex is not OutOfMemoryException)
+        {
+            Notice("Mineral names", ex.Message);
+        }
+    }
+
+    private void Notice(string title, string message)
+    {
+        new ConfirmWindow(title, message, choice: false) { Owner = this }.ShowDialog();
+    }
 
     private void ShowOverlaySetup()
     {

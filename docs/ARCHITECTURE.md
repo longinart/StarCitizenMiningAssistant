@@ -1,6 +1,6 @@
 # Architecture
 
-Version 0.1.0. This is the structure to follow until a new decision is recorded in `docs/DECISIONS.md`.
+Version 0.2.0. This is the structure to follow until a new decision is recorded in `docs/DECISIONS.md`.
 
 ## Why three projects
 

@@ -70,7 +70,25 @@ public class RefineryCalculatorTests
         Assert.True(CompositionShares.IsInert("Inert"));
         Assert.False(CompositionShares.IsInert("Copper"));
         Assert.Equal("Quantainium", CompositionShares.DisplayName("QUANTAINIUM (ORE)", ["Quantainium", "Copper"]));
+        Assert.Equal("Tin", CompositionShares.DisplayName("TIN (ORE)", ["Tin", "Copper"]));
+        Assert.Equal("Ice", CompositionShares.DisplayName("RAW ICE", ["Ice", "Tin"]));
         Assert.Equal("Ouratite", CompositionShares.DisplayName("Outarite", ["Ouratite"]));
+        var names = new[]
+        {
+            "Beryl", "Bexalite", "Hadanite", "Hephaestanite", "Ice", "Laranite",
+            "Quantainium", "Silicon", "Taranite", "Tin", "Titanium"
+        };
+        Assert.Equal("Hephaestanite", CompositionShares.DisplayName("Haestamte", names));
+        Assert.Equal("Hephaestanite", CompositionShares.DisplayName("THaestanite", names));
+        Assert.Equal("Hephaestanite", CompositionShares.DisplayName("iPHAESTANITE (R)", names));
+        Assert.Equal("Hephaestanite", CompositionShares.DisplayName("Hepha", names));
+        Assert.Equal("Silicon", CompositionShares.DisplayName("SILICON sle", names));
+        Assert.Equal("Quantainium", CompositionShares.DisplayName("Quantanium", names));
+        Assert.Equal("Taranite", CompositionShares.DisplayName("TARANTE", names));
+        Assert.Equal("Tin", CompositionShares.DisplayName("TIN", names));
+        Assert.Equal("Titanium", CompositionShares.DisplayName("TITAN", names));
+        Assert.Null(CompositionShares.DisplayName("MATERIALS e", names));
+        Assert.Null(CompositionShares.DisplayName("IANTAJNILJM", names));
     }
 
     [Fact]

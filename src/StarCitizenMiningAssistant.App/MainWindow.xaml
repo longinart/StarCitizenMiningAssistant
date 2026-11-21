@@ -905,6 +905,9 @@
                                 <Button DockPanel.Dock="Right" Content="Set" MinWidth="88" Click="CaptureRockHotkey_Click" />
                                 <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding RockOverlayHotkeyLabel}" />
                             </DockPanel>
+                            <Button Margin="0,22,0,0" HorizontalAlignment="Left" FontSize="16" Content="Simplify mineral names" Click="SimplifyMineralNames_Click" />
+                            <TextBlock Margin="0,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
+                                       Text="Shortens long ore names in the game's english text so the scan row can show them." />
                         </StackPanel>
                     </TabItem>
                 </TabControl>

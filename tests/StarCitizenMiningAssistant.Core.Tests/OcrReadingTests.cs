@@ -191,6 +191,41 @@ public class OcrReadingTests
     }
 
     [Fact]
+    public void A_live_composition_row_puts_the_percent_before_the_name()
+    {
+        var words = new[]
+        {
+            new RockPanel.Word("COMPOSITION", 109, 193, 12),
+            new RockPanel.Word("5.50", 249, 193, 12),
+            new RockPanel.Word("scu", 281, 193, 12),
+            new RockPanel.Word("6.63%", 109, 238, 12),
+            new RockPanel.Word("TIN", 162, 238, 12),
+            new RockPanel.Word("(ORE)", 187, 238, 12),
+            new RockPanel.Word("537", 281, 238, 12),
+            new RockPanel.Word("8.20%", 109, 256, 12),
+            new RockPanel.Word("COPPER", 163, 256, 12),
+            new RockPanel.Word("(ORE)", 218, 256, 12),
+            new RockPanel.Word("652", 281, 256, 12),
+            new RockPanel.Word("23.90%", 109, 274, 12),
+            new RockPanel.Word("INERT", 164, 274, 12),
+            new RockPanel.Word("MATERIALS", 206, 274, 12),
+            new RockPanel.Word("CARGO", 129, 400, 12),
+            new RockPanel.Word("9.09", 268, 400, 12),
+            new RockPanel.Word("/", 298, 400, 12),
+            new RockPanel.Word("96.00", 308, 400, 12),
+            new RockPanel.Word("SCU", 348, 400, 12)
+        };
+
+        var rock = RockPanel.Read(words, []);
+
+        Assert.Equal(5.5, rock.TotalScu.Value);
+        Assert.Equal(["TIN (ORE)", "COPPER (ORE)"], rock.Composition.Select(share => share.Name).ToArray());
+        Assert.Equal(6.63, rock.Composition[0].Percent.Value);
+        Assert.Equal(8.2, rock.Composition[1].Percent.Value);
+        Assert.All(rock.Composition, share => Assert.False(share.Percent.IsConfirmed));
+    }
+
+    [Fact]
     public void Composition_ocr_waits_for_fracture_or_extraction_mode()
     {
         Assert.False(MiningMode.AllowsComposition(MiningMode.Read(["SCAN", "RESULTS"])));

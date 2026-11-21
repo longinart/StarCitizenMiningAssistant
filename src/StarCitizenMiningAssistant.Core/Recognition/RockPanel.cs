@@ -8,8 +8,8 @@ namespace StarCitizenMiningAssistant.Core.Recognition;
 /// The longer of the word beside the label and the digit shapes is kept.
 /// A shorter fragment is left blank when the row had more digits. MASS is also accepted
 /// when the reader saw HASS or HAS. A missing mass or instability label still takes
-/// the number one row above or below resistance. A mineral name beside or just
-/// above a percent is kept as an uncertain composition share.
+/// the number one row above or below resistance. A mineral name on the same row
+/// as a percent is kept as an uncertain composition share. The live row puts the percent first.
 /// </summary>
 public static class RockPanel
 {
@@ -62,11 +62,7 @@ public static class RockPanel
                 continue;
             }
 
-            var name = words
-                .Where(word => Math.Abs(word.Y - percent.Y) <= 14 && word.X < percent.X && HasLetters(word.Text) && !IsCrack(word.Text) && !IsChrome(word.Text))
-                .OrderByDescending(word => word.X)
-                .Select(word => Letters(word.Text))
-                .FirstOrDefault(text => text.Length > 1);
+            var name = NameBeside(words, percent);
             if (name is null || CompositionShares.IsInert(name)
                 || !double.TryParse(number, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
             {
@@ -139,6 +135,44 @@ public static class RockPanel
         }
 
         return double.TryParse(text[start..end], NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+    }
+
+    /// <summary>
+    /// The live row is the percent, then the mineral, then a signature number.
+    /// A name to the left of the percent still counts.
+    /// </summary>
+    private static string? NameBeside(IReadOnlyList<Word> words, Word percent)
+    {
+        var right = new List<string>();
+        foreach (var word in words.Where(word => word.X > percent.X && Math.Abs(word.Y - percent.Y) <= 8).OrderBy(word => word.X))
+        {
+            if (word.Text.Any(char.IsDigit) || IsCrack(word.Text) || IsChrome(word.Text))
+            {
+                break;
+            }
+
+            if (Letters(word.Text).Length > 1)
+            {
+                right.Add(word.Text.Trim());
+            }
+        }
+
+        if (right.Any(part => !IsState(part)))
+        {
+            return string.Join(' ', right);
+        }
+
+        return words
+            .Where(word => Math.Abs(word.Y - percent.Y) <= 14 && word.X < percent.X && HasLetters(word.Text) && !IsCrack(word.Text) && !IsChrome(word.Text))
+            .OrderByDescending(word => word.X)
+            .Select(word => Letters(word.Text))
+            .FirstOrDefault(text => text.Length > 1);
+    }
+
+    private static bool IsState(string text)
+    {
+        var letters = Letters(text);
+        return letters is "ORE" or "RAW" or "PURE";
     }
 
     private static bool IsCrack(string text) => IsMass(text) || IsResistance(text) || IsInstability(text);
