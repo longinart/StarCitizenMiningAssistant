@@ -42,11 +42,3 @@ This application is a read-only, external tool.
 ## ⚖️ License
 
 MIT. See `LICENSE`.
-
-***
-
-### Instructions for implementation:
-
-1.  **Update `README.md`:** Overwrite your current file with the text above.
-2.  **Create `.cursorrules`:** As we discussed, create this file in your root directory and paste the technical "how to work" instructions from `AGENTS.md` (the "Take one small, verifiable task" section) into it. This will prevent Cursor from reading `AGENTS.md` in every single chat, significantly reducing your token usage.
-3.  **Final Polish:** Before you create your release, run the `dotnet publish` command I gave you earlier to ensure your `publish` folder is clean and ready for zipping.
