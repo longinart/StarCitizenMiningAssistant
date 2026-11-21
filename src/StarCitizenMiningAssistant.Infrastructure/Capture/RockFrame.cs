@@ -19,9 +19,9 @@ public static class RockFrame
         return RockPanel.Read(words, RockDigitReader.Read(width, height, green));
     }
 
-    public static IReadOnlyList<ObservedValue<string>>? Lines(RockOcrFields fields)
+    public static IReadOnlyList<ObservedValue<string>>? Lines(RockOcrFields fields, bool includeComposition = false)
     {
-        if (!fields.HasPanel)
+        if (!fields.HasPanel && !(includeComposition && HasComposition(fields)))
         {
             return null;
         }
@@ -30,8 +30,31 @@ public static class RockFrame
         Add(lines, "MASS", fields.Mass);
         Add(lines, "RESISTANCE", fields.Resistance);
         Add(lines, "INSTABILITY", fields.Instability);
-        return lines;
+        if (includeComposition)
+        {
+            if (fields.TotalScu.Confidence != RecognitionConfidence.Missing)
+            {
+                lines.Add(ObservedValue<string>.Uncertain(
+                    "COMPOSITION " + fields.TotalScu.Value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture) + " SCU"));
+            }
+
+            foreach (var share in fields.Composition)
+            {
+                if (share.Percent.Confidence == RecognitionConfidence.Missing)
+                {
+                    continue;
+                }
+
+                lines.Add(ObservedValue<string>.Uncertain(
+                    share.Name + " " + share.Percent.Value.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture) + "%"));
+            }
+        }
+
+        return lines.Count == 0 ? null : lines;
     }
+
+    private static bool HasComposition(RockOcrFields fields) =>
+        fields.Composition.Count > 0 || fields.TotalScu.Confidence != RecognitionConfidence.Missing;
 
     private static void Add(List<ObservedValue<string>> lines, string label, ObservedValue<double> value)
     {

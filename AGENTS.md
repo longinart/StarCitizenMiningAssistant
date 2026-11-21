@@ -83,6 +83,3 @@ Every recognised field uses `ObservedValue<T>` and `RecognitionConfidence` (`Mis
 
 Use the primary agent as the coordinator. Add a specialist only for a bounded task such as mechanics research, calculation review, UI work, or test review. Do not let two agents edit the same files at the same time.
 
-## Current milestone
-
-Foundation only (version 0.1.0). The next milestone is the verified crackability model, described in `docs/ROADMAP.md` and `docs/research/CRACKABILITY.md`. Do not start OCR or the overlay until the calculation engine has tests that match sourced examples.

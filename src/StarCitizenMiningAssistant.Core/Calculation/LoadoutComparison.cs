@@ -13,8 +13,9 @@ public enum CrackVerdict
 
 /// <summary>
 /// One saved loadout against one rock. Boosts names the active modules and
-/// gadget that the crack needs. Instability and the charge window come from
-/// that same check. They do not change the verdict.
+/// gadget that the crack needs. Power ratio is delivered power divided by
+/// required power. Stable throttle is the SCMiner percent, and it is set only
+/// when that check can crack the rock.
 /// </summary>
 public sealed record LoadoutCrackRow(
     string Name,
@@ -22,7 +23,9 @@ public sealed record LoadoutCrackRow(
     string Boosts,
     double? Instability,
     double? ChargeWindow,
-    string Reason);
+    string Reason,
+    double? PowerRatio,
+    int? StableThrottle);
 
 public static class LoadoutComparison
 {
@@ -40,7 +43,7 @@ public static class LoadoutComparison
     {
         if (!TryBuild(catalog, loadout, out var equipped, out var withoutActives, out var activeNames, out var gadget, out var problem))
         {
-            return new LoadoutCrackRow(loadout.Name, CrackVerdict.Unknown, "", null, null, problem);
+            return new LoadoutCrackRow(loadout.Name, CrackVerdict.Unknown, "", null, null, problem, null, null);
         }
 
         var gadgetModifier = gadget is null ? (ModifierSet?)null : GadgetModifier(gadget);
@@ -95,11 +98,48 @@ public static class LoadoutComparison
         var verdict = fullest.Band == CrackBand.NeedsGadgetOrConsumable
             ? CrackVerdict.Difficult
             : CrackVerdict.Uncrackable;
-        return Row(loadout.Name, verdict, "", fullest);
+        var shortfall = verdict == CrackVerdict.Difficult
+            ? BoostsFor(fullest, both, withActives, gadgetOnly, activeText, gadgetName)
+            : "";
+        return Row(loadout.Name, verdict, shortfall, fullest);
+    }
+
+    private static string BoostsFor(
+        CrackAssessment fullest,
+        CrackAssessment? both,
+        CrackAssessment? withActives,
+        CrackAssessment? gadgetOnly,
+        string activeText,
+        string gadgetName)
+    {
+        if (both is not null && ReferenceEquals(fullest, both))
+        {
+            return activeText + " + " + gadgetName;
+        }
+
+        if (withActives is not null && ReferenceEquals(fullest, withActives))
+        {
+            return activeText;
+        }
+
+        if (gadgetOnly is not null && ReferenceEquals(fullest, gadgetOnly))
+        {
+            return gadgetName;
+        }
+
+        return "";
     }
 
     private static LoadoutCrackRow Row(string name, CrackVerdict verdict, string boosts, CrackAssessment assessment) =>
-        new(name, verdict, boosts, assessment.EffectiveInstability, assessment.GreenZoneWidth, assessment.Reason);
+        new(
+            name,
+            verdict,
+            boosts,
+            assessment.EffectiveInstability,
+            assessment.GreenZoneWidth,
+            assessment.Reason,
+            assessment.PowerRatio,
+            assessment.RecommendedThrottlePercent);
 
     private static bool TryBuild(
         MiningCatalog catalog,

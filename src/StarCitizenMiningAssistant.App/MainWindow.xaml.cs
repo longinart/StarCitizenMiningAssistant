@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Input;
 
 namespace StarCitizenMiningAssistant.App;
 
@@ -26,6 +28,10 @@ public partial class MainWindow : Window
     private bool _onPicker = true;
     private Button? _chosenButton;
     private OverlayWindow? _overlay;
+    private SignatureOverlayWindow? _signature;
+    private bool _signatureOn;
+    private bool _sharedHotkey;
+    private bool _applyingOverlay;
     private DispatcherTimer? _watch;
     private bool _watchBusy;
     private DispatcherTimer? _scanLog;
@@ -33,6 +39,7 @@ public partial class MainWindow : Window
     private readonly Dictionary<CaptureTarget, (string Reading, DateTimeOffset At)> _scanLogLast = [];
     private readonly SignatureAim _signatureAim = new();
     private readonly SignatureAim _rockAim = new();
+    private readonly SignatureAim _compositionAim = new();
 
     private static SolidColorBrush Freeze(Color color)
     {
@@ -52,8 +59,21 @@ public partial class MainWindow : Window
         InitializeComponent();
         DataContext = viewModel;
         viewModel.ClickThroughChanged += (_, _) => ApplyOverlayClickThrough();
+        viewModel.HotkeysChanged += (_, _) => RefreshHotkeys();
+        viewModel.OverlayStateChanged += (_, _) => ApplyOverlayState();
+        viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainWindowViewModel.SignatureOverlayPreview) && viewModel.SignatureOverlayPreview)
+            {
+                EnsureSignatureOverlay();
+            }
+        };
         viewModel.ScanLogChanged += (_, _) => ApplyScanLog();
-        Closed += (_, _) => StopScanLog();
+        Closed += (_, _) =>
+        {
+            StopScanLog();
+            ReleaseHotkeys();
+        };
         ApplyScanLog();
         SizeChanged += Window_SizeChanged;
         if (FindRequestedMonitor() is MonitorInfo monitor)
@@ -73,6 +93,8 @@ public partial class MainWindow : Window
         if (PresentationSource.FromVisual(this) is HwndSource source)
         {
             source.AddHook(WindowHitTest);
+            source.AddHook(HotkeyMessage);
+            RefreshHotkeys();
         }
     }
 
@@ -290,6 +312,11 @@ public partial class MainWindow : Window
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         ApplyEdge();
+        if (DataContext is MainWindowViewModel { SignatureOverlayPreview: true })
+        {
+            EnsureSignatureOverlay();
+        }
+
         MarkNav(NavSelectShip);
         if (DataContext is MainWindowViewModel { SelectedShip: { } ship })
         {
@@ -308,6 +335,8 @@ public partial class MainWindow : Window
         if (_onPicker)
         {
             HideSettings();
+        HideMiningEquipment();
+            HideOverlaySetup();
             Stage.Opacity = 1;
             Stage.IsHitTestVisible = true;
             Prompt.Opacity = 1;
@@ -321,8 +350,9 @@ public partial class MainWindow : Window
         Stage.Opacity = 1;
         Stage.IsHitTestVisible = true;
         HideMinerals();
-        HideScan();
         HideSettings();
+        HideMiningEquipment();
+        HideOverlaySetup();
         foreach (var button in new[] { GolemButton, ProspectorButton, MoleButton })
         {
             button.IsHitTestVisible = true;
@@ -340,7 +370,6 @@ public partial class MainWindow : Window
         NavLoadout.IsEnabled = false;
         NavSignatures.IsEnabled = false;
         NavOverlay.IsEnabled = false;
-        NavScan.IsEnabled = false;
         MarkNav(NavSelectShip);
     }
 
@@ -352,8 +381,9 @@ public partial class MainWindow : Window
         }
 
         HideMinerals();
-        HideScan();
         HideSettings();
+        HideMiningEquipment();
+        HideOverlaySetup();
         Stage.Opacity = 1;
         Stage.IsHitTestVisible = true;
         Prompt.Opacity = 0;
@@ -385,7 +415,7 @@ public partial class MainWindow : Window
 
     private void SaveConfiguration_Click(object sender, RoutedEventArgs e) => ShowSignatures_Click(sender, e);
 
-    private void ShowOverlay_Click(object sender, RoutedEventArgs e)
+    private void ShowRock()
     {
         if (!_chosen)
         {
@@ -402,7 +432,12 @@ public partial class MainWindow : Window
             _overlay.Closed += (_, _) =>
             {
                 _overlay = null;
-                StopWatch();
+                if (!_signatureOn)
+                {
+                    StopWatch();
+                }
+
+                SyncOverlayState();
             };
             _overlay.PlaceFromViewModel();
             _overlay.Show();
@@ -411,8 +446,235 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (!_overlay.IsVisible)
+        {
+            _overlay.Show();
+        }
+
         _overlay.Activate();
         StartWatch();
+    }
+
+    private void SetRock(bool on)
+    {
+        if (on)
+        {
+            ShowRock();
+        }
+        else
+        {
+            _overlay?.Close();
+        }
+
+        SyncOverlayState();
+    }
+
+    private void SetSignature(bool on)
+    {
+        if (!_chosen)
+        {
+            return;
+        }
+
+        if (_chosen)
+        {
+            _signatureOn = on;
+            if (!on)
+            {
+                _signature?.SetLive(false);
+                if (_overlay is null)
+                {
+                    StopWatch();
+                }
+            }
+            else
+            {
+                EnsureSignatureOverlay();
+                _signature?.SetLive(true);
+                StartWatch();
+            }
+        }
+
+        SyncOverlayState();
+    }
+
+    private void ApplyOverlayState()
+    {
+        if (_applyingOverlay || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        _applyingOverlay = true;
+        try
+        {
+            if (viewModel.SignatureOverlayOn != _signatureOn)
+            {
+                SetSignature(viewModel.SignatureOverlayOn);
+            }
+
+            if (viewModel.RockOverlayOn != (_overlay is not null))
+            {
+                SetRock(viewModel.RockOverlayOn);
+            }
+        }
+        finally
+        {
+            _applyingOverlay = false;
+            SyncOverlayState();
+        }
+    }
+
+    private void SyncOverlayState()
+    {
+        if (_applyingOverlay || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        viewModel.ReportOverlayState(_signatureOn, _overlay is not null);
+    }
+
+    private void ToggleShared()
+    {
+        var on = _overlay is not null || _signatureOn;
+        SetSignature(!on);
+        SetRock(!on);
+    }
+
+    private void RefreshHotkeys()
+    {
+        var handle = new WindowInteropHelper(this).Handle;
+        if (handle == IntPtr.Zero || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        ReleaseHotkeys();
+        var rock = HotkeyChord.Parse(viewModel.RockOverlayHotkey);
+        var signature = HotkeyChord.Parse(viewModel.SignatureOverlayHotkey);
+        _sharedHotkey = rock is not null && rock == signature;
+        var failed = false;
+        if (_sharedHotkey && rock is not null)
+        {
+            failed = !GlobalHotkey.Register(handle, 1, rock.Value);
+        }
+        else
+        {
+            if (rock is not null && !GlobalHotkey.Register(handle, 1, rock.Value))
+            {
+                failed = true;
+            }
+
+            if (signature is not null && !GlobalHotkey.Register(handle, 2, signature.Value))
+            {
+                failed = true;
+            }
+        }
+
+        OverlayHotkeyNote.Text = failed
+            ? "That key is already used by another program."
+            : "";
+    }
+
+    private void ReleaseHotkeys()
+    {
+        var handle = new WindowInteropHelper(this).Handle;
+        if (handle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        GlobalHotkey.Unregister(handle, 1);
+        GlobalHotkey.Unregister(handle, 2);
+    }
+
+    private IntPtr HotkeyMessage(IntPtr hwnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (message != GlobalHotkey.Message)
+        {
+            return IntPtr.Zero;
+        }
+
+        handled = true;
+        var id = wParam.ToInt32();
+        if (id == 1 && _sharedHotkey)
+        {
+            ToggleShared();
+        }
+        else if (id == 1)
+        {
+            SetRock(_overlay is null);
+        }
+        else if (id == 2)
+        {
+            SetSignature(!_signatureOn);
+        }
+
+        return IntPtr.Zero;
+    }
+
+    private void CaptureRockHotkey_Click(object sender, RoutedEventArgs e) => CaptureHotkey(rock: true);
+
+    private void CaptureSignatureHotkey_Click(object sender, RoutedEventArgs e) => CaptureHotkey(rock: false);
+
+    private void CaptureHotkey(bool rock)
+    {
+        var dialog = new HotkeyCaptureWindow { Owner = this };
+        if (dialog.ShowDialog() != true || dialog.Chord is not HotkeyChord chord || DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        if (rock)
+        {
+            viewModel.RockOverlayHotkey = chord.Text;
+        }
+        else
+        {
+            viewModel.SignatureOverlayHotkey = chord.Text;
+        }
+    }
+
+    private void ClearRockHotkey_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.RockOverlayHotkey = "";
+        }
+    }
+
+    private void ClearSignatureHotkey_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.SignatureOverlayHotkey = "";
+        }
+    }
+
+    private void EnsureSignatureOverlay()
+    {
+        if (_signature is not null)
+        {
+            return;
+        }
+
+        _signature = new SignatureOverlayWindow
+        {
+            DataContext = DataContext,
+            Owner = this
+        };
+        _signature.Closed += (_, _) => _signature = null;
+        _signature.PlaceFromViewModel();
+        _signature.Show();
+    }
+
+    private void SignatureColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: string color } && DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.SignatureOverlayColor = color;
+        }
     }
 
     private void ApplyOverlayClickThrough()
@@ -562,7 +824,7 @@ public partial class MainWindow : Window
 
     private async void WatchTick(object? sender, EventArgs e)
     {
-        if (_watchBusy || _overlay is null || DataContext is not MainWindowViewModel viewModel)
+        if (_watchBusy || DataContext is not MainWindowViewModel viewModel || (_overlay is null && !_signatureOn))
         {
             return;
         }
@@ -571,18 +833,20 @@ public partial class MainWindow : Window
         try
         {
             var monitor = WatchMonitor(viewModel);
-            if (_overlay is null)
+            if (_overlay is null && !_signatureOn)
             {
                 return;
             }
 
-            SignatureReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Signatures);
-            if (_overlay is null)
+            if (_signatureOn)
             {
-                return;
+                SignatureReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Signatures);
             }
 
-            RockReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Rock);
+            if (_overlay is not null)
+            {
+                RockReadText.Text = await DescribeTarget(viewModel, monitor, CaptureTarget.Rock);
+            }
         }
         finally
         {
@@ -635,7 +899,7 @@ public partial class MainWindow : Window
         }
 
         var frame = await ReadWatchAsync(viewModel, monitor, target);
-        if (_overlay is null)
+        if (_overlay is null && !_signatureOn)
         {
             return "";
         }
@@ -724,16 +988,6 @@ public partial class MainWindow : Window
         scale.BeginAnimation(ScaleTransform.ScaleXProperty, close);
     }
 
-    private void ShowScan_Click(object sender, RoutedEventArgs e)
-    {
-        if (!_chosen)
-        {
-            return;
-        }
-
-        ShowScan();
-    }
-
     private void ScanMonitor_Changed(object sender, SelectionChangedEventArgs e) => RefreshScanLabels();
 
     private void SignatureStill_Click(object sender, RoutedEventArgs e) =>
@@ -816,8 +1070,9 @@ public partial class MainWindow : Window
     private void ShowAaron()
     {
         HideMinerals();
-        HideScan();
         HideSettings();
+        HideMiningEquipment();
+        HideOverlaySetup();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
@@ -838,16 +1093,113 @@ public partial class MainWindow : Window
         AaronPage.IsHitTestVisible = false;
     }
 
-    private void ShowSettings()
+    private void ShowOverlaySetup_Click(object sender, RoutedEventArgs e) => ShowOverlaySetup();
+
+    private void ShowOverlaySetup()
     {
         HideMinerals();
-        HideScan();
         HideAaron();
+        HideSettings();
+        HideMiningEquipment();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
         Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
         Loadout.IsHitTestVisible = false;
+        OverlaySetupPage.IsHitTestVisible = true;
+        OverlaySetupPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(120)
+        });
+        _onPicker = false;
+        MarkNav(NavOverlay);
+    }
+
+    private void HideOverlaySetup()
+    {
+        OverlaySetupPage.BeginAnimation(OpacityProperty, null);
+        OverlaySetupPage.Opacity = 0;
+        OverlaySetupPage.IsHitTestVisible = false;
+    }
+
+    private void MiningItem_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: MiningItemRow row } && DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.Equipment.OpenItem(row);
+        }
+    }
+
+    private void MiningItemBack_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.Equipment.CloseItem();
+        }
+    }
+
+    private void Kofi_Click(object sender, RoutedEventArgs e)
+    {
+        Process.Start(new ProcessStartInfo("https://ko-fi.com/longinart") { UseShellExecute = true });
+    }
+
+    private void MiningVehicle_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: MiningVehicleRow row } && DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.Equipment.OpenVehicle(row);
+        }
+    }
+
+    private void MiningVehicleBack_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.Equipment.CloseVehicle();
+        }
+    }
+
+    private void ShowMiningEquipment_Click(object sender, RoutedEventArgs e) => ShowMiningEquipment();
+
+    private void ShowMiningEquipment()
+    {
+        HideMinerals();
+        HideAaron();
+        HideOverlaySetup();
+        HideSettings();
+        Stage.Opacity = 0;
+        Stage.IsHitTestVisible = false;
+        Prompt.Opacity = 0;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
+        Loadout.IsHitTestVisible = false;
+        MiningEquipmentPage.IsHitTestVisible = true;
+        MiningEquipmentPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
+        {
+            BeginTime = TimeSpan.FromMilliseconds(120)
+        });
+        _onPicker = false;
+        MarkNav(NavEquipment);
+    }
+
+    private void HideMiningEquipment()
+    {
+        MiningEquipmentPage.BeginAnimation(OpacityProperty, null);
+        MiningEquipmentPage.Opacity = 0;
+        MiningEquipmentPage.IsHitTestVisible = false;
+    }
+
+    private void ShowSettings()
+    {
+        HideMinerals();
+        HideAaron();
+        HideOverlaySetup();
+        HideMiningEquipment();
+        Stage.Opacity = 0;
+        Stage.IsHitTestVisible = false;
+        Prompt.Opacity = 0;
+        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
+        Loadout.IsHitTestVisible = false;
+        FillScanMonitors();
         SettingsPage.IsHitTestVisible = true;
         SettingsPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
         {
@@ -866,8 +1218,9 @@ public partial class MainWindow : Window
 
     private void ShowMinerals()
     {
-        HideScan();
         HideSettings();
+        HideMiningEquipment();
+        HideOverlaySetup();
         Stage.Opacity = 0;
         Stage.IsHitTestVisible = false;
         Prompt.Opacity = 0;
@@ -887,32 +1240,6 @@ public partial class MainWindow : Window
         MineralsPage.BeginAnimation(OpacityProperty, null);
         MineralsPage.Opacity = 0;
         MineralsPage.IsHitTestVisible = false;
-    }
-
-    private void ShowScan()
-    {
-        HideMinerals();
-        HideSettings();
-        Stage.Opacity = 0;
-        Stage.IsHitTestVisible = false;
-        Prompt.Opacity = 0;
-        Loadout.BeginAnimation(OpacityProperty, new DoubleAnimation(0, TimeSpan.FromMilliseconds(180)));
-        Loadout.IsHitTestVisible = false;
-        FillScanMonitors();
-        ScanPage.IsHitTestVisible = true;
-        ScanPage.BeginAnimation(OpacityProperty, new DoubleAnimation(1, TimeSpan.FromMilliseconds(260))
-        {
-            BeginTime = TimeSpan.FromMilliseconds(120)
-        });
-        _onPicker = false;
-        MarkNav(NavScan);
-    }
-
-    private void HideScan()
-    {
-        ScanPage.BeginAnimation(OpacityProperty, null);
-        ScanPage.Opacity = 0;
-        ScanPage.IsHitTestVisible = false;
     }
 
     private void FillScanMonitors()
@@ -1102,11 +1429,65 @@ public partial class MainWindow : Window
             }
 
             _rockAim.Remember(offsetX, offsetY);
-            return (captured, RockFrame.Lines(fields));
+            var composition = await SeekComposition(monitor, offsetX, offsetY);
+            var shares = composition?.Composition is { Count: > 0 } found ? found : fields.Composition;
+            var total = fields.TotalScu;
+            if (composition is not null && composition.TotalScu.Confidence != RecognitionConfidence.Missing)
+            {
+                total = composition.TotalScu;
+            }
+
+            var merged = shares.Count == 0 && total.Confidence == RecognitionConfidence.Missing
+                ? fields
+                : fields.WithComposition(shares, total);
+            return (captured, RockFrame.Lines(merged, includeComposition: shares.Count > 0 || total.Confidence != RecognitionConfidence.Missing));
         }
 
         var home = center ?? CaptureRock(monitor, 0, 0);
         return (home, null);
+    }
+
+    private async Task<RockOcrFields?> SeekComposition(MonitorInfo monitor, int hintX, int hintY)
+    {
+        var offsets = new List<(int X, int Y)> { (hintX, hintY) };
+        foreach (var offset in _compositionAim.Order(monitor.Height))
+        {
+            if (!offsets.Contains(offset))
+            {
+                offsets.Add(offset);
+            }
+        }
+
+        foreach (var (offsetX, offsetY) in offsets)
+        {
+            var shifted = CompositionPatch.Shifted(monitor.Width, monitor.Height, offsetX, offsetY);
+            if (shifted is null)
+            {
+                continue;
+            }
+
+            var captured = RegionImage.CaptureBmp(
+                monitor.Left + shifted.Value.X,
+                monitor.Top + shifted.Value.Y,
+                shifted.Value.Width,
+                shifted.Value.Height);
+            if (captured is null)
+            {
+                continue;
+            }
+
+            var words = await new WindowsOcrReader().ReadWordsAsync(captured);
+            var fields = RockFrame.Read(captured, words);
+            if (fields.Composition.Count == 0 && fields.TotalScu.Confidence == RecognitionConfidence.Missing)
+            {
+                continue;
+            }
+
+            _compositionAim.Remember(offsetX, offsetY);
+            return fields;
+        }
+
+        return null;
     }
 
     private static byte[]? CaptureRock(MonitorInfo monitor, int offsetX, int offsetY)
@@ -1185,7 +1566,7 @@ public partial class MainWindow : Window
 
     private void MarkNav(Button selected)
     {
-        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures, NavOverlay, NavScan, NavAaron, NavSettings })
+        foreach (var button in new[] { NavSelectShip, NavLoadout, NavSignatures, NavOverlay, NavAaron, NavEquipment, NavSettings })
         {
             var active = button == selected;
             button.Background = active ? NavSelectedBrush : Brushes.Transparent;
@@ -1263,8 +1644,9 @@ public partial class MainWindow : Window
         NavLoadout.IsEnabled = true;
         NavSignatures.IsEnabled = true;
         NavOverlay.IsEnabled = true;
-        NavScan.IsEnabled = true;
         HideSettings();
+        HideMiningEquipment();
+        HideOverlaySetup();
         _onPicker = false;
         MarkNav(NavLoadout);
     }

@@ -64,7 +64,7 @@ The rock rectangle is scaled up and read with Windows OCR. Mass, resistance, and
 
 ### L. Overlay above the game — in the app
 
-The overlay stays above other windows and is slightly translucent. Clicks pass through the overlay only while that box is ticked on the assistant window. Untick it to move the overlay. The program does not send keyboard, mouse, or controller input.
+The rock overlay and a separate signature overlay stay above other windows. Each has its own opacity. Clicks pass through the rock overlay only while that box is ticked. The signature overlay can be dragged while it is unlocked, including while that box is ticked and the positioning preview is on. The program does not send keyboard, mouse, or controller input. Decision 024.
 
 ### M. Digit rectangle — in the app
 
@@ -76,7 +76,7 @@ The live signature path reads the fixed patch under the radar and matches glyphs
 
 ### Rock scan results — in the app
 
-Mass, resistance, and instability are read from a fixed patch on the scan results. No rectangle is placed. If none of the three numbers is in that still, the same patch is tried one step up, down, left, and right. A number that was read is shown even when another of the three is missing. The reading lists only those three fields. Composition and cargo are not read. Instability is shown and does not decide whether the rock can crack. Decision 022.
+Mass, resistance, and instability are read from a fixed patch on the scan results. No rectangle is placed. If none of the three numbers is in that still, the same patch is tried one step up, down, left, and right. A number that was read is shown even when another of the three is missing. The reading lists those three fields. Composition is a second patch under that panel. A parsed mineral percent and SCU total are written into the overlay. Cargo is not read. Instability is shown and does not decide whether the rock can crack. Decision 022.
 
 ### N. Your layout check — waiting on you
 
@@ -84,7 +84,7 @@ Choose the monitor the game is on. The signature does not need a rectangle. If t
 
 ## Later
 
-A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out. Reading the ore composition inside the scan results stays out until crackability from mass and resistance is doing what it should.
+A per-user installer or a portable build. No admin rights for normal use. Ranking equipment the user does not own stays out. The overlay composition panel prices a basket the user confirms. An OCR share of that panel stays uncertain and does not set the price.
 
 ## Explicitly out of scope
 

@@ -1,4 +1,5 @@
 using System.Globalization;
+using StarCitizenMiningAssistant.Core.Refining;
 
 namespace StarCitizenMiningAssistant.Core.Recognition;
 
@@ -7,7 +8,8 @@ namespace StarCitizenMiningAssistant.Core.Recognition;
 /// The longer of the word beside the label and the digit shapes is kept.
 /// A shorter fragment is left blank when the row had more digits. MASS is also accepted
 /// when the reader saw HASS or HAS. A missing mass or instability label still takes
-/// the number one row above or below resistance. Composition is ignored.
+/// the number one row above or below resistance. A mineral name beside or just
+/// above a percent is kept as an uncertain composition share.
 /// </summary>
 public static class RockPanel
 {
@@ -39,9 +41,117 @@ public static class RockPanel
         {
             Mass = mass,
             Resistance = resistance,
-            Instability = instability
+            Instability = instability,
+            Composition = Shares(words),
+            TotalScu = ReadTotalScu(words)
         };
     }
+
+    private static IReadOnlyList<ObservedShare> Shares(IReadOnlyList<Word> words)
+    {
+        var shares = new List<ObservedShare>();
+        foreach (var percent in words)
+        {
+            if (Digits(percent.Text) is not string number || !percent.Text.Contains('%', StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (words.Any(word => IsCrack(word.Text) && Math.Abs(word.Y - percent.Y) <= 14 && word.X < percent.X))
+            {
+                continue;
+            }
+
+            var name = words
+                .Where(word => Math.Abs(word.Y - percent.Y) <= 14 && word.X < percent.X && HasLetters(word.Text) && !IsCrack(word.Text) && !IsChrome(word.Text))
+                .OrderByDescending(word => word.X)
+                .Select(word => Letters(word.Text))
+                .FirstOrDefault(text => text.Length > 1);
+            if (name is null || CompositionShares.IsInert(name)
+                || !double.TryParse(number, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            {
+                continue;
+            }
+
+            shares.Add(new ObservedShare(name, ObservedValue<double>.Uncertain(value)));
+        }
+
+        return shares;
+    }
+
+    private static ObservedValue<double> ReadTotalScu(IReadOnlyList<Word> words)
+    {
+        foreach (var header in words)
+        {
+            if (!Letters(header.Text).Contains("COMPOSITION", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            foreach (var word in words.Where(word => word.X > header.X && Math.Abs(word.Y - header.Y) <= 14).OrderBy(word => word.X))
+            {
+                if (Letters(word.Text).Contains("CARGO", StringComparison.Ordinal))
+                {
+                    break;
+                }
+
+                if (TryAmount(word.Text, out var amount))
+                {
+                    return ObservedValue<double>.Uncertain(amount);
+                }
+            }
+        }
+
+        return ObservedValue<double>.Missing();
+    }
+
+    private static bool TryAmount(string text, out double value)
+    {
+        var start = -1;
+        for (var i = 0; i < text.Length; i++)
+        {
+            if (char.IsDigit(text[i]) || text[i] == '.')
+            {
+                if (start < 0)
+                {
+                    start = i;
+                }
+
+                continue;
+            }
+
+            if (start >= 0)
+            {
+                break;
+            }
+        }
+
+        if (start < 0)
+        {
+            value = 0;
+            return false;
+        }
+
+        var end = start;
+        while (end < text.Length && (char.IsDigit(text[end]) || text[end] == '.'))
+        {
+            end++;
+        }
+
+        return double.TryParse(text[start..end], NumberStyles.Float, CultureInfo.InvariantCulture, out value);
+    }
+
+    private static bool IsCrack(string text) => IsMass(text) || IsResistance(text) || IsInstability(text);
+
+    private static bool IsChrome(string text)
+    {
+        var letters = Letters(text);
+        return letters.Contains("COMPOSITION", StringComparison.Ordinal)
+            || letters.Contains("CARGO", StringComparison.Ordinal)
+            || letters.Contains("SCU", StringComparison.Ordinal);
+    }
+
+    private static bool HasLetters(string text) => text.Any(char.IsLetter);
 
     private static Word? Find(IReadOnlyList<Word> words, Func<string, bool> label)
     {

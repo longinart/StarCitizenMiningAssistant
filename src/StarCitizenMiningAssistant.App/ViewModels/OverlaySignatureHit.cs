@@ -20,6 +20,8 @@ public sealed class OverlaySignatureHit
 
     public bool HasDetail { get; }
 
+    public string Line => Name.Replace(" × ", "x ", StringComparison.Ordinal);
+
     public static OverlaySignatureHit From(SignatureWatchHit hit) =>
         new(hit.Label, "", hit.Blink);
 }

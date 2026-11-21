@@ -173,6 +173,56 @@ public class LoadoutLibraryTests
     }
 
     [Fact]
+    public void Overlay_appearance_survives_the_saved_file()
+    {
+        var library = new LoadoutLibrary
+        {
+            RockOverlayOpacity = 0.6,
+            RockOverlayScale = 1.25,
+            DebugMode = true,
+            SignatureOverlayLeft = 40,
+            SignatureOverlayTop = 80,
+            SignatureOverlayFontSize = 40,
+            SignatureOverlayColor = "#FF5FE8D2",
+            SignatureOverlayOpacity = 0.8,
+            SignatureOverlayLocked = true,
+            SignatureOverlayPreview = true
+        };
+
+        var restored = LoadoutLibrary.TryParse(library.ToJson());
+
+        Assert.NotNull(restored);
+        Assert.Equal(0.6, restored.RockOverlayOpacity);
+        Assert.Equal(1.25, restored.RockOverlayScale);
+        Assert.True(restored.DebugMode);
+        Assert.Equal(40, restored.SignatureOverlayLeft);
+        Assert.Equal(80, restored.SignatureOverlayTop);
+        Assert.Equal(40, restored.SignatureOverlayFontSize);
+        Assert.Equal("#FF5FE8D2", restored.SignatureOverlayColor);
+        Assert.Equal(0.8, restored.SignatureOverlayOpacity);
+        Assert.True(restored.SignatureOverlayLocked);
+        Assert.True(restored.SignatureOverlayPreview);
+    }
+
+    [Fact]
+    public void Overlay_appearance_keeps_defaults_when_an_older_file_omits_it()
+    {
+        var restored = LoadoutLibrary.TryParse("{\"loadouts\":[]}");
+
+        Assert.NotNull(restored);
+        Assert.Equal(0.94, restored.RockOverlayOpacity);
+        Assert.Equal(1, restored.RockOverlayScale);
+        Assert.False(restored.DebugMode);
+        Assert.Equal(32, restored.SignatureOverlayFontSize);
+        Assert.Equal("#FFFFFFFF", restored.SignatureOverlayColor);
+        Assert.Equal(1, restored.SignatureOverlayOpacity);
+        Assert.False(restored.SignatureOverlayLocked);
+        Assert.False(restored.SignatureOverlayPreview);
+        Assert.Equal("", restored.RockOverlayHotkey);
+        Assert.Equal("", restored.SignatureOverlayHotkey);
+    }
+
+    [Fact]
     public void Scan_log_stays_on_when_an_older_file_does_not_mention_it()
     {
         var restored = LoadoutLibrary.TryParse("{\"loadouts\":[],\"clickThrough\":false}");

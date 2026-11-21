@@ -1,13 +1,16 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
+using System.Windows.Input;
 using System.Windows.Media;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Calculation;
 using StarCitizenMiningAssistant.Core.Capture;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Input;
 using StarCitizenMiningAssistant.Core.Navigation;
 using StarCitizenMiningAssistant.Core.Recognition;
+using StarCitizenMiningAssistant.Core.Refining;
 
 namespace StarCitizenMiningAssistant.App.ViewModels;
 
@@ -24,7 +27,8 @@ public sealed class MainWindowViewModel : ViewModelBase
         "Saldynium",
         "Feynmaline",
         "Glacosite",
-        "Beradom"
+        "Beradom",
+        "Carinite"
     };
 
     private readonly MiningCatalog? _catalog;
@@ -59,6 +63,9 @@ public sealed class MainWindowViewModel : ViewModelBase
     private IReadOnlyList<OverlaySignatureHit> _signatureHits = [];
     private string _soundKey = "";
     private bool _soundArmed;
+    private bool _signatureOverlayOn;
+    private bool _rockOverlayOn;
+    private bool _syncingOverlay;
 
     private MainWindowViewModel(MiningCatalog? catalog, string? catalogError)
     {
@@ -66,6 +73,7 @@ public sealed class MainWindowViewModel : ViewModelBase
         WindowTitle = ApplicationInfo.Name;
         ProductName = ApplicationInfo.Name;
         VersionText = "Version " + ApplicationInfo.VersionText;
+        BuildLabel = ApplicationInfo.BuildLabel;
         CatalogNote = catalog is null
             ? "Equipment catalog did not load. " + catalogError
             : "Equipment " + catalog.GameVersion + ", retrieved " + catalog.Retrieved + ".";
@@ -94,6 +102,9 @@ public sealed class MainWindowViewModel : ViewModelBase
             .Select(material => new MineralRow(material, NotifyLoadout)));
         MineralsView = System.Windows.Data.CollectionViewSource.GetDefaultView(Minerals);
         MineralsView.Filter = item => item is MineralRow row && row.Matches(MineralSearch);
+        Composition = new CompositionBoard(Minerals.Select(row => row.Name).ToList(), NotifyLoadout);
+        ToggleSignatureOverlayCommand = new RelayCommand(() => SignatureOverlayOn = !SignatureOverlayOn);
+        ToggleRockOverlayCommand = new RelayCommand(() => RockOverlayOn = !RockOverlayOn);
     }
 
     public event EventHandler? LoadoutChanged;
@@ -104,7 +115,108 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public string VersionText { get; }
 
+    public string BuildLabel { get; }
+
     public string CatalogNote { get; }
+
+    private MiningEquipmentViewModel _equipment = MiningEquipmentViewModel.Empty;
+
+    public MiningEquipmentViewModel Equipment => _equipment;
+
+    public CompositionBoard Composition { get; }
+
+    public IReadOnlyList<string> HomeRefineries { get; private set; } = [];
+
+    public IReadOnlyList<string> RefineryMethods { get; private set; } = [];
+
+    public string HomeRefinery
+    {
+        get => _library.HomeRefinery;
+        set
+        {
+            var next = value ?? "";
+            if (_library.HomeRefinery == next)
+            {
+                return;
+            }
+
+            _library.HomeRefinery = next;
+            OnPropertyChanged(nameof(HomeRefinery));
+            Composition.Recalculate(_library.RefineryMethod, _library.HomeRefinery, _library.DisplayRefinedScu);
+            NotifyLoadout();
+        }
+    }
+
+    public string RefineryMethod
+    {
+        get => _library.RefineryMethod;
+        set
+        {
+            var next = value ?? "";
+            if (_library.RefineryMethod == next)
+            {
+                return;
+            }
+
+            _library.RefineryMethod = next;
+            OnPropertyChanged(nameof(RefineryMethod));
+            Composition.Recalculate(_library.RefineryMethod, _library.HomeRefinery, _library.DisplayRefinedScu);
+            NotifyLoadout();
+        }
+    }
+
+    public bool DisplayRefinedScu
+    {
+        get => _library.DisplayRefinedScu;
+        set
+        {
+            if (_library.DisplayRefinedScu == value)
+            {
+                return;
+            }
+
+            _library.DisplayRefinedScu = value;
+            OnPropertyChanged(nameof(DisplayRefinedScu));
+            Composition.Recalculate(_library.RefineryMethod, _library.HomeRefinery, _library.DisplayRefinedScu);
+            NotifyLoadout();
+        }
+    }
+
+    public void UseRefinery(RefineryCatalog catalog)
+    {
+        catalog ??= RefineryCatalog.Empty;
+        Composition.UseCatalog(catalog);
+        HomeRefineries = catalog.Refineries.Select(station => station.Name).ToList();
+        RefineryMethods = catalog.Methods.Select(method => method.Name).ToList();
+        OnPropertyChanged(nameof(HomeRefineries));
+        OnPropertyChanged(nameof(RefineryMethods));
+        if (string.IsNullOrWhiteSpace(_library.RefineryMethod))
+        {
+            var dinyx = RefineryMethods.FirstOrDefault(name => name.Equals("Dinyx Solventation", StringComparison.OrdinalIgnoreCase));
+            if (dinyx is not null)
+            {
+                _library.RefineryMethod = dinyx;
+                OnPropertyChanged(nameof(RefineryMethod));
+            }
+        }
+
+        Composition.Recalculate(_library.RefineryMethod, _library.HomeRefinery, _library.DisplayRefinedScu);
+    }
+
+    public void CalculateRock()
+    {
+        _library.MassConfidence = "";
+        _library.ResistanceConfidence = "";
+        _library.InstabilityConfidence = string.IsNullOrWhiteSpace(InstabilityText) ? "missing" : "";
+        RefreshCrackRows();
+        NotifyLoadout();
+    }
+
+    public void UseMiningItems(MiningItemCatalog catalog)
+    {
+        _equipment = new MiningEquipmentViewModel(catalog);
+        OnPropertyChanged(nameof(Equipment));
+    }
 
     public MiningCatalog? Catalog => _catalog;
 
@@ -400,6 +512,27 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.OverlayTop = saved.OverlayTop;
             _library.OverlayWidth = saved.OverlayWidth;
             _library.OverlayHeight = saved.OverlayHeight;
+            _library.RockOverlayOpacity = ClampOpacity(saved.RockOverlayOpacity, 0.94);
+            _library.RockOverlayScale = saved.RockOverlayScale is >= 0.7 and <= 1.5 ? saved.RockOverlayScale : 1;
+            _library.DebugMode = saved.DebugMode;
+            _library.SignatureOverlayLeft = saved.SignatureOverlayLeft;
+            _library.SignatureOverlayTop = saved.SignatureOverlayTop;
+            _library.SignatureOverlayFontSize = saved.SignatureOverlayFontSize is >= 12 and <= 96
+                ? saved.SignatureOverlayFontSize
+                : 32;
+            _library.SignatureOverlayColor = string.IsNullOrWhiteSpace(saved.SignatureOverlayColor)
+                ? "#FFFFFFFF"
+                : saved.SignatureOverlayColor;
+            _library.SignatureOverlayOpacity = ClampOpacity(saved.SignatureOverlayOpacity, 1);
+            _library.SignatureOverlayLocked = saved.SignatureOverlayLocked;
+            _library.SignatureOverlayPreview = saved.SignatureOverlayPreview;
+            _library.RockOverlayHotkey = saved.RockOverlayHotkey ?? "";
+            _library.SignatureOverlayHotkey = saved.SignatureOverlayHotkey ?? "";
+            _library.HomeRefinery = saved.HomeRefinery ?? "";
+            _library.RefineryMethod = string.IsNullOrWhiteSpace(saved.RefineryMethod)
+                ? _library.RefineryMethod
+                : saved.RefineryMethod;
+            _library.DisplayRefinedScu = saved.DisplayRefinedScu;
             _library.CaptureMonitors = LoadoutLibrary.CloneCaptures(saved.CaptureMonitors);
             MassText = string.IsNullOrWhiteSpace(saved.MassText) ? MassText : saved.MassText;
             ResistanceText = string.IsNullOrWhiteSpace(saved.ResistanceText) ? ResistanceText : saved.ResistanceText;
@@ -408,6 +541,20 @@ public sealed class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(SoundEnabled));
             OnPropertyChanged(nameof(ClickThrough));
             OnPropertyChanged(nameof(ScanLogEnabled));
+            OnPropertyChanged(nameof(RockOverlayOpacity));
+            OnPropertyChanged(nameof(RockOverlayScale));
+            OnPropertyChanged(nameof(DebugMode));
+            OnPropertyChanged(nameof(SignatureOverlayFontSize));
+            OnPropertyChanged(nameof(SignatureOverlayColor));
+            OnPropertyChanged(nameof(SignatureOverlayOpacity));
+            OnPropertyChanged(nameof(SignatureOverlayLocked));
+            OnPropertyChanged(nameof(SignatureOverlayPreview));
+            OnPropertyChanged(nameof(RockOverlayHotkey));
+            OnPropertyChanged(nameof(SignatureOverlayHotkey));
+            OnPropertyChanged(nameof(HomeRefinery));
+            OnPropertyChanged(nameof(RefineryMethod));
+            OnPropertyChanged(nameof(DisplayRefinedScu));
+            Composition.Recalculate(_library.RefineryMethod, _library.HomeRefinery, _library.DisplayRefinedScu);
 
             var screen = _library.Draft ?? _library.Find(_library.ActiveName);
             if (screen is not null)
@@ -643,6 +790,184 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public string OverlayNote { get; private set; } = "Type the rock here until the scan area can read it.";
 
+    public double RockOverlayOpacity
+    {
+        get => _library.RockOverlayOpacity;
+        set => SetOpacity(value, () => _library.RockOverlayOpacity, stored => _library.RockOverlayOpacity = stored, nameof(RockOverlayOpacity));
+    }
+
+    public double RockOverlayScale
+    {
+        get => _library.RockOverlayScale;
+        set
+        {
+            var stored = value is >= 0.7 and <= 1.5 ? value : _library.RockOverlayScale;
+            if (Math.Abs(_library.RockOverlayScale - stored) < 0.001)
+            {
+                return;
+            }
+
+            _library.RockOverlayScale = stored;
+            OnPropertyChanged(nameof(RockOverlayScale));
+            NotifyLoadout();
+        }
+    }
+
+    public bool DebugMode
+    {
+        get => _library.DebugMode;
+        set => SetFlag(value, () => _library.DebugMode, stored => _library.DebugMode = stored, nameof(DebugMode));
+    }
+
+    public double SignatureOverlayFontSize
+    {
+        get => _library.SignatureOverlayFontSize;
+        set
+        {
+            var size = Math.Clamp(value, 12, 96);
+            if (Math.Abs(_library.SignatureOverlayFontSize - size) < 0.1)
+            {
+                return;
+            }
+
+            _library.SignatureOverlayFontSize = size;
+            OnPropertyChanged(nameof(SignatureOverlayFontSize));
+            NotifyLoadout();
+        }
+    }
+
+    public string SignatureOverlayColor
+    {
+        get => _library.SignatureOverlayColor;
+        set
+        {
+            var next = value?.Trim() ?? "";
+            if (next.Length == 0 || !LooksLikeColor(next) || _library.SignatureOverlayColor == next)
+            {
+                return;
+            }
+
+            _library.SignatureOverlayColor = next;
+            OnPropertyChanged(nameof(SignatureOverlayColor));
+            NotifyLoadout();
+        }
+    }
+
+    public double SignatureOverlayOpacity
+    {
+        get => _library.SignatureOverlayOpacity;
+        set => SetOpacity(value, () => _library.SignatureOverlayOpacity, stored => _library.SignatureOverlayOpacity = stored, nameof(SignatureOverlayOpacity));
+    }
+
+    public bool SignatureOverlayLocked
+    {
+        get => _library.SignatureOverlayLocked;
+        set
+        {
+            if (_library.SignatureOverlayLocked == value)
+            {
+                return;
+            }
+
+            _library.SignatureOverlayLocked = value;
+            OnPropertyChanged(nameof(SignatureOverlayLocked));
+            if (value && _library.SignatureOverlayPreview)
+            {
+                _library.SignatureOverlayPreview = false;
+                OnPropertyChanged(nameof(SignatureOverlayPreview));
+            }
+
+            NotifyLoadout();
+        }
+    }
+
+    public bool SignatureOverlayPreview
+    {
+        get => _library.SignatureOverlayPreview;
+        set
+        {
+            if (_library.SignatureOverlayPreview == value)
+            {
+                return;
+            }
+
+            _library.SignatureOverlayPreview = value;
+            OnPropertyChanged(nameof(SignatureOverlayPreview));
+            if (value && _library.SignatureOverlayLocked)
+            {
+                _library.SignatureOverlayLocked = false;
+                OnPropertyChanged(nameof(SignatureOverlayLocked));
+            }
+
+            NotifyLoadout();
+        }
+    }
+
+    public event EventHandler? HotkeysChanged;
+
+    public string RockOverlayHotkey
+    {
+        get => _library.RockOverlayHotkey;
+        set => SetHotkey(value, () => _library.RockOverlayHotkey, stored => _library.RockOverlayHotkey = stored, nameof(RockOverlayHotkey));
+    }
+
+    public string SignatureOverlayHotkey
+    {
+        get => _library.SignatureOverlayHotkey;
+        set => SetHotkey(value, () => _library.SignatureOverlayHotkey, stored => _library.SignatureOverlayHotkey = stored, nameof(SignatureOverlayHotkey));
+    }
+
+    public string RockOverlayHotkeyLabel => LabelHotkey(_library.RockOverlayHotkey);
+
+    public string SignatureOverlayHotkeyLabel => LabelHotkey(_library.SignatureOverlayHotkey);
+
+    public event EventHandler? OverlayStateChanged;
+
+    public bool SignatureOverlayOn
+    {
+        get => _signatureOverlayOn;
+        set => ChangeOverlay(ref _signatureOverlayOn, value, nameof(SignatureOverlayOn));
+    }
+
+    public bool RockOverlayOn
+    {
+        get => _rockOverlayOn;
+        set => ChangeOverlay(ref _rockOverlayOn, value, nameof(RockOverlayOn));
+    }
+
+    public ICommand ToggleSignatureOverlayCommand { get; }
+
+    public ICommand ToggleRockOverlayCommand { get; }
+
+    public void ReportOverlayState(bool signatureOn, bool rockOn)
+    {
+        _syncingOverlay = true;
+        try
+        {
+            if (_signatureOverlayOn != signatureOn)
+            {
+                _signatureOverlayOn = signatureOn;
+                OnPropertyChanged(nameof(SignatureOverlayOn));
+            }
+
+            if (_rockOverlayOn != rockOn)
+            {
+                _rockOverlayOn = rockOn;
+                OnPropertyChanged(nameof(RockOverlayOn));
+            }
+        }
+        finally
+        {
+            _syncingOverlay = false;
+        }
+    }
+
+    public double? SignatureOverlayLeft => _library.SignatureOverlayLeft;
+
+    public double? SignatureOverlayTop => _library.SignatureOverlayTop;
+
+    public string SignatureOverlayLine { get; private set; } = "";
+
     public double? OverlayLeft => _library.OverlayLeft;
 
     public double? OverlayTop => _library.OverlayTop;
@@ -665,6 +990,18 @@ public sealed class MainWindowViewModel : ViewModelBase
         _library.OverlayTop = top;
         _library.OverlayWidth = width;
         _library.OverlayHeight = height;
+        NotifyLoadout();
+    }
+
+    public void RememberSignatureOverlay(double left, double top)
+    {
+        if (Near(_library.SignatureOverlayLeft, left) && Near(_library.SignatureOverlayTop, top))
+        {
+            return;
+        }
+
+        _library.SignatureOverlayLeft = left;
+        _library.SignatureOverlayTop = top;
         NotifyLoadout();
     }
 
@@ -691,6 +1028,7 @@ public sealed class MainWindowViewModel : ViewModelBase
             MassText = DisplayReading(fields.Mass);
             ResistanceText = DisplayReading(fields.Resistance);
             InstabilityText = DisplayReading(fields.Instability);
+            Composition.ApplyObserved(fields.Composition, fields.TotalScu);
         }
         finally
         {
@@ -738,8 +1076,11 @@ public sealed class MainWindowViewModel : ViewModelBase
         {
             Mass = mass.Shown,
             Resistance = resistance.Shown,
-            Instability = instability.Shown
+            Instability = instability.Shown,
+            Composition = sample?.Composition ?? [],
+            TotalScu = sample?.TotalScu ?? ObservedValue<double>.Missing()
         };
+        Composition.ApplyObserved(held.Composition, held.TotalScu);
         if (!held.Mass.Equals(current.MassKilograms)
             || !held.Resistance.Equals(current.ResistancePercent)
             || !held.Instability.Equals(current.Instability))
@@ -834,6 +1175,8 @@ public sealed class MainWindowViewModel : ViewModelBase
 
             var result = SignatureWatch.Evaluate(_catalog, signature, tracked, SoundEnabled, SignatureChart);
             _signatureHits = result.Hits.Select(OverlaySignatureHit.From).ToList();
+            SignatureOverlayLine = string.Join("\n", _signatureHits.Select(hit => hit.Line));
+            OnPropertyChanged(nameof(SignatureOverlayLine));
             var key = string.Join("|", result.Hits.Where(hit => hit.Blink).Select(hit => hit.Mineral));
             if (!_suspendSave)
             {
@@ -1307,6 +1650,86 @@ public sealed class MainWindowViewModel : ViewModelBase
             yield return new CatalogChoice<MiningGadget>(gadget.Name, gadget);
         }
     }
+
+    private void SetOpacity(double value, Func<double> read, Action<double> write, string name)
+    {
+        var stored = ClampOpacity(value, read());
+        if (Math.Abs(read() - stored) < 0.001)
+        {
+            return;
+        }
+
+        write(stored);
+        OnPropertyChanged(name);
+        NotifyLoadout();
+    }
+
+    private void SetFlag(bool value, Func<bool> read, Action<bool> write, string name)
+    {
+        if (read() == value)
+        {
+            return;
+        }
+
+        write(value);
+        OnPropertyChanged(name);
+        NotifyLoadout();
+    }
+
+    private void SetHotkey(string? value, Func<string> read, Action<string> write, string name)
+    {
+        var next = HotkeyChord.Parse(value)?.Text ?? "";
+        if (read() == next)
+        {
+            return;
+        }
+
+        write(next);
+        OnPropertyChanged(name);
+        OnPropertyChanged(name + "Label");
+        HotkeysChanged?.Invoke(this, EventArgs.Empty);
+        NotifyLoadout();
+    }
+
+    private static string LabelHotkey(string text) => text.Length == 0 ? "Not set" : text;
+
+    private void ChangeOverlay(ref bool field, bool value, string name)
+    {
+        if (field == value)
+        {
+            return;
+        }
+
+        field = value;
+        OnPropertyChanged(name);
+        if (!_syncingOverlay)
+        {
+            OverlayStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    private static double ClampOpacity(double value, double fallback)
+    {
+        if (value is < 0.05 or > 1 || double.IsNaN(value))
+        {
+            return fallback is >= 0.05 and <= 1 ? fallback : 1;
+        }
+
+        return value;
+    }
+
+    private static bool LooksLikeColor(string text)
+    {
+        var raw = text.StartsWith('#') ? text : "#" + text;
+        try
+        {
+            return ColorConverter.ConvertFromString(raw) is Color;
+        }
+        catch (Exception ex) when (ex is FormatException or ArgumentException or NotSupportedException)
+        {
+            return false;
+        }
+    }
 }
 
 public sealed class LoadoutNameChoice
@@ -1748,6 +2171,23 @@ public sealed class MineralRow : ViewModelBase
         value == Math.Truncate(value)
             ? value.ToString("0", CultureInfo.InvariantCulture)
             : value.ToString("0.##", CultureInfo.InvariantCulture);
+}
+
+public sealed class RelayCommand : ICommand
+{
+    private readonly Action _run;
+
+    public RelayCommand(Action run) => _run = run;
+
+    public event EventHandler? CanExecuteChanged
+    {
+        add { }
+        remove { }
+    }
+
+    public bool CanExecute(object? parameter) => true;
+
+    public void Execute(object? parameter) => _run();
 }
 
 public abstract class ViewModelBase : System.ComponentModel.INotifyPropertyChanged

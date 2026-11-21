@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <Content Include="..\..\data\mining-equipment.json" Link="data\mining-equipment.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\data\mining-items.json" Link="data\mining-items.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\data\refinery-data.json" Link="data\refinery-data.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\data\scan-signatures.json" Link="data\scan-signatures.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="..\..\data\aaron-halo-band5.json" Link="data\aaron-halo-band5.json" CopyToOutputDirectory="PreserveNewest" />
     <Resource Include="..\..\media\golem.png" Link="Media\golem.png" />

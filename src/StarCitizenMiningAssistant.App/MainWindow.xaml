@@ -137,6 +137,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ColorSwatch" TargetType="Button">
+            <Setter Property="Width" Value="28" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="CaptionButton" TargetType="Button">
             <Setter Property="Width" Value="46" />
             <Setter Property="Height" Value="46" />
@@ -237,7 +250,7 @@
                    Margin="0,300,0,0" />
 
         <ScrollViewer x:Name="Loadout"
-                      Margin="24,220,24,16"
+                      Margin="24,220,24,46"
                       Opacity="0"
                       IsHitTestVisible="False"
                       VerticalScrollBarVisibility="Auto"
@@ -335,9 +348,18 @@
                                 <ItemsControl ItemsSource="{Binding Slots}" Margin="0,8,0,0">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <DockPanel Margin="0,14,0,0" Visibility="{Binding IsEnabled, Converter={StaticResource ShowWhenTrue}}">
+                                            <DockPanel Margin="0,14,0,0">
+                                                <DockPanel.Style>
+                                                    <Style TargetType="DockPanel">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsEnabled}" Value="False">
+                                                                <Setter Property="Opacity" Value="0.35" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </DockPanel.Style>
                                                 <TextBlock DockPanel.Dock="Left" Width="118" VerticalAlignment="Center" FontSize="16" Foreground="{StaticResource Lapd.TealDim}" Text="{Binding Label}" />
-                                                <ComboBox FontSize="16" ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
+                                                <ComboBox FontSize="16" IsEnabled="{Binding IsEnabled}" ItemsSource="{x:Static vm:ModuleSlotEditor.ModuleChoices}"
                                                           ItemTemplate="{StaticResource ChoiceWithStats}"
                                                           SelectedItem="{Binding Selected, Mode=OneWay}"
                                                           DropDownOpened="Choice_DropDownOpened"
@@ -418,7 +440,13 @@
             </Grid.RowDefinitions>
             <TextBlock Text="Signatures to track" FontSize="32" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.TealBright}" HorizontalAlignment="Center" />
             <StackPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,16,0,8">
-                <TextBlock FontSize="16" Foreground="{StaticResource Lapd.TealDim}" TextAlignment="Center" TextWrapping="Wrap" Text="Tick the minerals the overlay should watch. A ticked mineral blinks when its signature is confirmed. Click a name to show its signatures. Shift-click the name to copy them." />
+                <TextBlock MaxWidth="640" HorizontalAlignment="Center" FontSize="16" Foreground="{StaticResource Lapd.TealDim}" TextAlignment="Center" TextWrapping="Wrap">
+                    <Run Text="Select the minerals the overlay should watch. A selected mineral blinks when its signature is confirmed." />
+                    <LineBreak />
+                    <Run Text="Click a name to show its signature numbers." />
+                    <LineBreak />
+                    <Run Text="Shift-click a name to copy the numbers." />
+                </TextBlock>
                 <CheckBox Margin="0,14,0,0" HorizontalAlignment="Center" FontSize="16"
                           Content="Play a sound when a ticked mineral is confirmed"
                           IsChecked="{Binding SoundEnabled}" />
@@ -442,7 +470,7 @@
                         <TextBlock Text="Track Hand &amp; ROC Deposits" FontFamily="{StaticResource Lapd.FontMono}" Foreground="{StaticResource Lapd.Teal}" FontSize="16" VerticalAlignment="Center" Padding="8,4" />
                     </StackPanel>
                 </StackPanel>
-            <ScrollViewer Grid.Row="1" Margin="0,22,0,0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer Grid.Row="1" Margin="0,22,0,30" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding MineralsView}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -481,38 +509,152 @@
             </ScrollViewer>
             </Grid>
         </Grid>
-        <ScrollViewer x:Name="ScanPage" Margin="48,28,48,20" Opacity="0" IsHitTestVisible="False"
+        <ScrollViewer x:Name="MiningEquipmentPage" Margin="48,28,48,50" Opacity="0" IsHitTestVisible="False"
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
-                <TextBlock Text="Scan areas" FontSize="28" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.TealBright}" HorizontalAlignment="Center" />
-                <TextBlock Margin="0,16,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" TextAlignment="Center"
-                           Text="Choose the monitor the game is on. The signature is read from the fixed patch under the radar. If that patch is empty, the same patch is tried one step up, down, left, and right, and a tilted pill is turned level. Mass, resistance, and instability are read from a fixed patch on the scan results. If those two numbers are not in the still, the same patch is tried one step away. Composition and cargo are not read. While the overlay is open, both are read twice a second. A dark frame keeps the last number. A new signature is kept after it appears twice. A rock mass or resistance is confirmed after two identical reads, and one read stays uncertain." />
-                <TextBlock Margin="0,28,0,8" Foreground="#FFA7B0BA" Text="Monitor" />
-                <ComboBox x:Name="ScanMonitor" Width="460" HorizontalAlignment="Left" SelectionChanged="ScanMonitor_Changed" />
-                <TextBlock x:Name="ScanMonitorNote" Margin="0,10,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
-
-                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Signature" />
-                <TextBlock x:Name="SignatureRegionText" Foreground="#FFA7B0BA" Text="Fixed patch under the radar. A miss also checks one step away." />
-                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                    <Button Content="Show still" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="13" Click="SignatureStill_Click" />
-                    <Button Content="Read text" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" FontSize="13" Click="SignatureRead_Click" />
-                </StackPanel>
-                <Image x:Name="SignatureStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
-                <TextBlock x:Name="SignatureStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
-                <TextBlock x:Name="SignatureReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
-
-                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Scan results" />
-                <TextBlock x:Name="RockRegionText" Foreground="#FFA7B0BA" Text="Fixed patch on the scan results. A miss also checks one step away." />
-                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
-                    <Button Content="Show still" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="13" Click="RockStill_Click" />
-                    <Button Content="Read text" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" FontSize="13" Click="RockRead_Click" />
-                </StackPanel>
-                <Image x:Name="RockStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
-                <TextBlock x:Name="RockStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
-                <TextBlock x:Name="RockReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
+                <TextBlock Text="Mining equipment" FontSize="32" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.TealBright}" HorizontalAlignment="Center" />
+                <TextBlock Margin="0,16,0,0" FontSize="16" Foreground="{StaticResource Lapd.TealDim}" TextWrapping="Wrap" TextAlignment="Center" Text="Search for buy/rent locations of Mining related items and vehicles" />
+                <TabControl Margin="0,24,0,0" Background="Transparent" BorderThickness="0" Padding="0">
+                    <TabControl.Resources>
+                        <Style TargetType="TabItem">
+                            <Setter Property="FontFamily" Value="{StaticResource Lapd.FontDisplay}" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Foreground" Value="{StaticResource Lapd.Teal}" />
+                            <Setter Property="Padding" Value="18,8" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TabItem">
+                                        <Border x:Name="Bd" Background="Transparent" BorderBrush="{StaticResource Lapd.LineDim}" BorderThickness="0,0,0,2" Padding="{TemplateBinding Padding}" Margin="8,0">
+                                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.Resources>
+                    <TabItem Header="Item search">
+                        <Grid Margin="0,16,0,0">
+                            <StackPanel Visibility="{Binding Equipment.ShowItemList, Converter={StaticResource ShowWhenTrue}}">
+                                <TextBlock Margin="0,0,0,6" FontSize="16" Foreground="{StaticResource Lapd.Teal}" Text="Search" />
+                                <TextBox Height="40" FontSize="16" Text="{Binding Equipment.SearchText, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Margin="0,14,0,0" FontSize="16" Foreground="{StaticResource Lapd.TealDim}" Text="Type a name or a category."
+                                           Visibility="{Binding Equipment.ShowSearchPrompt, Converter={StaticResource ShowWhenTrue}}" />
+                                <ItemsControl Margin="0,16,0,0" ItemsSource="{Binding Equipment.FilteredItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Margin="0,0,0,12" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Cursor="Hand" Click="MiningItem_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border x:Name="Bd" Padding="16" CornerRadius="12" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" Background="{StaticResource Lapd.BgDeep}">
+                                                            <StackPanel>
+                                                                <TextBlock FontSize="20" Foreground="#FFE6E8EB" Text="{Binding Name}" />
+                                                                <TextBlock Margin="0,6,0,0" FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="{Binding Category}" />
+                                                                <TextBlock Margin="0,8,0,0" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource Lapd.TealBright}" Text="{Binding Price}" />
+                                                                <TextBlock Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource Lapd.Teal}" Text="Where to buy" />
+                                                                <TextBlock Margin="0,4,0,0" FontSize="15" Foreground="#FFB7EDE2" TextWrapping="Wrap" Text="{Binding Locations}" />
+                                                                <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="{StaticResource Lapd.TealDim}" TextWrapping="Wrap" Text="{Binding Description}" />
+                                                                <TextBlock Margin="0,12,0,0" FontSize="14" Foreground="{StaticResource Lapd.Teal}" Text="{Binding MoreLocations}" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                            <StackPanel DataContext="{Binding Equipment.SelectedItem}" Visibility="{Binding DataContext.Equipment.HasItemDetail, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource ShowWhenTrue}}">
+                                <Button HorizontalAlignment="Left" Cursor="Hand" Click="MiningItemBack_Click" Margin="0,0,0,16">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Bd" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="10" Padding="14,8">
+                                                <TextBlock Text="Back" FontSize="16" Foreground="{StaticResource Lapd.Teal}" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <TextBlock FontSize="28" Foreground="#FFE6E8EB" Text="{Binding Name}" />
+                                <TextBlock Margin="0,6,0,0" FontSize="16" Foreground="{StaticResource Lapd.Teal}" Text="{Binding Category}" />
+                                <TextBlock Margin="0,8,0,0" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource Lapd.TealBright}" Text="{Binding Price}" />
+                                <TextBlock Margin="0,22,0,0" FontSize="18" Foreground="{StaticResource Lapd.Teal}" Text="Where to buy" />
+                                <TextBlock Margin="0,8,0,0" FontSize="16" Foreground="#FFB7EDE2" TextWrapping="Wrap" Text="{Binding AllLocations}" />
+                                <TextBlock Margin="0,18,0,0" FontSize="15" Foreground="{StaticResource Lapd.TealDim}" TextWrapping="Wrap" Text="{Binding Description}" />
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Vehicles">
+                        <Grid Margin="0,16,0,0">
+                            <ItemsControl ItemsSource="{Binding Equipment.Vehicles}" Visibility="{Binding Equipment.ShowVehicleList, Converter={StaticResource ShowWhenTrue}}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Width="148" Height="148" Margin="0,0,12,12" Cursor="Hand" Click="MiningVehicle_Click">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border x:Name="Bd" Background="{StaticResource Lapd.BgDeep}" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="12">
+                                                        <TextBlock Margin="12" Text="{Binding Name}" FontSize="16" Foreground="#FFE6E8EB" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <StackPanel DataContext="{Binding Equipment.SelectedVehicle}" Visibility="{Binding DataContext.Equipment.HasVehicleDetail, RelativeSource={RelativeSource AncestorType=ScrollViewer}, Converter={StaticResource ShowWhenTrue}}">
+                                <Button HorizontalAlignment="Left" Cursor="Hand" Click="MiningVehicleBack_Click" Margin="0,0,0,16">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Bd" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="10" Padding="14,8">
+                                                <TextBlock Text="Back" FontSize="16" Foreground="{StaticResource Lapd.Teal}" />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <TextBlock FontSize="28" Foreground="#FFE6E8EB" Text="{Binding Name}" />
+                                <TextBlock Margin="0,6,0,0" FontSize="16" Foreground="{StaticResource Lapd.Teal}" Text="{Binding Category}" />
+                                <TextBlock Margin="0,8,0,0" FontSize="16" Foreground="{StaticResource Lapd.TealBright}" Text="{Binding Capacity}" />
+                                <TextBlock Margin="0,4,0,0" FontSize="16" Foreground="{StaticResource Lapd.TealBright}" Text="{Binding Crew}" />
+                                <TextBlock Margin="0,4,0,0" FontSize="16" Foreground="{StaticResource Lapd.TealBright}" Text="{Binding Price}" />
+                                <TextBlock Margin="0,22,0,0" FontSize="18" Foreground="{StaticResource Lapd.Teal}" Text="Where to buy" />
+                                <TextBlock Margin="0,8,0,0" FontSize="16" Foreground="#FFB7EDE2" TextWrapping="Wrap" Text="{Binding BuyLines}" />
+                                <TextBlock Margin="0,28,0,0" FontSize="18" Foreground="{StaticResource Lapd.Teal}" Text="Where to rent" />
+                                <TextBlock Margin="0,8,0,0" FontSize="16" Foreground="#FFB7EDE2" TextWrapping="Wrap" Text="{Binding RentLines}" />
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
             </StackPanel>
         </ScrollViewer>
-        <ScrollViewer x:Name="SettingsPage" Margin="48,28,48,20" Opacity="0" IsHitTestVisible="False"
+        <ScrollViewer x:Name="SettingsPage" Margin="48,28,48,50" Opacity="0" IsHitTestVisible="False"
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
                 <TextBlock Text="Settings" FontSize="32" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.TealBright}" HorizontalAlignment="Center" />
@@ -536,9 +678,242 @@
                 </CheckBox>
                 <TextBlock Margin="30,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
                            Text="While this is ticked, placed rectangles are saved with what was read. Untick to stop." />
+                <TextBlock Text="Refinery &amp; pricing" Margin="0,36,0,0" FontSize="22" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Left" />
+                <TextBlock Margin="0,12,0,8" Foreground="#FFA7B0BA" Text="Home refinery" />
+                <ComboBox Style="{StaticResource StringCombo}" Width="460" HorizontalAlignment="Left" ItemsSource="{Binding HomeRefineries}" SelectedItem="{Binding HomeRefinery}" />
+                <TextBlock Margin="0,16,0,8" Foreground="#FFA7B0BA" Text="Refining method" />
+                <ComboBox Style="{StaticResource StringCombo}" Width="460" HorizontalAlignment="Left" ItemsSource="{Binding RefineryMethods}" SelectedItem="{Binding RefineryMethod}" />
+                <CheckBox Margin="0,18,0,0" HorizontalAlignment="Left" FontSize="16"
+                          Content="Show refined SCU instead of raw SCU"
+                          IsChecked="{Binding DisplayRefinedScu}">
+                    <CheckBox.ContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="16" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </CheckBox.ContentTemplate>
+                </CheckBox>
+                <TextBlock Text="Scan areas" Margin="0,36,0,0" FontSize="22" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Left" />
+                <TextBlock Margin="0,12,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap"
+                           Text="Choose the monitor the game is on. The signature is read from the fixed patch under the radar. If that patch is empty, the same patch is tried one step up, down, left, and right, and a tilted pill is turned level. Mass, resistance, and instability are read from a fixed patch on the scan results. If those two numbers are not in the still, the same patch is tried one step away. A composition line stays uncertain until you type it. Cargo is not read. While the overlay is open, both are read twice a second. A dark frame keeps the last number. A new signature is kept after it appears twice. A rock mass or resistance is confirmed after two identical reads, and one read stays uncertain." />
+                <TextBlock Margin="0,28,0,8" Foreground="#FFA7B0BA" Text="Monitor" />
+                <ComboBox x:Name="ScanMonitor" Width="460" HorizontalAlignment="Left" SelectionChanged="ScanMonitor_Changed" />
+                <TextBlock x:Name="ScanMonitorNote" Margin="0,10,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
+                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Signature" />
+                <TextBlock x:Name="SignatureRegionText" Foreground="#FFA7B0BA" Text="Fixed patch under the radar. A miss also checks one step away." />
+                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                    <Button Content="Show still" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="13" Click="SignatureStill_Click" />
+                    <Button Content="Read text" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" FontSize="13" Click="SignatureRead_Click" />
+                </StackPanel>
+                <Image x:Name="SignatureStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                <TextBlock x:Name="SignatureStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
+                <TextBlock x:Name="SignatureReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
+                <TextBlock Margin="0,32,0,8" FontSize="18" Text="Scan results" />
+                <TextBlock x:Name="RockRegionText" Foreground="#FFA7B0BA" Text="Fixed patch on the scan results. A miss also checks one step away." />
+                <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
+                    <Button Content="Show still" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" Margin="0,0,12,0" FontSize="13" Click="RockStill_Click" />
+                    <Button Content="Read text" Style="{StaticResource Lapd.Button}" MinWidth="140" MinHeight="44" FontSize="13" Click="RockRead_Click" />
+                </StackPanel>
+                <Image x:Name="RockStill" Margin="0,14,0,0" MaxHeight="220" HorizontalAlignment="Left" Stretch="Uniform" RenderOptions.BitmapScalingMode="NearestNeighbor" />
+                <TextBlock x:Name="RockStillNote" Margin="0,8,0,0" Foreground="#FFA7B0BA" TextWrapping="Wrap" />
+                <TextBlock x:Name="RockReadText" Margin="0,8,0,0" Foreground="#FFE6E8EB" TextWrapping="Wrap" />
             </StackPanel>
         </ScrollViewer>
-        <ScrollViewer x:Name="AaronPage" Margin="48,28,48,20" Opacity="0" IsHitTestVisible="False"
+        <ScrollViewer x:Name="OverlaySetupPage" Margin="48,28,48,50" Opacity="0" IsHitTestVisible="False"
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer.Resources>
+                <Style x:Key="OverlaySwitch" TargetType="ToggleButton">
+                    <Setter Property="Width" Value="70" />
+                    <Setter Property="Height" Value="26" />
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border x:Name="Track" Width="70" Height="26" CornerRadius="13" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" Background="{StaticResource Lapd.BgDeep}">
+                                    <Border x:Name="Knob" Width="18" Height="18" CornerRadius="9" Background="#FFE6E8EB" HorizontalAlignment="Left" Margin="3,0,0,0">
+                                        <Border.RenderTransform>
+                                            <TranslateTransform x:Name="KnobShift" />
+                                        </Border.RenderTransform>
+                                    </Border>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="Track" Property="Background" Value="{StaticResource Lapd.Teal}" />
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="KnobShift" Storyboard.TargetProperty="X" To="46" Duration="0:0:0.16" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation Storyboard.TargetName="KnobShift" Storyboard.TargetProperty="X" To="0" Duration="0:0:0.16" />
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="TabTitle" TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="{StaticResource Lapd.FontDisplay}" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Foreground" Value="{StaticResource Lapd.TealDim}" />
+                </Style>
+            </ScrollViewer.Resources>
+            <StackPanel MaxWidth="760" HorizontalAlignment="Center">
+                <TextBlock Text="Overlay Setup" FontSize="32" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.TealBright}" HorizontalAlignment="Center" />
+                <TabControl Margin="0,24,0,0" Background="Transparent" BorderThickness="0" Padding="0" HorizontalAlignment="Stretch">
+                    <TabControl.Template>
+                        <ControlTemplate TargetType="TabControl">
+                            <DockPanel>
+                                <TabPanel DockPanel.Dock="Top" IsItemsHost="True" HorizontalAlignment="Center" Background="Transparent" />
+                                <ContentPresenter ContentSource="SelectedContent" />
+                            </DockPanel>
+                        </ControlTemplate>
+                    </TabControl.Template>
+                    <TabControl.Resources>
+                        <Style TargetType="TabItem">
+                            <Setter Property="FontFamily" Value="{StaticResource Lapd.FontDisplay}" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Padding" Value="18,8" />
+                            <Setter Property="Margin" Value="0" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TabItem">
+                                        <Border x:Name="Bd" Background="Transparent" BorderBrush="{StaticResource Lapd.LineDim}" BorderThickness="0,0,0,2" Padding="{TemplateBinding Padding}" Margin="8,0">
+                                            <ContentPresenter ContentSource="Header" HorizontalAlignment="Left" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Lapd.Teal}" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TabControl.Resources>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <TextBlock Text="Signature" VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource TabTitle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SignatureOverlayOn}" Value="True">
+                                                        <Setter Property="Foreground" Value="{StaticResource Lapd.TealBright}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ToggleButton Style="{StaticResource OverlaySwitch}" IsChecked="{Binding SignatureOverlayOn}" />
+                                </StackPanel>
+                                <TextBlock Text="Signature Scanning" HorizontalAlignment="Left" Margin="0,27,0,0" FontFamily="{StaticResource Lapd.FontDisplay}" FontSize="16" Foreground="{StaticResource Lapd.Teal}" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <StackPanel Margin="0,20,0,0">
+                            <TextBlock Margin="0,0,0,6" FontSize="16" Text="Font size" />
+                            <TextBox Width="120" Height="40" HorizontalAlignment="Left" FontSize="16"
+                                     Text="{Binding SignatureOverlayFontSize, UpdateSourceTrigger=LostFocus}" />
+                            <TextBlock Margin="0,16,0,6" FontSize="16" Text="Font color" />
+                            <TextBox Width="180" Height="40" HorizontalAlignment="Left" FontSize="16"
+                                     Text="{Binding SignatureOverlayColor, UpdateSourceTrigger=LostFocus}" />
+                            <WrapPanel Margin="0,10,0,0">
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FFFFFFFF" Background="#FFFFFFFF" Click="SignatureColor_Click" />
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FF5FE8D2" Background="#FF5FE8D2" Click="SignatureColor_Click" />
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FF3DDC7A" Background="#FF3DDC7A" Click="SignatureColor_Click" />
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FFE0B03C" Background="#FFE0B03C" Click="SignatureColor_Click" />
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FFE15B64" Background="#FFE15B64" Click="SignatureColor_Click" />
+                                <Button Style="{StaticResource ColorSwatch}" Tag="#FFE6E8EB" Background="#FFE6E8EB" Click="SignatureColor_Click" />
+                            </WrapPanel>
+                            <TextBlock Margin="0,8,0,6" FontSize="16" Text="Transparency" />
+                            <Slider Minimum="0.05" Maximum="1" TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                    Value="{Binding SignatureOverlayOpacity}" />
+                            <CheckBox Margin="0,16,0,0" HorizontalAlignment="Left" FontSize="16"
+                                      Content="Show positioning preview"
+                                      IsChecked="{Binding SignatureOverlayPreview}">
+                                <CheckBox.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontSize="16" />
+                                    </DataTemplate>
+                                </CheckBox.ContentTemplate>
+                            </CheckBox>
+                            <CheckBox Margin="0,12,0,0" HorizontalAlignment="Left" FontSize="16"
+                                      Content="Lock position"
+                                      IsChecked="{Binding SignatureOverlayLocked}">
+                                <CheckBox.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontSize="16" />
+                                    </DataTemplate>
+                                </CheckBox.ContentTemplate>
+                            </CheckBox>
+                            <TextBlock Margin="0,16,0,6" FontSize="16" Text="Hotkey" />
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Clear" MinWidth="88" Margin="8,0,0,0" Click="ClearSignatureHotkey_Click" />
+                                <Button DockPanel.Dock="Right" Content="Set" MinWidth="88" Click="CaptureSignatureHotkey_Click" />
+                                <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding SignatureOverlayHotkeyLabel}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <TextBlock Text="Rock" VerticalAlignment="Center" Margin="0,0,10,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource TabTitle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding RockOverlayOn}" Value="True">
+                                                        <Setter Property="Foreground" Value="{StaticResource Lapd.TealBright}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <ToggleButton Style="{StaticResource OverlaySwitch}" IsChecked="{Binding RockOverlayOn}" />
+                                </StackPanel>
+                                <TextBlock Text="Rock Crackability" HorizontalAlignment="Left" Margin="0,27,0,0" FontFamily="{StaticResource Lapd.FontDisplay}" FontSize="16" Foreground="{StaticResource Lapd.Teal}" />
+                            </StackPanel>
+                        </TabItem.Header>
+                        <StackPanel Margin="0,20,0,0">
+                            <TextBlock Margin="0,0,0,6" FontSize="16" Text="Size" />
+                            <Slider Minimum="0.7" Maximum="1.5" TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                    Value="{Binding RockOverlayScale}" />
+                            <TextBlock Margin="0,16,0,6" FontSize="16" Text="Transparency" />
+                            <Slider Minimum="0.05" Maximum="1" TickFrequency="0.05" IsSnapToTickEnabled="True"
+                                    Value="{Binding RockOverlayOpacity}" />
+                            <CheckBox Margin="0,16,0,0" HorizontalAlignment="Left" FontSize="16"
+                                      Content="Debug mode"
+                                      IsChecked="{Binding DebugMode}">
+                                <CheckBox.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding}" FontSize="16" />
+                                    </DataTemplate>
+                                </CheckBox.ContentTemplate>
+                            </CheckBox>
+                            <TextBlock Margin="30,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
+                                       Text="Shows the signature number on the rock overlay." />
+                            <TextBlock Margin="0,16,0,6" FontSize="16" Text="Hotkey" />
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="Clear" MinWidth="88" Margin="8,0,0,0" Click="ClearRockHotkey_Click" />
+                                <Button DockPanel.Dock="Right" Content="Set" MinWidth="88" Click="CaptureRockHotkey_Click" />
+                                <TextBlock VerticalAlignment="Center" FontSize="16" Text="{Binding RockOverlayHotkeyLabel}" />
+                            </DockPanel>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+                <TextBlock x:Name="OverlayHotkeyNote" Margin="0,16,0,0" FontSize="16" TextWrapping="Wrap" />
+                <TextBlock Margin="0,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
+                           Text="Each overlay has its own key. Using the same key turns both on and off together. The key still works while the game is in front." />
+            </StackPanel>
+        </ScrollViewer>
+        <ScrollViewer x:Name="AaronPage" Margin="48,28,48,50" Opacity="0" IsHitTestVisible="False"
                       RequestBringIntoView="AaronPage_BringIntoView"
                       VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <StackPanel MaxWidth="760" HorizontalAlignment="Center">
@@ -596,18 +971,33 @@
         </Grid>
         <Border HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="Transparent" Panel.ZIndex="1">
             <DockPanel Margin="16,12,16,16">
-                <Button x:Name="NavSettings" DockPanel.Dock="Bottom" Content="Settings" Style="{StaticResource NavButton}" Margin="0,16,0,0" Click="ShowSettings_Click" />
+                <StackPanel DockPanel.Dock="Bottom" Margin="0,16,0,0">
+                    <Button x:Name="NavSettings" Content="Settings" Style="{StaticResource NavButton}" Click="ShowSettings_Click" />
+                    <TextBlock Margin="8,6,0,0" FontFamily="{StaticResource Lapd.FontMono}" FontSize="14" Foreground="{StaticResource Lapd.TealDim}" Text="{Binding BuildLabel}" />
+                </StackPanel>
                 <StackPanel>
                     <Button x:Name="NavSelectShip" Content="Select ship" Style="{StaticResource NavButton}" Click="ChangeShip_Click" />
                     <Button x:Name="NavLoadout" Content="Ship loadouts" Style="{StaticResource NavButton}" Click="ShowLoadout_Click" IsEnabled="False" />
                     <Button x:Name="NavSignatures" Content="Signature tracking" Style="{StaticResource NavButton}" Click="ShowSignatures_Click" IsEnabled="False" />
-                    <Button x:Name="NavOverlay" Content="Overlay" Style="{StaticResource NavButton}" Click="ShowOverlay_Click" IsEnabled="False" />
-                    <Button x:Name="NavScan" Content="Scan areas" Style="{StaticResource NavButton}" Click="ShowScan_Click" IsEnabled="False" />
+                    <Button x:Name="NavOverlay" Content="Overlay Setup" Style="{StaticResource NavButton}" Click="ShowOverlaySetup_Click" IsEnabled="False" />
                     <Button x:Name="NavAaron" Content="Aaron Halo Routes" Style="{StaticResource NavButton}" Click="ShowAaron_Click" />
+                    <Button x:Name="NavEquipment" Content="Mining equipment" Style="{StaticResource NavButton}" Click="ShowMiningEquipment_Click" />
                 </StackPanel>
             </DockPanel>
         </Border>
         </Grid>
         </Grid>
+    <Button Panel.ZIndex="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,18,14" Cursor="Hand" Click="Kofi_Click" ToolTip="ko-fi.com/longinart">
+        <Button.Template>
+            <ControlTemplate TargetType="Button">
+                <TextBlock x:Name="Label" Text="Tip on Ko-fi" FontSize="13" Foreground="{StaticResource Lapd.TealDim}" />
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="Label" Property="Foreground" Value="{StaticResource Lapd.TealBright}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Button.Template>
+    </Button>
     </Grid>
 </Window>

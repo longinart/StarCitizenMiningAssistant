@@ -1,0 +1,4854 @@
+{
+  "source": "https://scminer.rocks/data/refineries ; https://api.uexcorp.uk/2.0/refineries_methods ; https://api.uexcorp.uk/2.0/refineries_yields ; https://api.uexcorp.uk/2.0/commodities_prices",
+  "retrieved": "2026-11-20",
+  "gameVersion": "4.10.3",
+  "note": "Method yieldPercent is the SCMiner 4.10.3 base: 32 SCU at 45% with no station bonus is 14.4 SCU. Station percent is the UEX refineries_yields value for that mineral at that terminal. Refined SCU = raw SCU x yieldPercent/100 x (1 + station percent/100). A mineral with no station row uses 0. Sell prices are UEX price_sell per SCU. A missing price is not a zero price. Lindinium, Ouratite, Aslarite, Stileron, Tin and Torite sells were added 2026-11-21. UEX leaves is_mineral at 0 for them. Ouratite is the sellable form of Ouratite (Raw) and is stored as refined.",
+  "methods": [
+    {
+      "name": "Cormack",
+      "yieldPercent": 31.5
+    },
+    {
+      "name": "Dinyx Solventation",
+      "yieldPercent": 45
+    },
+    {
+      "name": "Electrostarolysis",
+      "yieldPercent": 38.25
+    },
+    {
+      "name": "Gaskin Process",
+      "yieldPercent": 38.25
+    },
+    {
+      "name": "Pyrometric Chromalysis",
+      "yieldPercent": 45
+    },
+    {
+      "name": "Kazen Winnowing",
+      "yieldPercent": 31.5
+    },
+    {
+      "name": "Thermonatic Deposition",
+      "yieldPercent": 38.25
+    },
+    {
+      "name": "Ferron Exchange",
+      "yieldPercent": 45
+    },
+    {
+      "name": "XCR Reaction",
+      "yieldPercent": 31.5
+    }
+  ],
+  "refineries": [
+    {
+      "name": "Refinement Center - Checkmate",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Levski",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": 8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": 8
+        },
+        {
+          "mineral": "Beryl",
+          "percent": 8
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": 8
+        },
+        {
+          "mineral": "Borase",
+          "percent": 8
+        },
+        {
+          "mineral": "Construction Material Rubble",
+          "percent": 9
+        },
+        {
+          "mineral": "Construction Material Salvage",
+          "percent": 8
+        },
+        {
+          "mineral": "Copper",
+          "percent": 8
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 8
+        },
+        {
+          "mineral": "Gold",
+          "percent": 5
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": 8
+        },
+        {
+          "mineral": "Ice",
+          "percent": 10
+        },
+        {
+          "mineral": "Iron",
+          "percent": 8
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 7
+        },
+        {
+          "mineral": "Lindinium",
+          "percent": 4
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 5
+        },
+        {
+          "mineral": "Quartz",
+          "percent": 8
+        },
+        {
+          "mineral": "Savrilium",
+          "percent": 1
+        },
+        {
+          "mineral": "Silicon",
+          "percent": 8
+        },
+        {
+          "mineral": "Taranite",
+          "percent": 8
+        },
+        {
+          "mineral": "Tin",
+          "percent": 9
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 8
+        },
+        {
+          "mineral": "Torite",
+          "percent": 1
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 8
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Nyx Gateway (Pyro)",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Orbituary",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Pyro Gateway (Nyx)",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Ruin Station",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Center - Stanton Gateway (Nyx)",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - ARC-L1",
+      "bonuses": [
+        {
+          "mineral": "Aluminum",
+          "percent": -5
+        },
+        {
+          "mineral": "Beryl",
+          "percent": 7
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -4
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -4
+        },
+        {
+          "mineral": "Iron",
+          "percent": 1
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 3
+        },
+        {
+          "mineral": "Quartz",
+          "percent": 11
+        },
+        {
+          "mineral": "Taranite",
+          "percent": -6
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 5
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - ARC-L2",
+      "bonuses": [
+        {
+          "mineral": "Bexalite",
+          "percent": 2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 2
+        },
+        {
+          "mineral": "Copper",
+          "percent": 6
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -3
+        },
+        {
+          "mineral": "Gold",
+          "percent": 7
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -8
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 3
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 3
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": -6
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - ARC-L4",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -4
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -3
+        },
+        {
+          "mineral": "Beryl",
+          "percent": -4
+        },
+        {
+          "mineral": "Copper",
+          "percent": -4
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -9
+        },
+        {
+          "mineral": "Gold",
+          "percent": -4
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -5
+        },
+        {
+          "mineral": "Quartz",
+          "percent": -2
+        },
+        {
+          "mineral": "Taranite",
+          "percent": 5
+        },
+        {
+          "mineral": "Titanium",
+          "percent": -2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": -5
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - CRU-L1",
+      "bonuses": [
+        {
+          "mineral": "Beryl",
+          "percent": 7
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -6
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 7
+        },
+        {
+          "mineral": "Gold",
+          "percent": -6
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -2
+        },
+        {
+          "mineral": "Iron",
+          "percent": 2
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -8
+        },
+        {
+          "mineral": "Titanium",
+          "percent": -1
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - HUR-L1",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - HUR-L2",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -2
+        },
+        {
+          "mineral": "Beryl",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -3
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 1
+        },
+        {
+          "mineral": "Gold",
+          "percent": 1
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -1
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Taranite",
+          "percent": -3
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - MIC-L1",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": 8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": 7
+        },
+        {
+          "mineral": "Beryl",
+          "percent": -6
+        },
+        {
+          "mineral": "Copper",
+          "percent": 4
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 2
+        },
+        {
+          "mineral": "Gold",
+          "percent": 1
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quartz",
+          "percent": -3
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - MIC-L2",
+      "bonuses": [
+        {
+          "mineral": "Beryl",
+          "percent": -8
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": 9
+        },
+        {
+          "mineral": "Borase",
+          "percent": -3
+        },
+        {
+          "mineral": "Copper",
+          "percent": 2
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 6
+        },
+        {
+          "mineral": "Gold",
+          "percent": 9
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -1
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 1
+        },
+        {
+          "mineral": "Quartz",
+          "percent": -5
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 6
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 9
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - MIC-L5",
+      "bonuses": [
+        {
+          "mineral": "Beryl",
+          "percent": 7
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": 12
+        },
+        {
+          "mineral": "Borase",
+          "percent": 9
+        },
+        {
+          "mineral": "Copper",
+          "percent": 9
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": 8
+        },
+        {
+          "mineral": "Iron",
+          "percent": 8
+        },
+        {
+          "mineral": "Lindinium",
+          "percent": 7
+        },
+        {
+          "mineral": "Savrilium",
+          "percent": 6
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 13
+        },
+        {
+          "mineral": "Torite",
+          "percent": 8
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - Nyx Gateway (Stanton)",
+      "bonuses": [
+        {
+          "mineral": "Aluminum",
+          "percent": -5
+        },
+        {
+          "mineral": "Beryl",
+          "percent": 7
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -4
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -4
+        },
+        {
+          "mineral": "Iron",
+          "percent": 1
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 3
+        },
+        {
+          "mineral": "Quartz",
+          "percent": 11
+        },
+        {
+          "mineral": "Taranite",
+          "percent": -6
+        },
+        {
+          "mineral": "Titanium",
+          "percent": 5
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - Pyro Gateway (Stanton)",
+      "bonuses": [
+        {
+          "mineral": "Beryl",
+          "percent": 7
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -6
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 7
+        },
+        {
+          "mineral": "Gold",
+          "percent": -6
+        },
+        {
+          "mineral": "Hephaestanite",
+          "percent": -2
+        },
+        {
+          "mineral": "Iron",
+          "percent": 2
+        },
+        {
+          "mineral": "Laranite",
+          "percent": -8
+        },
+        {
+          "mineral": "Titanium",
+          "percent": -1
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 2
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - Stanton Gateway (Pyro)",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": -8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": -4
+        },
+        {
+          "mineral": "Bexalite",
+          "percent": -2
+        },
+        {
+          "mineral": "Borase",
+          "percent": 1
+        },
+        {
+          "mineral": "Copper",
+          "percent": -5
+        },
+        {
+          "mineral": "Corundum",
+          "percent": -5
+        },
+        {
+          "mineral": "Gold",
+          "percent": -3
+        },
+        {
+          "mineral": "Iron",
+          "percent": -5
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quantainium",
+          "percent": 2
+        },
+        {
+          "mineral": "Tungsten",
+          "percent": 4
+        }
+      ]
+    },
+    {
+      "name": "Refinement Processing - Terra Gateway (Stanton)",
+      "bonuses": [
+        {
+          "mineral": "Agricium",
+          "percent": 8
+        },
+        {
+          "mineral": "Aluminum",
+          "percent": 7
+        },
+        {
+          "mineral": "Beryl",
+          "percent": -6
+        },
+        {
+          "mineral": "Copper",
+          "percent": 4
+        },
+        {
+          "mineral": "Corundum",
+          "percent": 2
+        },
+        {
+          "mineral": "Gold",
+          "percent": 1
+        },
+        {
+          "mineral": "Laranite",
+          "percent": 2
+        },
+        {
+          "mineral": "Quartz",
+          "percent": -3
+        }
+      ]
+    }
+  ],
+  "sells": [
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 7200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 7200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Devlin Scrap and Salvage",
+      "price": 7200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L3",
+      "price": 9600
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L4",
+      "price": 9400
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L3",
+      "price": 9400
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L4",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 8200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 9200
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 9500
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L1",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L5",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L4",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L5",
+      "price": 10000
+    },
+    {
+      "mineral": "Agricium",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Alpha",
+      "price": 10000
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 3800
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 3800
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 2900
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 3800
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 2900
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 3600
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 3600
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 3600
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 3600
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 3400
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 3700
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 3500
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Everus Harbor",
+      "price": 4000
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Port Tressler",
+      "price": 3800
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3100
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 3800
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 3600
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 3300
+    },
+    {
+      "mineral": "Aluminum",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 3700
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 048",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - Port Tressler",
+      "price": 100000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 045",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 056",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 061",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-5",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-18",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-22",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-10",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Rayari Deltana Research Outpost",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-13",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SCD-1",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Devlin Scrap and Salvage",
+      "price": 81000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Rayari Cantwell Research Outpost",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-6",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-8",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Hadley",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Pinewood",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Thedus",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Stanhope",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Oparei",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Norgaard",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Ryder",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Woodruff",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Perlman",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Hahn",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Bezdek",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 157",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Edmond",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Anderson",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - Everus Harbor",
+      "price": 100000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - Baijini Point",
+      "price": 100000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - Seraphim",
+      "price": 100000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 80000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 80000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 80000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Rayari McGrath Research Outpost",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - GrimHEX",
+      "price": 100000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 80000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "HDMS-Lathan",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Levski",
+      "price": 85000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-2",
+      "price": 110000
+    },
+    {
+      "mineral": "Aphorite",
+      "kind": "raw",
+      "terminal": "Admin - Ruin Station",
+      "price": 93000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 15000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 15000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 21000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L1",
+      "price": 22000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - MIC-L5",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L3",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L5",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L4",
+      "price": 22000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L5",
+      "price": 22000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 20000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 19000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 16000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Theta",
+      "price": 18000
+    },
+    {
+      "mineral": "Beryl",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 19000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 29000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 28000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 27000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 27000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 24000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 28000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Jackson's Swap",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 29000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 26000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 29000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 30000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 27000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 27000
+    },
+    {
+      "mineral": "Bexalite",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 29000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 18000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 18000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Devlin Scrap and Salvage",
+      "price": 18000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 21000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 22000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 25000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 30000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 33000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L5",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - MIC-L1",
+      "price": 31000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L3",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - MIC-L3",
+      "price": 31000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 25000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 25000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 27000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 24000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 28000
+    },
+    {
+      "mineral": "Borase",
+      "kind": "raw",
+      "terminal": "Admin - People's Service Station Theta",
+      "price": 14000
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 2400
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 2800
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 3600
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Stanton)",
+      "price": 3900
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 3000
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Baijini Point",
+      "price": 3900
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 3000
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 4500
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 3800
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Pyro)",
+      "price": 4400
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3200
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 3400
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 3400
+    },
+    {
+      "mineral": "Copper",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 3700
+    },
+    {
+      "mineral": "Copper",
+      "kind": "raw",
+      "terminal": "Scrap - Rappel",
+      "price": 1200
+    },
+    {
+      "mineral": "Copper",
+      "kind": "raw",
+      "terminal": "Rust - Pickers Field",
+      "price": 1200
+    },
+    {
+      "mineral": "Copper",
+      "kind": "raw",
+      "terminal": "Rust - Dunboro",
+      "price": 1200
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 3700
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 3700
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 2600
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 3700
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 2100
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 4400
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 3500
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 4000
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Everus Harbor",
+      "price": 4000
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 3700
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 4400
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3000
+    },
+    {
+      "mineral": "Corundum",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 3700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 7400
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 8200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 7300
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Jackson's Swap",
+      "price": 6200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L1",
+      "price": 7200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L5",
+      "price": 7100
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Rust - Pickers Field",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Scrap - Rappel",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Rust - Dunboro",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 7700
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 6200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 6200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 5900
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 6200
+    },
+    {
+      "mineral": "Diamond",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 7700
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 110000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 048",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - Port Tressler",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 045",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 056",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 061",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-5",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-18",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-22",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-10",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - ARC-L1",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Rayari Deltana Research Outpost",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-13",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - ARC-L2",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - ARC-L3",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - ARC-L4",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - ARC-L5",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SCD-1",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - Seraphim",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - CRU-L5",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - CRU-L1",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - MIC-L5",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - MIC-L2",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Rayari Cantwell Research Outpost",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-6",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - HUR-L2",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - MIC-L1",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - HUR-L1",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-8",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Hadley",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Pinewood",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Thedus",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Stanhope",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Oparei",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Norgaard",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Ryder",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Woodruff",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Perlman",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Hahn",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Lathan",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Bezdek",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - HUR-L4",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 157",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - CRU-L4",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - HUR-L3",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - MIC-L4",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Edmond",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - HUR-L5",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - MIC-L3",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "HDMS-Anderson",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - Everus Harbor",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - Baijini Point",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 110000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 110000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 110000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Rayari McGrath Research Outpost",
+      "price": 160000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - GrimHEX",
+      "price": 120000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 140000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Levski",
+      "price": 110000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-2",
+      "price": 150000
+    },
+    {
+      "mineral": "Dolivine",
+      "kind": "raw",
+      "terminal": "Admin - Ruin Station",
+      "price": 130000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 31000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 30000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 23000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 23000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 30000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Jackson's Swap",
+      "price": 26000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 29000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Ashland",
+      "price": 27000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L1",
+      "price": 30000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 30000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 25000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 26000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Fallow Field",
+      "price": 26000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 29000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 26000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 27000
+    },
+    {
+      "mineral": "Gold",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Nyx)",
+      "price": 31000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 410000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 410000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 048",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 045",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 056",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 061",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-5",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-22",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-10",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Rayari Deltana Research Outpost",
+      "price": 570000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-13",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Brio's Breaker Yard",
+      "price": 420000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SCD-1",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Rayari Cantwell Research Outpost",
+      "price": 570000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-6",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SMCa-8",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Hadley",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Pinewood",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Thedus",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Stanhope",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Oparei",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Norgaard",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Ryder",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Woodruff",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Perlman",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Hahn",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 590000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Lathan",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Bezdek",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 157",
+      "price": 590000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Edmond",
+      "price": 580000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - Port Tressler",
+      "price": 540000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 520000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - Everus Harbor",
+      "price": 540000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - Baijini Point",
+      "price": 540000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - Seraphim",
+      "price": 540000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Jackson's Swap",
+      "price": 570000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Rayari McGrath Research Outpost",
+      "price": 570000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 530000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - GrimHEX",
+      "price": 440000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "HDMS-Anderson",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Levski",
+      "price": 410000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SAL-2",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Shubin Mining Facility SM0-18",
+      "price": 600000
+    },
+    {
+      "mineral": "Hadanite",
+      "kind": "raw",
+      "terminal": "Admin - Ruin Station",
+      "price": 480000
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 3000
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 3400
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Everus Harbor",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 4300
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 4500
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L4",
+      "price": 4900
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - MIC-L5",
+      "price": 4500
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - MIC-L4",
+      "price": 5200
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3900
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 4600
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 4100
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L1",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L4",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L5",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L5",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L5",
+      "price": 4800
+    },
+    {
+      "mineral": "Hephaestanite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 4600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 3400
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Nyx Gateway (Stanton)",
+      "price": 3300
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 3600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "HDMS-Hahn",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 3400
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 3600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 3600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 3000
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 3600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 3400
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 2700
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 3400
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "HDMS-Perlman",
+      "price": 3200
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Alpha",
+      "price": 3400
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Delta",
+      "price": 3500
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Theta",
+      "price": 3500
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Lambda",
+      "price": 3500
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 3300
+    },
+    {
+      "mineral": "Iron",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 3600
+    },
+    {
+      "mineral": "Iron",
+      "kind": "raw",
+      "terminal": "Scrap - Rappel",
+      "price": 1000
+    },
+    {
+      "mineral": "Iron",
+      "kind": "raw",
+      "terminal": "Rust - Dunboro",
+      "price": 1000
+    },
+    {
+      "mineral": "Iron",
+      "kind": "raw",
+      "terminal": "Rust - Pickers Field",
+      "price": 1000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "Admin - Seraphim",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 1300000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 1300000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 1300000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "Admin - GrimHEX",
+      "price": 1500000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 1600000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "Levski",
+      "price": 1300000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Stanhope",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Bezdek",
+      "price": 1700000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Oparei",
+      "price": 1700000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Lathan",
+      "price": 1700000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Hadley",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Edmond",
+      "price": 1700000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Thedus",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "HDMS-Pinewood",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 1800000
+    },
+    {
+      "mineral": "Janalite",
+      "kind": "raw",
+      "terminal": "Admin - Ruin Station",
+      "price": 1500000
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 6500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 8700
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 8100
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 8700
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 8700
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 8700
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 8700
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 8400
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 8200
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - CRU-L1",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L1",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - HUR-L2",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 8500
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 7400
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 7800
+    },
+    {
+      "mineral": "Laranite",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 8600
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 150000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 150000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 150000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 140000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 130000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Ashland",
+      "price": 160000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 170000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 130000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 160000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 150000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 170000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Fallow Field",
+      "price": 170000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 170000
+    },
+    {
+      "mineral": "Quantainium",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 140000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 4400
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 4400
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 3100
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 4400
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 4600
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Pyro)",
+      "price": 4300
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Nyx Gateway (Stanton)",
+      "price": 4500
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Seraphim",
+      "price": 4700
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Stanton)",
+      "price": 4000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Hickes Research Outpost",
+      "price": 4000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Deakins Research Outpost",
+      "price": 4000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Rayari Kaltag Research Outpost",
+      "price": 4000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Rayari Anvik Research Outpost",
+      "price": 4000
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 4400
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 4200
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3500
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 3700
+    },
+    {
+      "mineral": "Quartz",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 4400
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 27000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 27000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 22000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 27000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Jackson's Swap",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Ashland",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 29000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 22000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Fallow Field",
+      "price": 28000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 25000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 28000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 27000
+    },
+    {
+      "mineral": "Taranite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 22000
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 6200
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Devlin Scrap and Salvage",
+      "price": 6200
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 6200
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 9500
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 8100
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 8300
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 7000
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L5",
+      "price": 7900
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - ARC-L3",
+      "price": 7700
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 7400
+    },
+    {
+      "mineral": "Titanium",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 8300
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 10000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 10000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 8200
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Locker Room - CRU-L4",
+      "price": 8200
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 10000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 9700
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 12000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Pyro)",
+      "price": 11000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Nyx Gateway (Stanton)",
+      "price": 11000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 11000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Stanton)",
+      "price": 11000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 10000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 8700
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 9200
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - Stanton Gateway (Nyx)",
+      "price": 10000
+    },
+    {
+      "mineral": "Tungsten",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Lambda",
+      "price": 10000
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 2300
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 2900
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 2300
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 2300
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 2600
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 2600
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 2300
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Terra Gateway (Stanton)",
+      "price": 2300
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Seraphim",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 2000
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Admin - Port Tressler",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 2400
+    },
+    {
+      "mineral": "Silicon",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 2400
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 59000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Ashland",
+      "price": 84000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 66000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 66000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 66000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 72000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "ArcCorp Mining Area 157",
+      "price": 91000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 66000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 59000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 67000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 74000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 74000
+    },
+    {
+      "mineral": "Riccite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 71000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 110000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 130000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 150000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 130000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 110000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "Bueno Ravine",
+      "price": 130000
+    },
+    {
+      "mineral": "Savrilium",
+      "kind": "refined",
+      "terminal": "Admin - People's Service Station Delta",
+      "price": 130000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Brio's Breaker Yard",
+      "price": 2500
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Maintenance Room - CRU-L5",
+      "price": 2500
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Reclamation and Disposal Orinth",
+      "price": 2900
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Samson & Son's Salvage Center",
+      "price": 2500
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Checkmate",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Rod's Fuel 'N Supplies",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 4300
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Patch City",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Starlight Service",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Endgame",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Gaslight",
+      "price": 4300
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Rat's Nest",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Dudley & Daughters",
+      "price": 4600
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Baijini Point",
+      "price": 4500
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Port Tressler",
+      "price": 4500
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 3300
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Orbituary",
+      "price": 3800
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Nyx)",
+      "price": 4000
+    },
+    {
+      "mineral": "Tin",
+      "kind": "refined",
+      "terminal": "Admin - Pyro Gateway (Stanton)",
+      "price": 4000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Jackson's Swap",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Ashland",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Rayari Kaltag Research Outpost",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Terra Mills Hydrofarm",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Hickes Research Outpost",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "ArcCorp Mining Area 141",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "ArcCorp Mining Area 157",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Deakins Research Outpost",
+      "price": 150000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Rayari Anvik Research Outpost",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 110000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Canard View",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Fallow Field",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "The Golden Riviera",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 110000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Sacren's Plot",
+      "price": 130000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 140000
+    },
+    {
+      "mineral": "Stileron",
+      "kind": "refined",
+      "terminal": "Admin - Nyx Gateway (Pyro)",
+      "price": 170000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 43000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 51000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 51000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 51000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "Admin - Megumi Refueling",
+      "price": 46000
+    },
+    {
+      "mineral": "Lindinium",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 43000
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 6600
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 7700
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "Admin - Port Tressler",
+      "price": 8500
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 7700
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 7700
+    },
+    {
+      "mineral": "Torite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 6900
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 5100
+    },
+    {
+      "mineral": "Aslarite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 5100
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "Levski",
+      "price": 46000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "Admin - Ruin Station",
+      "price": 45000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Commons - New Babbage",
+      "price": 46000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "Admin - GrimHEX",
+      "price": 46000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Area 18",
+      "price": 45000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "TDD - Trade and Development Division - Cloudview Center - Orison",
+      "price": 46000
+    },
+    {
+      "mineral": "Ouratite",
+      "kind": "refined",
+      "terminal": "CBD - Central Business District - Lorville",
+      "price": 46000
+    }
+  ]
+}

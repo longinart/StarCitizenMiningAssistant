@@ -1,4 +1,5 @@
 using System.Globalization;
+using StarCitizenMiningAssistant.Core.Refining;
 
 namespace StarCitizenMiningAssistant.Core.Recognition;
 
@@ -9,6 +10,10 @@ public sealed class RockOcrFields
     public required ObservedValue<double> Resistance { get; init; }
 
     public required ObservedValue<double> Instability { get; init; }
+
+    public IReadOnlyList<ObservedShare> Composition { get; init; } = [];
+
+    public ObservedValue<double> TotalScu { get; init; } = ObservedValue<double>.Missing();
 
     /// <summary>
     /// The scan-results panel is present when any of the three numbers was read.
@@ -31,9 +36,96 @@ public sealed class RockOcrFields
         {
             Mass = Field(lines, "mass", culture),
             Resistance = Field(lines, "resistance", culture),
-            Instability = Field(lines, "instability", culture)
+            Instability = Field(lines, "instability", culture),
+            Composition = Shares(lines, culture),
+            TotalScu = ReadTotalScu(lines, culture)
         };
     }
+
+    public RockOcrFields WithComposition(IReadOnlyList<ObservedShare> shares, ObservedValue<double> totalScu) =>
+        new()
+        {
+            Mass = Mass,
+            Resistance = Resistance,
+            Instability = Instability,
+            Composition = shares,
+            TotalScu = totalScu
+        };
+
+    private static IReadOnlyList<ObservedShare> Shares(IReadOnlyList<ObservedValue<string>> lines, CultureInfo culture)
+    {
+        var shares = new List<ObservedShare>();
+        foreach (var line in lines)
+        {
+            if (line.Value is not string text || IsCrackLabel(text) || CompositionShares.IsInert(text))
+            {
+                continue;
+            }
+
+            if (text.Contains("SCU", StringComparison.OrdinalIgnoreCase) && !text.Contains('%', StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            if (!NumberText.TryParseFirst(text, culture, out var number))
+            {
+                continue;
+            }
+
+            var name = new string(text.Where(character => char.IsLetter(character) || character is ' ' or '(' or ')').ToArray());
+            name = string.Join(' ', name.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+            if (name.Length == 0)
+            {
+                continue;
+            }
+
+            var percent = line.IsConfirmed
+                ? ObservedValue<double>.Confirmed(number)
+                : ObservedValue<double>.Uncertain(number);
+            shares.Add(new ObservedShare(name, percent));
+        }
+
+        return shares;
+    }
+
+    private static ObservedValue<double> ReadTotalScu(IReadOnlyList<ObservedValue<string>> lines, CultureInfo culture)
+    {
+        foreach (var line in lines)
+        {
+            if (line.Value is not string text || !TryCompositionScu(text, culture, out var number))
+            {
+                continue;
+            }
+
+            return line.IsConfirmed
+                ? ObservedValue<double>.Confirmed(number)
+                : ObservedValue<double>.Uncertain(number);
+        }
+
+        return ObservedValue<double>.Missing();
+    }
+
+    private static bool TryCompositionScu(string text, CultureInfo culture, out double number)
+    {
+        number = 0;
+        var index = text.IndexOf("COMPOSITION", StringComparison.OrdinalIgnoreCase);
+        if (index < 0 || !text.Contains("SCU", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        var after = text[(index + "COMPOSITION".Length)..];
+        var cargo = after.IndexOf("CARGO", StringComparison.OrdinalIgnoreCase);
+        if (cargo >= 0)
+        {
+            after = after[..cargo];
+        }
+
+        return NumberText.TryParseFirst(after, culture, out number);
+    }
+
+    private static bool IsCrackLabel(string text) =>
+        FindLabel(text, "mass") >= 0 || FindLabel(text, "resistance") >= 0 || FindLabel(text, "instability") >= 0;
 
     private static ObservedValue<double> Field(
         IReadOnlyList<ObservedValue<string>> lines,
@@ -79,6 +171,8 @@ public sealed class RockOcrFields
         return -1;
     }
 }
+
+public sealed record ObservedShare(string Name, ObservedValue<double> Percent);
 
 public static class NumberText
 {

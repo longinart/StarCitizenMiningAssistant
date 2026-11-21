@@ -116,6 +116,11 @@ public class OcrReadingTests
 
         Assert.False(rock.HasPanel);
         Assert.Equal("", ScanLogText.Rock(lines).Reading);
+        var share = Assert.Single(rock.Composition);
+        Assert.Equal("COPPER (ORE)", share.Name);
+        Assert.DoesNotContain(rock.Composition, item => item.Name.Contains("INERT", StringComparison.OrdinalIgnoreCase));
+        Assert.Equal(61.28, share.Percent.Value);
+        Assert.False(share.Percent.IsConfirmed);
     }
 
     [Fact]
@@ -130,7 +135,7 @@ public class OcrReadingTests
             new RockPanel.Word("INSTABILITY:", 40, 140, 12),
             new RockPanel.Word("5.32", 180, 140, 12),
             new RockPanel.Word("COPPER", 40, 200, 12),
-            new RockPanel.Word("61.28%", 40, 220, 12)
+            new RockPanel.Word("61.28%", 180, 200, 12)
         };
 
         var rock = RockPanel.Read(words, []);
@@ -139,6 +144,76 @@ public class OcrReadingTests
         Assert.Equal(0, rock.Resistance.Value);
         Assert.Equal(5.32, rock.Instability.Value);
         Assert.False(rock.Mass.IsConfirmed);
+        var share = Assert.Single(rock.Composition);
+        Assert.Equal("COPPER", share.Name);
+        Assert.Equal(61.28, share.Percent.Value);
+        Assert.False(share.Percent.IsConfirmed);
+    }
+
+    [Fact]
+    public void Inert_rows_are_dropped_and_the_composition_total_stays_uncertain()
+    {
+        var words = new[]
+        {
+            new RockPanel.Word("COPPER", 40, 200, 12),
+            new RockPanel.Word("61.28%", 180, 200, 12),
+            new RockPanel.Word("INERT MATERIALS", 40, 250, 12),
+            new RockPanel.Word("20%", 180, 250, 12),
+            new RockPanel.Word("INERT", 40, 300, 12),
+            new RockPanel.Word("10%", 180, 300, 12),
+            new RockPanel.Word("COMPOSITION", 40, 160, 12),
+            new RockPanel.Word("5.50", 180, 160, 12),
+            new RockPanel.Word("SCU", 230, 160, 12),
+            new RockPanel.Word("CARGO", 40, 340, 12),
+            new RockPanel.Word("1.33", 120, 340, 12),
+            new RockPanel.Word("96", 180, 340, 12),
+            new RockPanel.Word("SCU", 220, 340, 12)
+        };
+
+        var rock = RockPanel.Read(words, []);
+
+        var share = Assert.Single(rock.Composition);
+        Assert.Equal("COPPER", share.Name);
+        Assert.False(share.Percent.IsConfirmed);
+        Assert.Equal(5.5, rock.TotalScu.Value);
+        Assert.Equal(RecognitionConfidence.Uncertain, rock.TotalScu.Confidence);
+        var reread = RockOcrFields.Read(
+            [
+                ObservedValue<string>.Uncertain("CARGO 1.33 / 96 SCU"),
+                ObservedValue<string>.Uncertain("COMPOSITION 5.5 SCU"),
+                ObservedValue<string>.Uncertain("COPPER 61.28%"),
+                ObservedValue<string>.Uncertain("INERT MATERIALS 20%")
+            ],
+            English);
+        Assert.Equal("COPPER", Assert.Single(reread.Composition).Name);
+        Assert.Equal(5.5, reread.TotalScu.Value);
+        Assert.False(reread.TotalScu.IsConfirmed);
+    }
+
+    [Fact]
+    public void Composition_ocr_waits_for_fracture_or_extraction_mode()
+    {
+        Assert.False(MiningMode.AllowsComposition(MiningMode.Read(["SCAN", "RESULTS"])));
+        Assert.False(MiningMode.AllowsComposition(MiningMode.Read(["FRACTURE"])));
+        var fracture = MiningMode.Read(["laser", "FRACTURE", "MODE"]);
+        var extraction = MiningMode.Read(["EXTRACTION MODE"]);
+        Assert.True(MiningMode.AllowsComposition(fracture));
+        Assert.True(MiningMode.AllowsComposition(extraction));
+        Assert.Equal(RecognitionConfidence.Uncertain, fracture.Confidence);
+        Assert.Equal(RecognitionConfidence.Uncertain, extraction.Confidence);
+    }
+
+    [Fact]
+    public void The_composition_patch_overlaps_the_scan_header_and_stays_on_screen()
+    {
+        var rock = RockPatch.Of(2560, 1440);
+        var home = CompositionPatch.Of(2560, 1440);
+        Assert.Equal(rock.X, home.X);
+        Assert.Equal(rock.Width, home.Width);
+        Assert.InRange(rock.Y + rock.Height - 1, home.Y, home.Y + home.Height);
+        Assert.True(home.Y + home.Height > rock.Y + rock.Height);
+        Assert.NotNull(CompositionPatch.Shifted(2560, 1440, 0, 100));
+        Assert.Null(CompositionPatch.Shifted(2560, 1440, 0, 800));
     }
 
     [Fact]

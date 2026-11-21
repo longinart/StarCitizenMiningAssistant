@@ -78,6 +78,36 @@ public sealed class LoadoutLibrary
 
     public double? OverlayHeight { get; set; }
 
+    public double RockOverlayOpacity { get; set; } = 0.94;
+
+    public double RockOverlayScale { get; set; } = 1;
+
+    public bool DebugMode { get; set; }
+
+    public double? SignatureOverlayLeft { get; set; }
+
+    public double? SignatureOverlayTop { get; set; }
+
+    public double SignatureOverlayFontSize { get; set; } = 32;
+
+    public string SignatureOverlayColor { get; set; } = "#FFFFFFFF";
+
+    public double SignatureOverlayOpacity { get; set; } = 1;
+
+    public bool SignatureOverlayLocked { get; set; }
+
+    public bool SignatureOverlayPreview { get; set; }
+
+    public string RockOverlayHotkey { get; set; } = "";
+
+    public string HomeRefinery { get; set; } = "";
+
+    public string RefineryMethod { get; set; } = "";
+
+    public bool DisplayRefinedScu { get; set; }
+
+    public string SignatureOverlayHotkey { get; set; } = "";
+
     public List<MonitorCapture> CaptureMonitors { get; set; } = [];
 
     public static LoadoutLibrary FromLegacy(

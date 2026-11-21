@@ -50,6 +50,8 @@ public class LoadoutComparisonTests
         Assert.Equal(CrackVerdict.Crackable, heavy.Verdict);
         Assert.Equal("", cleanup.Boosts);
         Assert.Equal("", heavy.Boosts);
+        Assert.True(cleanup.PowerRatio > 1);
+        Assert.InRange(cleanup.StableThrottle!.Value, 5, 100);
         Assert.True(cleanup.ChargeWindow > heavy.ChargeWindow);
     }
 
@@ -77,8 +79,12 @@ public class LoadoutComparisonTests
 
         Assert.Equal(CrackVerdict.Difficult, at31200.Verdict);
         Assert.Equal(CrackVerdict.Uncrackable, at31300.Verdict);
-        Assert.Equal("", at31200.Boosts);
+        Assert.Equal("Surge Module + Sabir", at31200.Boosts);
         Assert.Equal("", at31300.Boosts);
+        Assert.InRange(at31200.PowerRatio!.Value, 0.7, 1);
+        Assert.Null(at31200.StableThrottle);
+        Assert.True(at31300.PowerRatio < 0.7);
+        Assert.Null(at31300.StableThrottle);
     }
 
     [Fact]

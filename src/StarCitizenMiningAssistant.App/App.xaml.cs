@@ -5,6 +5,7 @@ using StarCitizenMiningAssistant.App.ViewModels;
 using StarCitizenMiningAssistant.Core;
 using StarCitizenMiningAssistant.Core.Diagnostics;
 using StarCitizenMiningAssistant.Core.Equipment;
+using StarCitizenMiningAssistant.Core.Refining;
 using StarCitizenMiningAssistant.Core.Navigation;
 using StarCitizenMiningAssistant.Core.Recognition;
 using StarCitizenMiningAssistant.Infrastructure.Diagnostics;
@@ -42,6 +43,18 @@ public partial class App : Application
             var catalog = MiningCatalog.Parse(File.ReadAllText(catalogPath));
             WriteInformation("Loaded equipment catalog " + catalog.GameVersion + ".");
             var viewModel = MainWindowViewModel.Create(catalog);
+            var refineryPath = Path.Combine(AppContext.BaseDirectory, "data", "refinery-data.json");
+            if (File.Exists(refineryPath))
+            {
+                viewModel.UseRefinery(RefineryCatalog.Parse(File.ReadAllText(refineryPath)));
+            }
+
+            var itemsPath = Path.Combine(AppContext.BaseDirectory, "data", "mining-items.json");
+            if (File.Exists(itemsPath))
+            {
+                viewModel.UseMiningItems(MiningItemCatalog.Parse(File.ReadAllText(itemsPath)));
+            }
+
             var chartPath = Path.Combine(AppContext.BaseDirectory, "data", "scan-signatures.json");
             if (File.Exists(chartPath))
             {

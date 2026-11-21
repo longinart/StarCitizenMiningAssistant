@@ -1,0 +1,4488 @@
+{
+  "source": "https://finder.cstone.space/",
+  "retrieved": "2026-11-20",
+  "gameVersion": "4.10.3",
+  "note": "Item buy locations are the shop tables on finder.cstone.space, retrieved 2026-11-20. Each location keeps that table verified date. Prices are the base prices on those rows. Vehicle buy and rent rows stay the earlier UEX reports, with the Teach Special lines added from the wiki. Ore capacity for Prospector, MOLE, and Golem, and their crew fields, are the wiki values already stored in data/mining-equipment.json on 2026-11-12. The wiki API returned MOLE crew min 4 and max 2, and those two numbers are stored that way. ROC, ROC-DS, and ATLS GEO have no ore figure here. No crafting recipe was on these records.",
+  "items": [
+    {
+      "id": "waveshift",
+      "name": "Waveshift",
+      "category": "Mining gadget",
+      "description": "Greycat Industrial Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 18169,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Bueno Ravine - shop_terminal",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Carver's Ridge - shop_terminal",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Monox - Ostler's Claim - shop_terminal",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - Monox - Yang's Place - shop_terminal",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Pyro I - Stag's Rut - shop_terminal",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 19125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "sabir",
+      "name": "Sabir",
+      "category": "Mining gadget",
+      "description": "Shubin Interstellar Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 13125,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13125,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Sublevel 02 - Grand Barter Market - Tools & Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - People's Service Station Alpha - Central Hub - Tools & Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Delta - Central Hub - Tools & Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Lambda - Central Hub - Tools & Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Cargo - Weapons and armor",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Central Hub - Tools & Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Bueno Ravine - shop_terminal",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Carver's Ridge - shop_terminal",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Monox - Ostler's Claim - shop_terminal",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - Monox - Yang's Place - shop_terminal",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - Pyro I - Stag's Rut - shop_terminal",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 13815,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "boremax",
+      "name": "BoreMax",
+      "category": "Mining gadget",
+      "description": "Thermyte Concern Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Sublevel 02 - Grand Barter Market - Tools & Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - People's Service Station Alpha - Central Hub - Tools & Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Delta - Central Hub - Tools & Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Lambda - Central Hub - Tools & Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Cargo - Weapons and armor",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Central Hub - Tools & Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        }
+      ]
+    },
+    {
+      "id": "lancet-mh2-mining-laser",
+      "name": "Lancet MH2 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 89300,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 94000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "arbor-mh1-mining-laser",
+      "name": "Arbor MH1 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2954-12-14"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2955-08-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2954-12-25"
+        },
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2954-12-15"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2955-01-05"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 11363,
+          "type": "buy",
+          "gameVersion": "2955-04-13"
+        }
+      ]
+    },
+    {
+      "id": "hofstede-s1-mining-laser",
+      "name": "Hofstede-S1 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 12113,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 12750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "klein-s1-mining-laser",
+      "name": "Klein-S1 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-06-27"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-07-03"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-06-03"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-06-11"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-05-29"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-05-23"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-05-20"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-12-14"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-06-05"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-12-14"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 10150,
+          "type": "buy",
+          "gameVersion": "2955-06-02"
+        }
+      ]
+    },
+    {
+      "id": "klein-s2-mining-laser",
+      "name": "Klein-S2 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-05-13"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-05-14"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-05-17"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-05-15"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-06-14"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20150,
+          "type": "buy",
+          "gameVersion": "2955-05-18"
+        }
+      ]
+    },
+    {
+      "id": "impact-i-mining-laser",
+      "name": "Impact I Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 54863,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "impact-ii-mining-laser",
+      "name": "Impact II Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Everus Harbor - Galleria - Casaba Outlet",
+          "price": 779,
+          "type": "buy",
+          "gameVersion": "2956-05-14"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Baijini Point - Galleria - Casaba Outlet",
+          "price": 820,
+          "type": "buy",
+          "gameVersion": "2956-05-14"
+        },
+        {
+          "verse": "Stanton - Hurston - Everus Harbor - Galleria - FPS Armor",
+          "price": 981,
+          "type": "buy",
+          "gameVersion": "2956-05-14"
+        },
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 54863,
+          "type": "buy",
+          "gameVersion": "2956-05-15"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 54863,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-05-15"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "helix-i-mining-laser",
+      "name": "Helix I Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 55100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 55100,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 58000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "helix-ii-mining-laser",
+      "name": "Helix II Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 102600,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-02-24"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 108000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "focus-module",
+      "name": "Focus Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3800,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "torrent-module",
+      "name": "Torrent Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2954-12-26"
+        }
+      ]
+    },
+    {
+      "id": "vaux-module",
+      "name": "Vaux Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1900,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "vaux-c2-module",
+      "name": "Vaux-C2 Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5700,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "vaux-c3-module",
+      "name": "Vaux-C3 Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "xtr-module",
+      "name": "XTR Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1900,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "xtr-l-module",
+      "name": "XTR-L Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5700,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "xtr-xl-module",
+      "name": "XTR-XL Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 20000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "brandt-module",
+      "name": "Brandt Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 2138,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-05-15"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 2250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "forel-module",
+      "name": "Forel Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1853,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "lifeline-module",
+      "name": "Lifeline Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 760,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 760,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 800,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "optimum-module",
+      "name": "Optimum Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 3000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "rime-module",
+      "name": "Rime Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1045,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "stampede-module",
+      "name": "Stampede Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1330,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "surge-module",
+      "name": "Surge Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 1400,
+          "type": "buy",
+          "gameVersion": "2956-02-21"
+        }
+      ]
+    },
+    {
+      "id": "torpid-module",
+      "name": "Torpid Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1853,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 1950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "fltr-l-module",
+      "name": "FLTR-L Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 17100,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 18000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "fltr-xl-module",
+      "name": "FLTR-XL Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 57000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 60000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "focus-ii-module",
+      "name": "Focus II Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 11400,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "focus-iii-module",
+      "name": "Focus III Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "rieger-module",
+      "name": "Rieger Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 5700,
+          "type": "buy",
+          "gameVersion": "2956-05-21"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2955-12-14"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2955-05-17"
+        }
+      ]
+    },
+    {
+      "id": "rieger-c2-module",
+      "name": "Rieger-C2 Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 17100,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "rieger-c3-module",
+      "name": "Rieger-C3 Module",
+      "category": "Mining module",
+      "description": "Shubin Interstellar Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 57000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "torrent-ii-module",
+      "name": "Torrent II Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 11400,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 12000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "torrent-iii-module",
+      "name": "Torrent III Module",
+      "category": "Mining module",
+      "description": "Thermyte Concern Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 38000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-06-18"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 40000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "optimax",
+      "name": "OptiMax",
+      "category": "Mining gadget",
+      "description": "Greycat Industrial Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 26244,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27265,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - Levski - Sublevel 02 - Grand Barter Market - Tools & Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx - People's Service Station Alpha - Central Hub - Tools & Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Delta - Central Hub - Tools & Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Lambda - Central Hub - Tools & Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Cargo - Weapons and armor",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-03-26"
+        },
+        {
+          "verse": "Nyx - People's Service Station Theta - Central Hub - Tools & Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 27625,
+          "type": "buy",
+          "gameVersion": "2956-05-26"
+        }
+      ]
+    },
+    {
+      "id": "okunis",
+      "name": "Okunis",
+      "category": "Mining gadget",
+      "description": "Shubin Interstellar Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22088,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23250,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "lancet-mh1-mining-laser",
+      "name": "Lancet MH1 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 22325,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22325,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 23500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "arbor-mh2-mining-laser",
+      "name": "Arbor MH2 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 20378,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 21450,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 21450,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 21450,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 21450,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "hofstede-s2-mining-laser",
+      "name": "Hofstede-S2 Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 21613,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 21613,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-08-26"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 22750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "fltr-module",
+      "name": "FLTR Module",
+      "category": "Mining module",
+      "description": "Greycat Industrial Mining module. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5700,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 6000,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "stalwart",
+      "name": "Stalwart",
+      "category": "Mining gadget",
+      "description": "Thermyte Concern Mining gadget. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 20190,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "arbor-mhv-mining-laser",
+      "name": "Arbor MHV Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 4893,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4893,
+          "type": "buy",
+          "gameVersion": "2956-05-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5150,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "s0-helix",
+      "name": "S0 Helix",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 8075,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8075,
+          "type": "buy",
+          "gameVersion": "2956-05-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 8500,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "s00-hofstede",
+      "name": "S00 Hofstede",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 5463,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5463,
+          "type": "buy",
+          "gameVersion": "2956-05-16"
+        },
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Pyro Jump Point - Pyro Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Nyx > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Pyro > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-03-07"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-29"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-16"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 5750,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        }
+      ]
+    },
+    {
+      "id": "lawson-mining-laser",
+      "name": "Lawson Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. Buy prices are UEX player reports. This pull had no crafting recipe.",
+      "purchaseLocations": [
+        {
+          "verse": "Nyx - Levski - Refinery 03 - Supplies",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Pyro - Bloom - Orbituary - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-27"
+        },
+        {
+          "verse": "Pyro - PYR2-L4 - Checkmate - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-27"
+        },
+        {
+          "verse": "Pyro - Terminus - Ruin Station - Hangar Transit - Refinery - Shops - Equipment - Supplies",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-07-07"
+        },
+        {
+          "verse": "Pyro > Stanton Jump Point - Stanton Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-07-03"
+        },
+        {
+          "verse": "Stanton - ARC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-19"
+        },
+        {
+          "verse": "Stanton - ARC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-08"
+        },
+        {
+          "verse": "Stanton - ARC-L4 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-31"
+        },
+        {
+          "verse": "Stanton - ArcCorp - Area18 - Retail bridges - Dumper's Depot",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-25"
+        },
+        {
+          "verse": "Stanton - CRU-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-03"
+        },
+        {
+          "verse": "Stanton - Crusader - Yela - Grim HEX - Main Concourse - Dumper's Depot",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-28"
+        },
+        {
+          "verse": "Stanton - HUR-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-27"
+        },
+        {
+          "verse": "Stanton - HUR-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-17"
+        },
+        {
+          "verse": "Stanton - Hurston - Lorville - Workers District - Tammany And Sons",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-05"
+        },
+        {
+          "verse": "Stanton - MIC-L1 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-10"
+        },
+        {
+          "verse": "Stanton - MIC-L2 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-03"
+        },
+        {
+          "verse": "Stanton - MIC-L5 - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-06-06"
+        },
+        {
+          "verse": "Stanton - microTech - New Babbage - The Commons - Plaza - Shubin Interstellar",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2956-01-04"
+        },
+        {
+          "verse": "Stanton > Nyx Jump Point - Nyx Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-12-14"
+        },
+        {
+          "verse": "Stanton > Terra Jump Point - Terra Gateway - Refinery - Service - Mining support center - Refinery Shop",
+          "price": 4950,
+          "type": "buy",
+          "gameVersion": "2955-05-25"
+        }
+      ]
+    },
+    {
+      "id": "pitman-mining-laser",
+      "name": "Pitman Mining Laser",
+      "category": "Mining laser",
+      "description": "Mining laser. UEX returned no buy price for this item on 2026-11-20. This pull had no crafting recipe.",
+      "purchaseLocations": []
+    },
+    {
+      "id": "roc-module",
+      "name": "ROC Module",
+      "category": "Mining module",
+      "description": "Mining module. UEX returned no buy price for this item on 2026-11-20. This pull had no crafting recipe.",
+      "purchaseLocations": []
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "misc-prospector",
+      "name": "MISC Prospector",
+      "category": "Ship",
+      "oreCapacity": 32,
+      "crewMin": 1,
+      "crewMax": 1,
+      "rentCost": 69575,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 2783020,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Ruin Station, Buy and Fly - Ruin Station",
+          "price": 2929500,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Checkmate Station, Buy and Fly - Checkmate",
+          "price": 2929500,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Orbituary, Buy and Fly - Orbituary",
+          "price": 2929500,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Lorville, Vantage Rentals - Lorville",
+          "price": 69575,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "id": "argo-mole",
+      "name": "MOLE",
+      "category": "Ship",
+      "oreCapacity": 96,
+      "crewMin": 4,
+      "crewMax": 2,
+      "rentCost": 223256,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 8483740,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Checkmate Station, Buy and Fly - Checkmate",
+          "price": 8483740,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Orbituary, Buy and Fly - Orbituary",
+          "price": 8483740,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Ruin Station, Buy and Fly - Ruin Station",
+          "price": 8483740,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Ship Shop - Levski, Teach's Special",
+          "price": 9376760,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Terra Gateway, Traveler Rentals - Cargo Center - Terra Gateway (Stanton)",
+          "price": 223256,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Rentals - Levski, Teach's Special",
+          "price": 234419,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "id": "drak-golem",
+      "name": "Golem",
+      "category": "Ship",
+      "oreCapacity": 32,
+      "crewMin": 1,
+      "crewMax": 1,
+      "rentCost": 15082,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 1005480,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Checkmate Station, Buy and Fly - Checkmate",
+          "price": 1005480,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Orbituary, Buy and Fly - Orbituary",
+          "price": 1005480,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Ruin Station, Buy and Fly - Ruin Station",
+          "price": 1005480,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Ship Shop - Levski, Teach's Special",
+          "price": 1111320,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Lorville, Vantage Rentals - Lorville",
+          "price": 15082,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Rentals - Levski, Teach's Special",
+          "price": 27783,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "id": "grin-roc",
+      "name": "Greycat ROC",
+      "category": "Ground vehicle",
+      "oreCapacity": null,
+      "crewMin": 1,
+      "crewMax": 1,
+      "rentCost": 2468,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 98753,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Ship Shop - Levski",
+          "price": 103950,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Lorville, Vantage Rentals - Lorville",
+          "price": 2468,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Rentals - Levski",
+          "price": 2598,
+          "type": "rent",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "id": "grin-roc-ds",
+      "name": "Greycat ROC-DS",
+      "category": "Ground vehicle",
+      "oreCapacity": null,
+      "crewMin": 2,
+      "crewMax": 2,
+      "rentCost": null,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 134663,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Ship Shop - Levski",
+          "price": 141750,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    },
+    {
+      "id": "atls-geo",
+      "name": "Argo ATLS GEO",
+      "category": "Ground vehicle",
+      "oreCapacity": null,
+      "crewMin": 1,
+      "crewMax": 1,
+      "rentCost": null,
+      "purchaseLocations": [
+        {
+          "verse": "Stanton, Lorville, New Deal - Teasa Spaceport - Lorville",
+          "price": 86184,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Area 18, Astro Armada - Area 18",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Stanton, Orison, New Deal - Crusader Showroom - Orison",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Orbituary, Buy and Fly - Orbituary",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Checkmate Station, Buy and Fly - Checkmate",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Pyro, Ruin Station, Buy and Fly - Ruin Station",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        },
+        {
+          "verse": "Nyx, Levski, Teach's Ship Shop - Levski",
+          "price": 90720,
+          "type": "buy",
+          "gameVersion": "4.10.3"
+        }
+      ]
+    }
+  ]
+}
