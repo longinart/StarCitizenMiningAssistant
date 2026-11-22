@@ -43,7 +43,7 @@ public class ObservedValueTests
     public void Application_identity_is_stable()
     {
         Assert.Equal("Star Citizen Mining Assistant", ApplicationInfo.Name);
-        Assert.Equal("0.2.0", ApplicationInfo.VersionText);
-        Assert.Equal("v.0.2", ApplicationInfo.BuildLabel);
+        Assert.Equal("0.3.0", ApplicationInfo.VersionText);
+        Assert.Equal("v.0.3", ApplicationInfo.BuildLabel);
     }
 }

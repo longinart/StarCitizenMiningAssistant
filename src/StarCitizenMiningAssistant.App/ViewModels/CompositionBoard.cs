@@ -61,6 +61,13 @@ public sealed class CompositionBoard : ViewModelBase
     private string _method = "";
     private string _home = "";
     private bool _showRefined;
+    private bool _isLocked;
+
+    public bool IsLocked
+    {
+        get => _isLocked;
+        set => Set(ref _isLocked, value);
+    }
 
     public void UseCatalog(RefineryCatalog catalog) => _catalog = catalog ?? RefineryCatalog.Empty;
 
@@ -110,6 +117,11 @@ public sealed class CompositionBoard : ViewModelBase
 
     public void ApplyObserved(IReadOnlyList<ObservedShare> shares, ObservedValue<double>? totalScu = null)
     {
+        if (IsLocked)
+        {
+            return;
+        }
+
         if (totalScu is ObservedValue<double> total && total.Confidence != RecognitionConfidence.Missing)
         {
             var text = total.Value.ToString("0.##", CultureInfo.CurrentCulture);

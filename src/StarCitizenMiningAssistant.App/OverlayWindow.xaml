@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:StarCitizenMiningAssistant.App"
         Title="Rock details"
-        SizeToContent="WidthAndHeight"
+        Width="540"
+        Height="1100"
         WindowStyle="None"
         AllowsTransparency="True"
         ResizeMode="NoResize"
@@ -57,7 +58,7 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <DockPanel>
+    <DockPanel MinWidth="360" MinHeight="1100">
         <DockPanel.LayoutTransform>
             <ScaleTransform ScaleX="{Binding RockOverlayScale}" ScaleY="{Binding RockOverlayScale}" />
         </DockPanel.LayoutTransform>
@@ -119,6 +120,47 @@
                             <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}"
                                        FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="Composition" />
                         </StackPanel>
+                    </Button>
+                    <Button Margin="2,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Lock the composition reading" PreviewMouseLeftButtonDown="ToggleLock_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" Padding="6,0">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="15" Foreground="{StaticResource Lapd.Teal}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="&#xE785;" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Composition.IsLocked}" Value="True">
+                                            <Setter Property="Text" Value="&#xE72E;" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Button>
+                    <Button Margin="2,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Read the composition again" PreviewMouseLeftButtonDown="Rescan_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" Padding="6,0">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}" FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="Rescan" />
                     </Button>
                     </StackPanel>
                     <Border Background="Transparent" />

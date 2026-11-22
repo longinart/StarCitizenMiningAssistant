@@ -33,6 +33,8 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     private readonly MiningCatalog? _catalog;
     private readonly RepeatedReading _signatureRepeat = new();
+    private readonly ReadingStabilizer<string> _compositionStable = new(5);
+    private bool _compositionRescan;
     private bool _suspendSave;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
@@ -334,6 +336,7 @@ public sealed class MainWindowViewModel : ViewModelBase
                     _library.SignatureConfidence = "";
                 }
 
+                ReleaseComposition();
                 NotifyLoadout();
             }
         }
@@ -1028,7 +1031,6 @@ public sealed class MainWindowViewModel : ViewModelBase
             MassText = DisplayReading(fields.Mass);
             ResistanceText = DisplayReading(fields.Resistance);
             InstabilityText = DisplayReading(fields.Instability);
-            Composition.ApplyObserved(fields.Composition, fields.TotalScu);
         }
         finally
         {
@@ -1063,8 +1065,59 @@ public sealed class MainWindowViewModel : ViewModelBase
         return new HeldReading(sample, held);
     }
 
-    public RockOcrFields WatchRock(RockOcrFields? sample)
+    public void ToggleCompositionLock()
     {
+        Composition.IsLocked = !Composition.IsLocked;
+        _compositionStable.Reset();
+    }
+
+    public void ReleaseComposition()
+    {
+        _compositionStable.Reset();
+        Composition.IsLocked = false;
+    }
+
+    public void RescanComposition()
+    {
+        _compositionRescan = true;
+        ReleaseComposition();
+    }
+
+    public RockOcrFields WatchRock(RockOcrFields? sample, bool compositionAllowed = false)
+    {
+        if (sample is null || !sample.HasPanel)
+        {
+            ReleaseComposition();
+        }
+        else if (!Composition.IsLocked)
+        {
+            if (!compositionAllowed)
+            {
+                if (!_compositionRescan)
+                {
+                    _compositionStable.Reset();
+                }
+            }
+            else
+            {
+                var key = CompositionKey(sample);
+                if (key is null)
+                {
+                    if (!_compositionRescan)
+                    {
+                        _compositionStable.Reset();
+                    }
+                }
+                else if (_compositionRescan || _compositionStable.Observe(key))
+                {
+                    Composition.ApplyObserved(sample.Composition, sample.TotalScu);
+                    Composition.IsLocked = true;
+                    _compositionRescan = false;
+                    _compositionStable.Reset();
+                }
+            }
+        }
+
         var current = ReadRock();
         var mass = StableReading.Next(current.MassKilograms, _lastMassSample, sample?.Mass ?? ObservedValue<double>.Missing());
         var resistance = StableReading.Next(current.ResistancePercent, _lastResistanceSample, sample?.Resistance ?? ObservedValue<double>.Missing());
@@ -1080,7 +1133,6 @@ public sealed class MainWindowViewModel : ViewModelBase
             Composition = sample?.Composition ?? [],
             TotalScu = sample?.TotalScu ?? ObservedValue<double>.Missing()
         };
-        Composition.ApplyObserved(held.Composition, held.TotalScu);
         if (!held.Mass.Equals(current.MassKilograms)
             || !held.Resistance.Equals(current.ResistancePercent)
             || !held.Instability.Equals(current.Instability))
@@ -1089,6 +1141,36 @@ public sealed class MainWindowViewModel : ViewModelBase
         }
 
         return held;
+    }
+
+    private string? CompositionKey(RockOcrFields sample)
+    {
+        var parts = new List<string>();
+        foreach (var share in sample.Composition)
+        {
+            if (share.Percent.Confidence == RecognitionConfidence.Missing || CompositionShares.IsInert(share.Name))
+            {
+                continue;
+            }
+
+            var name = CompositionShares.DisplayName(share.Name, Composition.MineralNames);
+            if (name is null)
+            {
+                continue;
+            }
+
+            parts.Add(name + "=" + share.Percent.Value.ToString("0.##", CultureInfo.InvariantCulture));
+        }
+
+        var total = sample.TotalScu.Confidence == RecognitionConfidence.Missing
+            ? null
+            : sample.TotalScu.Value.ToString("0.##", CultureInfo.InvariantCulture);
+        if (parts.Count == 0 && total is null)
+        {
+            return null;
+        }
+
+        return (total ?? "") + "|" + string.Join("|", parts);
     }
 
     private void ApplySignature(ObservedValue<double> reading)

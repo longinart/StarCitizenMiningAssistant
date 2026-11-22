@@ -10,7 +10,7 @@ Star Citizen is a trademark of Cloud Imperium Games. This is an unofficial fan t
 
 - **Signature reading.** While the signature overlay is open, the app reads the number under the radar and names the deposit when that number matches one known mineral.
 - **Crack check.** Mass and resistance from the scan panel are compared with the ship loadout you saved. The overlay says whether that setup can crack the rock.
-- **Composition reading.** Mineral rows under the scan panel are filled in when the name matches the mineral list. Cargo, such as `1.33 / 96 SCU`, is the ship's hold and is ignored.
+- **Composition reading.** Mineral rows under the scan panel are filled in when the name matches the mineral list. The reading locks after it stays the same. Rescan takes a new one if that lock was wrong. Cargo, such as `1.33 / 96 SCU`, is the ship's hold and is ignored.
 - **Refinery and sell totals.** Refined SCU and a sell total are worked out from the rock size on the COMPOSITION line and from each mineral's own best price.
 - **Overlays you can place.** The rock overlay and the signature overlay are separate windows. Each keeps its own size, opacity, and position.
 
@@ -20,7 +20,7 @@ The same window also stores named ship loadouts, a mining-equipment shop list, a
 
 You need 64-bit Windows 10 or Windows 11. You do not need to install .NET.
 
-**[Download StarCitizenMiningAssistant-0.2.0-win-x64.zip](https://github.com/longinart/StarCitizenMiningAssistant/releases/download/v0.2.0/StarCitizenMiningAssistant-0.2.0-win-x64.zip)**
+**[Download StarCitizenMiningAssistant-0.3.0-win-x64.zip](https://github.com/longinart/StarCitizenMiningAssistant/releases/download/v0.3.0/StarCitizenMiningAssistant-0.3.0-win-x64.zip)**
 
 1. Click the link above and save the ZIP.
 2. Right-click the ZIP and choose **Extract All**. Put it in a folder you can write to, such as `Documents\StarCitizenMiningAssistant`. Do not run the app from inside the ZIP.

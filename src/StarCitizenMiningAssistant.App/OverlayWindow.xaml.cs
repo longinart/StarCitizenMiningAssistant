@@ -60,6 +60,18 @@ public partial class OverlayWindow : Window
             Left = left;
             Top = top;
         }
+
+        ApplyFixedSize();
+    }
+
+    private const double BaseWidth = 540;
+    private const double BaseHeight = 1100;
+
+    private void ApplyFixedSize()
+    {
+        var scale = DataContext is MainWindowViewModel viewModel ? viewModel.RockOverlayScale : 1;
+        Width = BaseWidth * scale;
+        Height = BaseHeight * scale;
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -128,6 +140,29 @@ public partial class OverlayWindow : Window
         if (e.PropertyName is nameof(MainWindowViewModel.CrackRows) or "")
         {
             SyncFade(force: false);
+        }
+
+        if (e.PropertyName is nameof(MainWindowViewModel.RockOverlayScale) or "")
+        {
+            ApplyFixedSize();
+        }
+    }
+
+    private void ToggleLock_Click(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.ToggleCompositionLock();
+        }
+    }
+
+    private void Rescan_Click(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.RescanComposition();
         }
     }
 

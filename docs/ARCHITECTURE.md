@@ -1,6 +1,6 @@
 # Architecture
 
-Version 0.2.0. This is the structure to follow until a new decision is recorded in `docs/DECISIONS.md`.
+Version 0.3.0. This is the structure to follow until a new decision is recorded in `docs/DECISIONS.md`.
 
 ## Why three projects
 
@@ -74,7 +74,7 @@ The rock overlay and the signature overlay are two windows in this project, both
 - `Recognition.SignatureReading` — one digit line becomes a confirmed signature when the chart has one match, or when the chart has none and the catalog has one deposit. Decision 013 and decision 021. Any other reading stays Uncertain or Missing.
 - `Recognition.ReadingHold` — a missing sample keeps the previous signature or rock field. A sample that contains a number replaces it. Decision 014. The overlay timer in the App calls this about twice a second and stops when the overlay closes.
 - `Recognition.ScanLogPolicy` — while Log scans is ticked, a placed rectangle is written to `scan-log` with the reading from that frame. A repeat waits. A rock line lists mass, resistance, and instability only. Decision 019 and decision 022.
-- `Recognition.StableReading` — two identical labelled samples confirm mass, resistance, or instability. One sample stays Uncertain. Decision 015. `WindowsOcrReader.ReadLabelsAsync` scales the rock image up to three times before Windows OCR. The live signature path uses `HudSignatureReader`. Decision 021. `SignatureOcr` remains and is not the live path.
+- `Recognition.StableReading` — two identical labelled samples confirm mass, resistance, or instability. One sample stays Uncertain. Decision 015. `ReadingStabilizer` writes a composition only after five identical frames, and only while the HUD says FRACTURE MODE or EXTRACTION MODE. Rescan writes the next frame without that wait. Decision 028. `WindowsOcrReader.ReadLabelsAsync` scales the rock image up to three times before Windows OCR. The live signature path uses `HudSignatureReader`. Decision 021. `SignatureOcr` remains and is not the live path.
 - `Recognition.SignatureWatch` — a confirmed signature against the catalog. The hit is labelled with the deposit count, such as 2 × Bexalite. A ticked mineral blinks. Sound is requested only when the user enabled it. An uncertain signature produces no hit.
 - `Recognition.RockScan` — keeps a rock field at the confidence it was saved with. An uncertain scan is not a confirmed mass or resistance.
 - `Recognition.HudNumberReader` — the earlier bright-core digit rules. Signature capture no longer uses it. Decision 018.

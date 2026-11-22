@@ -788,7 +788,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            var sought = await SeekRock(monitor);
+            var sought = await SeekRock(monitor, !viewModel.Composition.IsLocked);
             captured = sought.Bmp;
             lines = sought.Lines;
         }
@@ -871,7 +871,7 @@ public partial class MainWindow : Window
         viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Signatures) is { IsPlaceable: true }
         || viewModel.CaptureOf(monitor.DeviceName, CaptureTarget.Rock) is { IsPlaceable: true };
 
-    private readonly record struct WatchFrame(IReadOnlyList<ObservedValue<string>>? Lines, bool Clipped);
+    private readonly record struct WatchFrame(IReadOnlyList<ObservedValue<string>>? Lines, bool Clipped, bool CompositionAllowed);
 
     private async Task<WatchFrame> ReadWatchAsync(
         MainWindowViewModel viewModel,
@@ -880,17 +880,17 @@ public partial class MainWindow : Window
     {
         if (monitor is null)
         {
-            return new WatchFrame(null, false);
+            return new WatchFrame(null, false, false);
         }
 
         if (target == CaptureTarget.Signatures)
         {
             var sought = SeekSignature(monitor, viewModel.SignatureChart);
-            return new WatchFrame(sought.Lines, false);
+            return new WatchFrame(sought.Lines, false, false);
         }
 
-        var rockFrame = await SeekRock(monitor);
-        return new WatchFrame(rockFrame.Lines, false);
+        var rockFrame = await SeekRock(monitor, !viewModel.Composition.IsLocked);
+        return new WatchFrame(rockFrame.Lines, false, rockFrame.CompositionAllowed);
     }
 
     private async Task<string> DescribeTarget(MainWindowViewModel viewModel, MonitorInfo? monitor, CaptureTarget target)
@@ -916,7 +916,7 @@ public partial class MainWindow : Window
 
         var lines = frame.Lines;
         var rock = lines is null ? null : RockOcrFields.Read(lines);
-        var held = viewModel.WatchRock(rock);
+        var held = viewModel.WatchRock(rock, frame.CompositionAllowed);
         return "Watching. "
             + DescribeHeld("Mass", new HeldReading(rock?.Mass ?? ObservedValue<double>.Missing(), held.Mass))
             + " " + DescribeHeld("Resistance", new HeldReading(rock?.Resistance ?? ObservedValue<double>.Missing(), held.Resistance))
@@ -1358,9 +1358,9 @@ public partial class MainWindow : Window
         }
 
         output.Text = "Reading...";
-        var rockFrame = await SeekRock(rockMonitor);
+        var rockFrame = await SeekRock(rockMonitor, !rockModel.Composition.IsLocked);
         var sample = rockFrame.Lines is null ? null : RockOcrFields.Read(rockFrame.Lines);
-        var shown = sample is { HasPanel: true } ? rockModel.WatchRock(sample) : sample;
+        var shown = sample is { HasPanel: true } ? rockModel.WatchRock(sample, rockFrame.CompositionAllowed) : sample;
         output.Text = FormatField("Mass", shown?.Mass ?? ObservedValue<double>.Missing())
             + Environment.NewLine + FormatField("Resistance", shown?.Resistance ?? ObservedValue<double>.Missing())
             + Environment.NewLine + FormatField("Instability", shown?.Instability ?? ObservedValue<double>.Missing());
@@ -1439,7 +1439,9 @@ public partial class MainWindow : Window
         return (center ?? CaptureShifted(monitor, 0, 0), null);
     }
 
-    private async Task<(byte[]? Bmp, IReadOnlyList<ObservedValue<string>>? Lines)> SeekRock(MonitorInfo monitor)
+    private async Task<(byte[]? Bmp, IReadOnlyList<ObservedValue<string>>? Lines, bool CompositionAllowed)> SeekRock(
+        MonitorInfo monitor,
+        bool scanComposition)
     {
         byte[]? center = null;
         foreach (var (offsetX, offsetY) in _rockAim.Order(monitor.Height))
@@ -1473,7 +1475,8 @@ public partial class MainWindow : Window
             }
 
             _rockAim.Remember(offsetX, offsetY);
-            var composition = await SeekComposition(monitor, offsetX, offsetY);
+            var allowed = scanComposition && await ModeAllowsComposition(monitor);
+            var composition = allowed ? await SeekComposition(monitor, offsetX, offsetY) : null;
             var shares = composition?.Composition is { Count: > 0 } found ? found : fields.Composition;
             var total = fields.TotalScu;
             if (composition is not null && composition.TotalScu.Confidence != RecognitionConfidence.Missing)
@@ -1484,11 +1487,29 @@ public partial class MainWindow : Window
             var merged = shares.Count == 0 && total.Confidence == RecognitionConfidence.Missing
                 ? fields
                 : fields.WithComposition(shares, total);
-            return (captured, RockFrame.Lines(merged, includeComposition: shares.Count > 0 || total.Confidence != RecognitionConfidence.Missing));
+            var include = allowed && (shares.Count > 0 || total.Confidence != RecognitionConfidence.Missing);
+            return (captured, RockFrame.Lines(merged, includeComposition: include), allowed);
         }
 
         var home = center ?? CaptureRock(monitor, 0, 0);
-        return (home, null);
+        return (home, null, false);
+    }
+
+    private async Task<bool> ModeAllowsComposition(MonitorInfo monitor)
+    {
+        var patch = MiningModePatch.Of(monitor.Width, monitor.Height);
+        var captured = RegionImage.CaptureBmp(
+            monitor.Left + patch.X,
+            monitor.Top + patch.Y,
+            patch.Width,
+            patch.Height);
+        if (captured is null)
+        {
+            return false;
+        }
+
+        var words = await new WindowsOcrReader().ReadWordsAsync(captured);
+        return MiningMode.AllowsComposition(MiningMode.Read(words.Select(word => word.Text)));
     }
 
     private async Task<RockOcrFields?> SeekComposition(MonitorInfo monitor, int hintX, int hintY)
