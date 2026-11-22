@@ -13,7 +13,7 @@ A successful run ends with exit code 0 and `Build succeeded`. The folder `publis
 Zip that folder. The version below is the `<Version>` in `Directory.Build.props`. Change the zip name when that version changes.
 
 ```powershell
-Compress-Archive -Path publish/win-x64/* -DestinationPath publish/StarCitizenMiningAssistant-0.3.0-win-x64.zip -Force
+Compress-Archive -Path publish/win-x64/* -DestinationPath publish/StarCitizenMiningAssistant-0.4.0-win-x64.zip -Force
 ```
 
 Check the zip before uploading it:
@@ -22,6 +22,6 @@ Check the zip before uploading it:
 - The window opens, and the bottom-left label matches the version in the zip name.
 - `data\mining-equipment.json` is present beside the exe, inside `data`.
 
-Upload `publish/StarCitizenMiningAssistant-0.3.0-win-x64.zip` to the GitHub release for that version. Do not upload the loose `publish/win-x64` folder.
+Upload `publish/StarCitizenMiningAssistant-0.4.0-win-x64.zip` to the GitHub release for that version. Do not upload the loose `publish/win-x64` folder.
 
 The exe is not code-signed. Windows SmartScreen will warn on first launch. The public readme tells people to choose More info, then Run anyway.

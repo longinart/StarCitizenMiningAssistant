@@ -170,7 +170,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" FontSize="18" FontFamily="Segoe UI" Foreground="{StaticResource App.Text}" Effect="{x:Null}" />
+                    <TextBlock Text="{Binding}" FontFamily="Segoe UI" Foreground="{StaticResource App.Text}" Effect="{x:Null}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -197,7 +197,7 @@
                         </ToggleButton>
                         <TextBlock IsHitTestVisible="False" Margin="12,0,32,0"
                                    VerticalAlignment="Center" HorizontalAlignment="Left"
-                                   FontSize="18" FontFamily="Segoe UI" Effect="{x:Null}"
+                                   FontSize="{TemplateBinding FontSize}" FontFamily="Segoe UI" Effect="{x:Null}"
                                    Foreground="{StaticResource App.Text}"
                                    Text="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}" />
                         <Popup x:Name="PART_Popup" AllowsTransparency="True" Focusable="False" Placement="Bottom" PopupAnimation="Fade"

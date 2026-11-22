@@ -17,8 +17,6 @@ public partial class OverlayWindow : Window
     private const int HitClient = 1;
     private const int HitTransparent = -1;
 
-    private static readonly SolidColorBrush SolidBody = Freeze(Color.FromRgb(0x03, 0x07, 0x0B));
-
     private bool _ready;
     private bool _clickThrough;
     private bool _detailsOpen;
@@ -40,13 +38,6 @@ public partial class OverlayWindow : Window
         WindowClickThrough.Apply(this, false);
     }
 
-    private static SolidColorBrush Freeze(Color color)
-    {
-        var brush = new SolidColorBrush(color);
-        brush.Freeze();
-        return brush;
-    }
-
     public void PlaceFromViewModel()
     {
         if (DataContext is not MainWindowViewModel viewModel)
@@ -64,14 +55,15 @@ public partial class OverlayWindow : Window
         ApplyFixedSize();
     }
 
-    private const double BaseWidth = 540;
-    private const double BaseHeight = 1100;
-
     private void ApplyFixedSize()
     {
-        var scale = DataContext is MainWindowViewModel viewModel ? viewModel.RockOverlayScale : 1;
-        Width = BaseWidth * scale;
-        Height = BaseHeight * scale;
+        if (DataContext is not MainWindowViewModel viewModel)
+        {
+            return;
+        }
+
+        Width = viewModel.OverlayWidth;
+        Height = viewModel.OverlayHeight;
     }
 
     protected override void OnSourceInitialized(EventArgs e)
@@ -106,12 +98,18 @@ public partial class OverlayWindow : Window
             return false;
         }
 
-        if (point.Y <= TitleBar.ActualHeight + DetailsChrome.ActualHeight + CompositionChrome.ActualHeight)
+        if (point.Y <= TitleBar.ActualHeight + ActionChrome.ActualHeight + DetailsChrome.ActualHeight + CompositionChrome.ActualHeight)
         {
             return true;
         }
 
-        return false;
+        if (!CrackList.IsVisible || CrackList.ActualWidth < 1)
+        {
+            return false;
+        }
+
+        var local = TranslatePoint(point, CrackList);
+        return VisualTreeHelper.HitTest(CrackList, local) is not null;
     }
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -129,7 +127,6 @@ public partial class OverlayWindow : Window
             };
         }
 
-        FitShade();
         ClipTitle();
         SyncFade(force: true);
         _ready = true;
@@ -142,10 +139,138 @@ public partial class OverlayWindow : Window
             SyncFade(force: false);
         }
 
-        if (e.PropertyName is nameof(MainWindowViewModel.RockOverlayScale) or "")
+        if (e.PropertyName is nameof(MainWindowViewModel.OverlayWidth) or nameof(MainWindowViewModel.OverlayHeight) or "")
         {
             ApplyFixedSize();
         }
+    }
+
+    private const double HoldLabelMs = 250;
+    private const double HoldFireMs = 500;
+
+    private DispatcherTimer? _hold;
+    private bool _holdFired;
+    private DateTime _holdStarted;
+    private TextBlock? _rescanLabel;
+    private Border? _rescanTrack;
+    private Border? _rescanFill;
+
+    private void Rescan_Down(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        if (sender is UIElement element)
+        {
+            element.CaptureMouse();
+        }
+
+        _holdFired = false;
+        _holdStarted = DateTime.UtcNow;
+        ShowRescanHold(0);
+        _hold ??= new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(16) };
+        _hold.Stop();
+        _hold.Tick -= HoldTick;
+        _hold.Tick += HoldTick;
+        _hold.Start();
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.HoldActive = true;
+        }
+    }
+
+    private void HoldTick(object? sender, EventArgs e)
+    {
+        var elapsed = (DateTime.UtcNow - _holdStarted).TotalMilliseconds;
+        ShowRescanHold(Math.Clamp(elapsed / HoldFireMs, 0, 1));
+        if (elapsed < HoldFireMs)
+        {
+            return;
+        }
+
+        _hold?.Stop();
+        _holdFired = true;
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.HoldActive = false;
+            viewModel.RescanAll();
+        }
+    }
+
+    private void Rescan_Up(object sender, MouseButtonEventArgs e)
+    {
+        e.Handled = true;
+        if (sender is UIElement element)
+        {
+            element.ReleaseMouseCapture();
+        }
+
+        var fired = _holdFired;
+        _holdFired = false;
+        _hold?.Stop();
+        HideRescanHold();
+        if (fired)
+        {
+            return;
+        }
+
+        if (DataContext is MainWindowViewModel viewModel)
+        {
+            viewModel.HoldActive = false;
+            viewModel.RescanComposition();
+        }
+    }
+
+    private void ShowRescanHold(double progress)
+    {
+        if (!EnsureRescanParts())
+        {
+            return;
+        }
+
+        var elapsed = progress * HoldFireMs;
+        var show = elapsed >= HoldLabelMs;
+        _rescanLabel!.Text = show ? "Rescan all" : "Rescan";
+        _rescanTrack!.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+        if (!show)
+        {
+            _rescanFill!.Width = 0;
+            return;
+        }
+
+        _rescanTrack.UpdateLayout();
+        var width = _rescanTrack.ActualWidth;
+        if (width < 1)
+        {
+            width = _rescanLabel.ActualWidth;
+        }
+
+        var span = (elapsed - HoldLabelMs) / (HoldFireMs - HoldLabelMs);
+        _rescanFill!.Width = width * Math.Clamp(span, 0, 1);
+    }
+
+    private void HideRescanHold()
+    {
+        if (!EnsureRescanParts())
+        {
+            return;
+        }
+
+        _rescanLabel!.Text = "Rescan";
+        _rescanFill!.Width = 0;
+        _rescanTrack!.Visibility = Visibility.Collapsed;
+    }
+
+    private bool EnsureRescanParts()
+    {
+        if (_rescanLabel is not null && _rescanTrack is not null && _rescanFill is not null)
+        {
+            return true;
+        }
+
+        RescanButton.ApplyTemplate();
+        _rescanLabel = RescanButton.Template.FindName("RescanLabel", RescanButton) as TextBlock;
+        _rescanTrack = RescanButton.Template.FindName("RescanTrack", RescanButton) as Border;
+        _rescanFill = RescanButton.Template.FindName("RescanFill", RescanButton) as Border;
+        return _rescanLabel is not null && _rescanTrack is not null && _rescanFill is not null;
     }
 
     private void ToggleLock_Click(object sender, MouseButtonEventArgs e)
@@ -157,18 +282,8 @@ public partial class OverlayWindow : Window
         }
     }
 
-    private void Rescan_Click(object sender, MouseButtonEventArgs e)
-    {
-        e.Handled = true;
-        if (DataContext is MainWindowViewModel viewModel)
-        {
-            viewModel.RescanComposition();
-        }
-    }
-
     private void Window_BoundsChanged(object sender, EventArgs e)
     {
-        FitShade();
         ClipTitle();
         if (!_ready || WindowState != WindowState.Normal || DataContext is not MainWindowViewModel viewModel)
         {
@@ -236,12 +351,52 @@ public partial class OverlayWindow : Window
         CompositionChevron.Data = Geometry.Parse("M0,8 L8,0 L16,8 Z");
     }
 
+    private CrackDetailWindow? _detail;
+
+    private void CrackRow_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement source || source.DataContext is not OverlayCrackRow)
+        {
+            return;
+        }
+
+        var spot = source.TranslatePoint(new Point(source.ActualWidth + 8, 0), this);
+        if (_detail is null)
+        {
+            _detail = new CrackDetailWindow { Owner = this };
+            _detail.Closed += (_, _) => _detail = null;
+        }
+
+        _detail.DataContext = source.DataContext;
+        _detail.WindowStartupLocation = WindowStartupLocation.Manual;
+        if (!_detail.IsVisible)
+        {
+            _detail.Show();
+        }
+
+        _detail.UpdateLayout();
+        var left = Left + spot.X;
+        var top = Top + spot.Y;
+        var screenRight = SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth;
+        if (left + _detail.ActualWidth > screenRight)
+        {
+            var row = source.TranslatePoint(new Point(0, 0), this);
+            left = Left + row.X - _detail.ActualWidth - 8;
+        }
+
+        _detail.Left = Math.Max(SystemParameters.VirtualScreenLeft, left);
+        _detail.Top = Math.Max(SystemParameters.VirtualScreenTop, top);
+        _detail.Activate();
+    }
+
     private void Calculate_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is MainWindowViewModel viewModel)
         {
             viewModel.CalculateRock();
         }
+
+        SyncFade(force: true);
     }
 
     private void AddMineral_Click(object sender, RoutedEventArgs e)
@@ -275,9 +430,9 @@ public partial class OverlayWindow : Window
         if (box.Parent is Grid grid && grid.ColumnDefinitions.Count == 3)
         {
             grid.ColumnDefinitions[0].Width = new GridLength(nameWidth);
-            grid.ColumnDefinitions[1].Width = new GridLength(96);
+            grid.ColumnDefinitions[1].Width = new GridLength(82);
             var amountFont = box.TryFindResource("Lapd.FontMono") as FontFamily;
-            grid.ColumnDefinitions[2].Width = new GridLength(Measure(box, "100,00 cSCU", 19, amountFont) + 14);
+            grid.ColumnDefinitions[2].Width = new GridLength(Measure(box, "100,00 cSCU", 16, amountFont) + 12);
         }
 
     }
@@ -292,14 +447,14 @@ public partial class OverlayWindow : Window
         var longest = 0.0;
         foreach (var name in viewModel.Composition.Choices)
         {
-            var text = Measure(box, name, 18);
+            var text = Measure(box, name, 15);
             if (text > longest)
             {
                 longest = text;
             }
         }
 
-        _nameColumnWidth = Math.Ceiling((longest + 36) * 1.2);
+        _nameColumnWidth = Math.Ceiling((longest + 31) * 1.2);
         return _nameColumnWidth;
     }
 
@@ -308,35 +463,6 @@ public partial class OverlayWindow : Window
         var dpi = VisualTreeHelper.GetDpi(visual).PixelsPerDip;
         var typeface = new Typeface(family ?? new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
         return new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, typeface, size, Brushes.White, dpi).Width;
-    }
-
-    private void FitShade()
-    {
-        var height = BodyShade.ActualHeight;
-        var width = BodyShade.ActualWidth;
-        if (height < 1 || width < 1)
-        {
-            return;
-        }
-
-        BodyShade.OpacityMask = null;
-        var fade = Math.Min(120, height * 0.35);
-        if (fade < 16)
-        {
-            BodyShade.Background = SolidBody;
-            return;
-        }
-
-        var hold = (height - fade) / height;
-        var fill = new LinearGradientBrush
-        {
-            StartPoint = new Point(0, 0),
-            EndPoint = new Point(0, 1)
-        };
-        fill.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x03, 0x07, 0x0B), 0));
-        fill.GradientStops.Add(new GradientStop(Color.FromArgb(0xFF, 0x03, 0x07, 0x0B), hold));
-        fill.GradientStops.Add(new GradientStop(Color.FromArgb(0x00, 0x03, 0x07, 0x0B), 1));
-        BodyShade.Background = fill;
     }
 
     private void ClipTitle()

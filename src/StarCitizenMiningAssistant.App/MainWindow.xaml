@@ -678,6 +678,26 @@
                 </CheckBox>
                 <TextBlock Margin="30,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
                            Text="While this is ticked, placed rectangles are saved with what was read. Untick to stop." />
+                <CheckBox Margin="0,18,0,0" HorizontalAlignment="Left" FontSize="16"
+                          Content="Auto-scan Rock Details"
+                          IsChecked="{Binding AutoScanRockDetails}">
+                    <CheckBox.ContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="16" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </CheckBox.ContentTemplate>
+                </CheckBox>
+                <CheckBox Margin="0,18,0,0" HorizontalAlignment="Left" FontSize="16"
+                          Content="Auto-scan Composition"
+                          IsChecked="{Binding AutoScanComposition}">
+                    <CheckBox.ContentTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="16" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </CheckBox.ContentTemplate>
+                </CheckBox>
+                <TextBlock Margin="30,8,0,0" Foreground="{StaticResource Lapd.TealDim}" FontSize="16" TextWrapping="Wrap"
+                           Text="Untick a scan to keep the current reading. Rescan on the overlay still reads that part." />
                 <TextBlock Text="Refinery &amp; pricing" Margin="0,36,0,0" FontSize="22" FontFamily="{StaticResource Lapd.FontDisplay}" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Left" />
                 <TextBlock Margin="0,12,0,8" Foreground="#FFA7B0BA" Text="Home refinery" />
                 <ComboBox Style="{StaticResource StringCombo}" Width="460" HorizontalAlignment="Left" ItemsSource="{Binding HomeRefineries}" SelectedItem="{Binding HomeRefinery}" />
@@ -882,9 +902,12 @@
                             </StackPanel>
                         </TabItem.Header>
                         <StackPanel Margin="0,20,0,0">
-                            <TextBlock Margin="0,0,0,6" FontSize="16" Text="Size" />
-                            <Slider Minimum="0.7" Maximum="1.5" TickFrequency="0.05" IsSnapToTickEnabled="True"
-                                    Value="{Binding RockOverlayScale}" />
+                            <TextBlock Margin="0,0,0,6" FontSize="16" Text="{Binding OverlayWidth, StringFormat=Width {0:0}}" />
+                            <Slider Minimum="315" Maximum="1400" TickFrequency="10" IsSnapToTickEnabled="True"
+                                    Value="{Binding OverlayWidth}" />
+                            <TextBlock Margin="0,16,0,6" FontSize="16" Text="{Binding OverlayHeight, StringFormat=Height {0:0}}" />
+                            <Slider Minimum="400" Maximum="1600" TickFrequency="10" IsSnapToTickEnabled="True"
+                                    Value="{Binding OverlayHeight}" />
                             <TextBlock Margin="0,16,0,6" FontSize="16" Text="Transparency" />
                             <Slider Minimum="0.05" Maximum="1" TickFrequency="0.05" IsSnapToTickEnabled="True"
                                     Value="{Binding RockOverlayOpacity}" />

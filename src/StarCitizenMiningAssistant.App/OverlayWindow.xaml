@@ -27,15 +27,15 @@
             <Setter Property="Foreground" Value="#FFF4FFFB" />
             <Setter Property="BorderBrush" Value="#665FE8D2" />
             <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontSize" Value="19" />
             <Setter Property="FontFamily" Value="{StaticResource Lapd.FontMono}" />
-            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="Padding" Value="7,3" />
             <Setter Property="CaretBrush" Value="#FFF4FFFB" />
             <Setter Property="Effect" Value="{x:Null}" />
         </Style>
         <Style x:Key="CaptionButton" TargetType="Button">
-            <Setter Property="Width" Value="40" />
-            <Setter Property="Height" Value="40" />
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Height" Value="34" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="Cursor" Value="Hand" />
@@ -57,22 +57,32 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="HudCombo" TargetType="ComboBox" BasedOn="{StaticResource StringCombo}">
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="MinHeight" Value="32" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" FontSize="15" FontFamily="Segoe UI" Foreground="{StaticResource App.Text}" Effect="{x:Null}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <DockPanel MinWidth="360" MinHeight="1100">
-        <DockPanel.LayoutTransform>
-            <ScaleTransform ScaleX="{Binding RockOverlayScale}" ScaleY="{Binding RockOverlayScale}" />
-        </DockPanel.LayoutTransform>
-            <Border x:Name="TitleBar" DockPanel.Dock="Top" Height="46" Background="#FF03070B" PreviewMouseLeftButtonDown="Caption_Drag">
+    <Border Background="#FF03070B" CornerRadius="16" ClipToBounds="True">
+    <DockPanel MinWidth="315">
+            <Border x:Name="TitleBar" DockPanel.Dock="Top" Height="39" Background="#FF03070B" PreviewMouseLeftButtonDown="Caption_Drag">
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                         <Button Style="{StaticResource CaptionButton}" ToolTip="Close" Click="Close_Click">
-                            <Grid Width="14" Height="14">
-                                <Border Width="14" Height="2.5" Background="{StaticResource Lapd.Teal}" RenderTransformOrigin="0.5,0.5">
+                            <Grid Width="12" Height="12">
+                                <Border Width="12" Height="2" Background="{StaticResource Lapd.Teal}" RenderTransformOrigin="0.5,0.5">
                                     <Border.RenderTransform>
                                         <RotateTransform Angle="45" />
                                     </Border.RenderTransform>
                                 </Border>
-                                <Border Width="14" Height="2.5" Background="{StaticResource Lapd.Teal}" RenderTransformOrigin="0.5,0.5">
+                                <Border Width="12" Height="2" Background="{StaticResource Lapd.Teal}" RenderTransformOrigin="0.5,0.5">
                                     <Border.RenderTransform>
                                         <RotateTransform Angle="-45" />
                                     </Border.RenderTransform>
@@ -84,7 +94,7 @@
                     <Button HorizontalAlignment="Left" VerticalAlignment="Center" Cursor="Hand" PreviewMouseLeftButtonDown="ToggleDetails_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border x:Name="Bd" Background="Transparent" Padding="12,0,8,0">
+                                <Border x:Name="Bd" Background="Transparent" Padding="10,0,7,0">
                                     <ContentPresenter VerticalAlignment="Center" />
                                 </Border>
                                 <ControlTemplate.Triggers>
@@ -95,16 +105,16 @@
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel Orientation="Horizontal">
-                            <Path x:Name="Chevron" Width="16" Height="10" Stretch="Fill" Fill="{StaticResource Lapd.Teal}"
+                            <Path x:Name="Chevron" Width="14" Height="9" Stretch="Fill" Fill="{StaticResource Lapd.Teal}"
                                   Data="M0,0 L8,8 L16,0 Z" VerticalAlignment="Center" />
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}"
-                                       FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="Rock details" />
+                            <TextBlock Margin="7,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}"
+                                       FontSize="13" Foreground="{StaticResource Lapd.Teal}" Text="Rock details" />
                         </StackPanel>
                     </Button>
-                    <Button Margin="4,0,0,0" VerticalAlignment="Center" Cursor="Hand" PreviewMouseLeftButtonDown="ToggleComposition_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
+                    <Button Margin="3,0,0,0" VerticalAlignment="Center" Cursor="Hand" PreviewMouseLeftButtonDown="ToggleComposition_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border x:Name="Bd" Background="Transparent" Padding="8,0">
+                                <Border x:Name="Bd" Background="Transparent" Padding="7,0">
                                     <ContentPresenter VerticalAlignment="Center" />
                                 </Border>
                                 <ControlTemplate.Triggers>
@@ -115,97 +125,104 @@
                             </ControlTemplate>
                         </Button.Template>
                         <StackPanel Orientation="Horizontal">
-                            <Path x:Name="CompositionChevron" Width="16" Height="10" Stretch="Fill" Fill="{StaticResource Lapd.Teal}"
+                            <Path x:Name="CompositionChevron" Width="14" Height="9" Stretch="Fill" Fill="{StaticResource Lapd.Teal}"
                                   Data="M0,0 L8,8 L16,0 Z" VerticalAlignment="Center" />
-                            <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}"
-                                       FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="Composition" />
+                            <TextBlock Margin="7,0,0,0" VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}"
+                                       FontSize="13" Foreground="{StaticResource Lapd.Teal}" Text="Composition" />
                         </StackPanel>
-                    </Button>
-                    <Button Margin="2,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Lock the composition reading" PreviewMouseLeftButtonDown="ToggleLock_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="Bd" Background="Transparent" Padding="6,0">
-                                    <ContentPresenter VerticalAlignment="Center" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="15" Foreground="{StaticResource Lapd.Teal}">
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock">
-                                    <Setter Property="Text" Value="&#xE785;" />
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Composition.IsLocked}" Value="True">
-                                            <Setter Property="Text" Value="&#xE72E;" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBlock.Style>
-                        </TextBlock>
-                    </Button>
-                    <Button Margin="2,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Read the composition again" PreviewMouseLeftButtonDown="Rescan_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="Bd" Background="Transparent" Padding="6,0">
-                                    <ContentPresenter VerticalAlignment="Center" />
-                                </Border>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <TextBlock VerticalAlignment="Center" FontFamily="{StaticResource Lapd.FontDisplay}" FontSize="15" Foreground="{StaticResource Lapd.Teal}" Text="Rescan" />
                     </Button>
                     </StackPanel>
                     <Border Background="Transparent" />
                 </DockPanel>
             </Border>
-            <Border x:Name="DetailsChrome" DockPanel.Dock="Top" Background="#FF03070B" Padding="20,12,20,8">
-            <StackPanel x:Name="Details" Visibility="Collapsed">
-                <TextBlock FontSize="16" Foreground="#FFB7EDE2" Text="Mass" />
-                <TextBox Margin="0,4,0,0" Style="{StaticResource HudField}" Text="{Binding MassText, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Margin="0,12,0,0" FontSize="16" Foreground="#FFB7EDE2" Text="Resistance %" />
-                <TextBox Margin="0,4,0,0" Style="{StaticResource HudField}" Text="{Binding ResistanceText, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Margin="0,12,0,0" FontSize="16" Foreground="#FFB7EDE2" Text="Instability" />
-                <TextBox Margin="0,4,0,0" Style="{StaticResource HudField}" Text="{Binding InstabilityText, UpdateSourceTrigger=PropertyChanged}" />
-                <StackPanel Margin="0,12,0,0" Visibility="{Binding DebugMode, Converter={StaticResource ShowWhenTrue}}">
-                    <TextBlock FontSize="16" Foreground="#FFB7EDE2" Text="Signature" />
-                    <TextBox Margin="0,4,0,0" Style="{StaticResource HudField}" Text="{Binding SignatureText, UpdateSourceTrigger=PropertyChanged}" />
+            <Border x:Name="ActionChrome" DockPanel.Dock="Top" Background="#FF03070B" Padding="14,0,14,5">
+                <StackPanel Orientation="Horizontal">
+                    <Button HorizontalAlignment="Left" Cursor="Hand" Click="Calculate_Click" Background="Transparent" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" Padding="3,5">
+                                    <TextBlock Text="Calculate" FontSize="13" Foreground="{StaticResource Lapd.Teal}" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button x:Name="RescanButton" Margin="7,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Click to rescan composition. Hold to rescan the rock too." PreviewMouseLeftButtonDown="Rescan_Down" PreviewMouseLeftButtonUp="Rescan_Up" Background="Transparent" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" Padding="3,5,3,3">
+                                    <StackPanel>
+                                        <TextBlock x:Name="RescanLabel" Text="Rescan" FontSize="13" Foreground="{StaticResource Lapd.Teal}" />
+                                        <Border x:Name="RescanTrack" Height="3" Margin="0,3,0,0" CornerRadius="1" Background="#223C4A48" Visibility="Collapsed" ClipToBounds="True">
+                                            <Border x:Name="RescanFill" HorizontalAlignment="Left" Width="0" Background="{StaticResource Lapd.Teal}" />
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button Margin="7,0,0,0" VerticalAlignment="Center" Cursor="Hand" ToolTip="Lock the composition reading" PreviewMouseLeftButtonDown="ToggleLock_Click" PreviewMouseLeftButtonUp="TitleButton_Up" Background="Transparent" BorderThickness="0">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Bd" Background="Transparent" Padding="3,5">
+                                    <TextBlock FontFamily="Segoe MDL2 Assets" FontSize="13" Foreground="{StaticResource Lapd.Teal}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="&#xE785;" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DataContext.Composition.IsLocked, RelativeSource={RelativeSource AncestorType=Window}}" Value="True">
+                                                        <Setter Property="Text" Value="&#xE72E;" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
-                <Button Margin="0,16,0,4" HorizontalAlignment="Left" Cursor="Hand" Click="Calculate_Click" Background="Transparent" BorderThickness="0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Bd" Background="Transparent" Padding="4,6">
-                                <TextBlock Text="Calculate" FontSize="15" Foreground="{StaticResource Lapd.Teal}" />
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+            </Border>
+            <Border x:Name="DetailsChrome" DockPanel.Dock="Top" Background="#FF03070B" Padding="17,10,17,7">
+            <StackPanel x:Name="Details" Visibility="Collapsed">
+                <TextBlock FontSize="14" Foreground="#FFB7EDE2" Text="Mass" />
+                <TextBox Margin="0,3,0,0" Style="{StaticResource HudField}" Text="{Binding MassText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="#FFB7EDE2" Text="Resistance %" />
+                <TextBox Margin="0,3,0,0" Style="{StaticResource HudField}" Text="{Binding ResistanceText, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="0,10,0,0" FontSize="14" Foreground="#FFB7EDE2" Text="Instability" />
+                <TextBox Margin="0,3,0,0" Style="{StaticResource HudField}" Text="{Binding InstabilityText, UpdateSourceTrigger=PropertyChanged}" />
+                <StackPanel Margin="0,10,0,0" Visibility="{Binding DebugMode, Converter={StaticResource ShowWhenTrue}}">
+                    <TextBlock FontSize="14" Foreground="#FFB7EDE2" Text="Signature" />
+                    <TextBox Margin="0,3,0,0" Style="{StaticResource HudField}" Text="{Binding SignatureText, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
             </StackPanel>
             </Border>
-            <Border x:Name="CompositionChrome" DockPanel.Dock="Top" Background="#FF03070B" Padding="20,0,20,8">
+            <Border x:Name="CompositionChrome" DockPanel.Dock="Top" Background="#FF03070B" Padding="17,0,17,7">
             <StackPanel x:Name="CompositionPanel" Visibility="Collapsed">
-                <Grid Margin="0,8,0,0" Width="128" HorizontalAlignment="Left">
-                    <TextBox Style="{StaticResource HudField}" FontSize="20" MinHeight="40" Padding="8,6,42,6" Text="{Binding Composition.TotalScuText, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock Margin="0,0,8,0" HorizontalAlignment="Right" VerticalAlignment="Center" IsHitTestVisible="False" FontSize="15" Foreground="#88A7B0BA" Text="SCU" />
+                <Grid Margin="0,7,0,0" Width="109" HorizontalAlignment="Left">
+                    <TextBox Style="{StaticResource HudField}" FontSize="17" MinHeight="34" Padding="7,5,36,5" Text="{Binding Composition.TotalScuText, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Margin="0,0,7,0" HorizontalAlignment="Right" VerticalAlignment="Center" IsHitTestVisible="False" FontSize="13" Foreground="#88A7B0BA" Text="SCU" />
                 </Grid>
-                <StackPanel Margin="0,8,0,0" Orientation="Horizontal">
+                <StackPanel Margin="0,7,0,0" Orientation="Horizontal">
                 <Button HorizontalAlignment="Left" Cursor="Hand" Click="AddMineral_Click" Visibility="{Binding Composition.CanAdd, Converter={StaticResource ShowWhenTrue}}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="Bd" Width="31" Height="31" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="8">
-                                <TextBlock Text="+" FontSize="20" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Border x:Name="Bd" Width="26" Height="26" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="7">
+                                <TextBlock Text="+" FontSize="17" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -215,11 +232,11 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Margin="8,0,0,0" HorizontalAlignment="Left" Cursor="Hand" Click="RemoveMineral_Click" Visibility="{Binding Composition.CanRemove, Converter={StaticResource ShowWhenTrue}}">
+                <Button Margin="7,0,0,0" HorizontalAlignment="Left" Cursor="Hand" Click="RemoveMineral_Click" Visibility="{Binding Composition.CanRemove, Converter={StaticResource ShowWhenTrue}}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="Bd" Width="31" Height="31" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="8">
-                                <TextBlock Text="−" FontSize="20" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <Border x:Name="Bd" Width="26" Height="26" Background="Transparent" BorderBrush="{StaticResource Lapd.Line}" BorderThickness="1" CornerRadius="7">
+                                <TextBlock Text="−" FontSize="17" Foreground="{StaticResource Lapd.Teal}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
@@ -230,27 +247,27 @@
                     </Button.Template>
                 </Button>
                 </StackPanel>
-                <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Composition.Rows}">
+                <ItemsControl Margin="0,7,0,0" ItemsSource="{Binding Composition.Rows}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid Margin="0,0,0,8">
+                            <Grid Margin="0,0,0,7">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="160" />
-                                    <ColumnDefinition Width="96" />
-                                    <ColumnDefinition Width="140" />
+                                    <ColumnDefinition Width="136" />
+                                    <ColumnDefinition Width="82" />
+                                    <ColumnDefinition Width="119" />
                                 </Grid.ColumnDefinitions>
-                                <ComboBox Style="{StaticResource StringCombo}" IsEditable="False" Loaded="MineralName_Loaded"
+                                <ComboBox Style="{StaticResource HudCombo}" IsEditable="False" Loaded="MineralName_Loaded"
                                           ItemsSource="{Binding Options}"
                                           SelectedItem="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-                                <Grid Grid.Column="1" Margin="8,0,0,0">
+                                <Grid Grid.Column="1" Margin="7,0,0,0">
                                     <TextBox Text="{Binding PercentText, UpdateSourceTrigger=PropertyChanged}">
                                         <TextBox.Style>
                                             <Style TargetType="TextBox" BasedOn="{StaticResource HudField}">
-                                                <Setter Property="FontSize" Value="16" />
+                                                <Setter Property="FontSize" Value="14" />
                                                 <Setter Property="TextAlignment" Value="Center" />
                                                 <Setter Property="VerticalContentAlignment" Value="Center" />
-                                                <Setter Property="Padding" Value="4,0,22,0" />
-                                                <Setter Property="MinHeight" Value="36" />
+                                                <Setter Property="Padding" Value="3,0,19,0" />
+                                                <Setter Property="MinHeight" Value="31" />
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding DataContext.Composition.IsCompositionValid, RelativeSource={RelativeSource AncestorType=Window}}" Value="False">
                                                         <Setter Property="Background" Value="#55E15B64" />
@@ -264,42 +281,47 @@
                                             </Style>
                                         </TextBox.Style>
                                     </TextBox>
-                                    <TextBlock Margin="0,0,5,0" HorizontalAlignment="Right" VerticalAlignment="Center" IsHitTestVisible="False" FontFamily="Segoe UI" FontSize="15" FontWeight="SemiBold" Foreground="#FFB7EDE2" Text="%" />
+                                    <TextBlock Margin="0,0,4,0" HorizontalAlignment="Right" VerticalAlignment="Center" IsHitTestVisible="False" FontFamily="Segoe UI" FontSize="13" FontWeight="SemiBold" Foreground="#FFB7EDE2" Text="%" />
                                 </Grid>
-                                <TextBlock Grid.Column="2" Margin="8,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="19" Foreground="#FF3DDC7A" Text="{Binding ScuText, Converter={StaticResource ScuAmount}}" />
+                                <TextBlock Grid.Column="2" Margin="7,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Foreground="#FF3DDC7A" Text="{Binding ScuText, Converter={StaticResource ScuAmount}}" />
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <TextBlock Margin="0,8,0,0" FontSize="15" Foreground="#FFE08A3C" Text="{Binding Composition.RawPrice}" />
-                <TextBlock Margin="0,4,0,0" FontSize="15" Foreground="#FFE08A3C" Text="{Binding Composition.RefinedPrice}" />
-                <TextBlock Margin="0,6,0,0" FontSize="13" Foreground="{StaticResource Lapd.TealDim}" TextWrapping="Wrap" Text="{Binding Composition.BestTerminals}"
+                <TextBlock Margin="0,7,0,0" FontSize="13" Foreground="#FFE08A3C" Text="{Binding Composition.RawPrice}" />
+                <TextBlock Margin="0,3,0,0" FontSize="13" Foreground="#FFE08A3C" Text="{Binding Composition.RefinedPrice}" />
+                <TextBlock Margin="0,5,0,0" FontSize="11" Foreground="{StaticResource Lapd.TealDim}" TextWrapping="Wrap" Text="{Binding Composition.BestTerminals}"
                            Visibility="{Binding Composition.HasBestTerminals, Converter={StaticResource ShowWhenTrue}}" />
             </StackPanel>
             </Border>
             <Grid>
-                <Border x:Name="BodyShade" IsHitTestVisible="False" />
-            <StackPanel x:Name="CrackHost" Margin="20,12,20,24" HorizontalAlignment="Center">
-                <ItemsControl ItemsSource="{Binding CrackRows}" HorizontalAlignment="Center">
+            <StackPanel x:Name="CrackHost" Margin="17,10,17,20" HorizontalAlignment="Center">
+                <ItemsControl x:Name="CrackList" ItemsSource="{Binding CrackRows}" HorizontalAlignment="Center">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Margin="0,10,0,0" HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding Name}" FontSize="16" Foreground="#FFE6E8EB" TextAlignment="Center" />
-                                <TextBlock Margin="0,4,0,0" Text="{Binding Verdict}" FontSize="26" FontWeight="SemiBold"
-                                           Foreground="{Binding Brush}" TextAlignment="Center" />
-                                <TextBlock Margin="0,2,0,0" Text="{Binding Boosts}" FontSize="16" FontWeight="SemiBold"
-                                           Foreground="{Binding Brush}" TextAlignment="Center"
-                                           Visibility="{Binding HasBoosts, Converter={StaticResource ShowWhenTrue}}" />
-                                <StackPanel Margin="0,4,0,0" Orientation="Horizontal" HorizontalAlignment="Center"
-                                            Visibility="{Binding HasReading, Converter={StaticResource ShowWhenTrue}}">
-                                    <TextBlock FontSize="16" Text="{Binding PowerRatioText, Mode=OneWay}" Foreground="{Binding PowerRatioBrush, Mode=OneWay}" />
-                                    <TextBlock FontSize="16" Text="{Binding ThrottleText, Mode=OneWay}" Foreground="#FFA7B0BA" />
-                                </StackPanel>
-                            </StackPanel>
+                            <Button Margin="0,6,0,0" HorizontalAlignment="Center" Cursor="Hand" Click="CrackRow_Click" Background="Transparent" BorderThickness="0">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="Bd" Background="Transparent" Padding="8,2">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="#FFE6E8EB" TextAlignment="Center" />
+                                                <TextBlock Margin="0,3,0,0" Text="{Binding Verdict}" FontSize="22" FontWeight="SemiBold"
+                                                           Foreground="{Binding Brush}" TextAlignment="Center" />
+                                            </StackPanel>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="#243CB4A5" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
             </Grid>
     </DockPanel>
+    </Border>
 </Window>

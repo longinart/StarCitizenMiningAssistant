@@ -35,6 +35,8 @@ public sealed class MainWindowViewModel : ViewModelBase
     private readonly RepeatedReading _signatureRepeat = new();
     private readonly ReadingStabilizer<string> _compositionStable = new(5);
     private bool _compositionRescan;
+    private bool _rescanAll;
+    private bool _holdActive;
     private bool _suspendSave;
     private MiningShip? _selectedShip;
     private CatalogChoice<MiningGadget>? _selectedGadget;
@@ -511,6 +513,8 @@ public sealed class MainWindowViewModel : ViewModelBase
             _library.SoundEnabled = saved.SoundEnabled;
             _library.ClickThrough = saved.ClickThrough;
             _library.ScanLogEnabled = saved.ScanLogEnabled;
+            _library.AutoScanRockDetails = saved.AutoScanRockDetails;
+            _library.AutoScanComposition = saved.AutoScanComposition;
             _library.OverlayLeft = saved.OverlayLeft;
             _library.OverlayTop = saved.OverlayTop;
             _library.OverlayWidth = saved.OverlayWidth;
@@ -544,6 +548,10 @@ public sealed class MainWindowViewModel : ViewModelBase
             OnPropertyChanged(nameof(SoundEnabled));
             OnPropertyChanged(nameof(ClickThrough));
             OnPropertyChanged(nameof(ScanLogEnabled));
+            OnPropertyChanged(nameof(AutoScanRockDetails));
+            OnPropertyChanged(nameof(AutoScanComposition));
+            OnPropertyChanged(nameof(OverlayWidth));
+            OnPropertyChanged(nameof(OverlayHeight));
             OnPropertyChanged(nameof(RockOverlayOpacity));
             OnPropertyChanged(nameof(RockOverlayScale));
             OnPropertyChanged(nameof(DebugMode));
@@ -816,6 +824,44 @@ public sealed class MainWindowViewModel : ViewModelBase
         }
     }
 
+    public bool AutoScanRockDetails
+    {
+        get => _library.AutoScanRockDetails;
+        set
+        {
+            if (_library.AutoScanRockDetails == value)
+            {
+                return;
+            }
+
+            _library.AutoScanRockDetails = value;
+            OnPropertyChanged(nameof(AutoScanRockDetails));
+            NotifyLoadout();
+        }
+    }
+
+    public bool AutoScanComposition
+    {
+        get => _library.AutoScanComposition;
+        set
+        {
+            if (_library.AutoScanComposition == value)
+            {
+                return;
+            }
+
+            _library.AutoScanComposition = value;
+            OnPropertyChanged(nameof(AutoScanComposition));
+            NotifyLoadout();
+        }
+    }
+
+    public bool HoldActive
+    {
+        get => _holdActive;
+        set => Set(ref _holdActive, value);
+    }
+
     public bool DebugMode
     {
         get => _library.DebugMode;
@@ -975,9 +1021,34 @@ public sealed class MainWindowViewModel : ViewModelBase
 
     public double? OverlayTop => _library.OverlayTop;
 
-    public double? OverlayWidth => _library.OverlayWidth;
+    public double OverlayWidth
+    {
+        get => _library.OverlayWidth is >= 315 and <= 1400 ? _library.OverlayWidth.Value : 540;
+        set => StoreOverlayEdge(value, 315, 1400, width => _library.OverlayWidth = width, nameof(OverlayWidth));
+    }
 
-    public double? OverlayHeight => _library.OverlayHeight;
+    public double OverlayHeight
+    {
+        get => _library.OverlayHeight is >= 400 and <= 1600 ? _library.OverlayHeight.Value : 1100;
+        set => StoreOverlayEdge(value, 400, 1600, height => _library.OverlayHeight = height, nameof(OverlayHeight));
+    }
+
+    private void StoreOverlayEdge(double value, double min, double max, Action<double> store, string name)
+    {
+        var stored = Math.Clamp(value, min, max);
+        var current = name == nameof(OverlayWidth) ? _library.OverlayWidth : _library.OverlayHeight;
+        if (Near(current, stored))
+        {
+            return;
+        }
+
+        store(stored);
+        OnPropertyChanged(name);
+        NotifyLoadout();
+    }
+
+    public bool WantsCompositionScan =>
+        _compositionRescan || _rescanAll || (AutoScanComposition && !Composition.IsLocked);
 
     public void RememberOverlay(double left, double top, double width, double height)
     {
@@ -1083,56 +1154,39 @@ public sealed class MainWindowViewModel : ViewModelBase
         ReleaseComposition();
     }
 
+    public void RescanAll()
+    {
+        _rescanAll = true;
+        RescanComposition();
+    }
+
     public RockOcrFields WatchRock(RockOcrFields? sample, bool compositionAllowed = false)
     {
-        if (sample is null || !sample.HasPanel)
+        var scanComposition = AutoScanComposition || _compositionRescan || _rescanAll;
+        var scanRock = AutoScanRockDetails || _rescanAll;
+        if (scanComposition)
         {
-            ReleaseComposition();
-        }
-        else if (!Composition.IsLocked)
-        {
-            if (!compositionAllowed)
-            {
-                if (!_compositionRescan)
-                {
-                    _compositionStable.Reset();
-                }
-            }
-            else
-            {
-                var key = CompositionKey(sample);
-                if (key is null)
-                {
-                    if (!_compositionRescan)
-                    {
-                        _compositionStable.Reset();
-                    }
-                }
-                else if (_compositionRescan || _compositionStable.Observe(key))
-                {
-                    Composition.ApplyObserved(sample.Composition, sample.TotalScu);
-                    Composition.IsLocked = true;
-                    _compositionRescan = false;
-                    _compositionStable.Reset();
-                }
-            }
+            AcceptComposition(sample, compositionAllowed);
         }
 
         var current = ReadRock();
+        if (!scanRock)
+        {
+            return ShownRock(current.MassKilograms, current.ResistancePercent, current.Instability, sample);
+        }
+
+        if (_rescanAll)
+        {
+            return AcceptRescan(sample, current);
+        }
+
         var mass = StableReading.Next(current.MassKilograms, _lastMassSample, sample?.Mass ?? ObservedValue<double>.Missing());
         var resistance = StableReading.Next(current.ResistancePercent, _lastResistanceSample, sample?.Resistance ?? ObservedValue<double>.Missing());
         var instability = StableReading.Next(current.Instability, _lastInstabilitySample, sample?.Instability ?? ObservedValue<double>.Missing());
         _lastMassSample = mass.LastSample;
         _lastResistanceSample = resistance.LastSample;
         _lastInstabilitySample = instability.LastSample;
-        var held = new RockOcrFields
-        {
-            Mass = mass.Shown,
-            Resistance = resistance.Shown,
-            Instability = instability.Shown,
-            Composition = sample?.Composition ?? [],
-            TotalScu = sample?.TotalScu ?? ObservedValue<double>.Missing()
-        };
+        var held = ShownRock(mass.Shown, resistance.Shown, instability.Shown, sample);
         if (!held.Mass.Equals(current.MassKilograms)
             || !held.Resistance.Equals(current.ResistancePercent)
             || !held.Instability.Equals(current.Instability))
@@ -1142,6 +1196,89 @@ public sealed class MainWindowViewModel : ViewModelBase
 
         return held;
     }
+
+    private void AcceptComposition(RockOcrFields? sample, bool compositionAllowed)
+    {
+        if (sample is null || !sample.HasPanel)
+        {
+            if (!_compositionRescan && !_rescanAll)
+            {
+                ReleaseComposition();
+            }
+
+            return;
+        }
+
+        if (Composition.IsLocked)
+        {
+            return;
+        }
+
+        if (!compositionAllowed)
+        {
+            if (!_compositionRescan)
+            {
+                _compositionStable.Reset();
+            }
+
+            return;
+        }
+
+        var key = CompositionKey(sample);
+        if (key is null)
+        {
+            if (!_compositionRescan)
+            {
+                _compositionStable.Reset();
+            }
+
+            return;
+        }
+
+        if (_compositionRescan || _compositionStable.Observe(key))
+        {
+            Composition.ApplyObserved(sample.Composition, sample.TotalScu);
+            Composition.IsLocked = true;
+            _compositionRescan = false;
+            _compositionStable.Reset();
+        }
+    }
+
+    private RockOcrFields AcceptRescan(RockOcrFields? sample, RockReading current)
+    {
+        if (sample is not { HasPanel: true }
+            || (sample.Mass.Confidence == RecognitionConfidence.Missing
+                && sample.Resistance.Confidence == RecognitionConfidence.Missing
+                && sample.Instability.Confidence == RecognitionConfidence.Missing))
+        {
+            return ShownRock(current.MassKilograms, current.ResistancePercent, current.Instability, sample);
+        }
+
+        var mass = sample.Mass.Confidence == RecognitionConfidence.Missing ? current.MassKilograms : sample.Mass;
+        var resistance = sample.Resistance.Confidence == RecognitionConfidence.Missing ? current.ResistancePercent : sample.Resistance;
+        var instability = sample.Instability.Confidence == RecognitionConfidence.Missing ? current.Instability : sample.Instability;
+        _lastMassSample = mass;
+        _lastResistanceSample = resistance;
+        _lastInstabilitySample = instability;
+        _rescanAll = false;
+        var held = ShownRock(mass, resistance, instability, sample);
+        ApplyRockScan(held);
+        return held;
+    }
+
+    private static RockOcrFields ShownRock(
+        ObservedValue<double> mass,
+        ObservedValue<double> resistance,
+        ObservedValue<double> instability,
+        RockOcrFields? sample) =>
+        new()
+        {
+            Mass = mass,
+            Resistance = resistance,
+            Instability = instability,
+            Composition = sample?.Composition ?? [],
+            TotalScu = sample?.TotalScu ?? ObservedValue<double>.Missing()
+        };
 
     private string? CompositionKey(RockOcrFields sample)
     {

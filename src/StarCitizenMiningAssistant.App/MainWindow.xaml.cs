@@ -788,7 +788,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            var sought = await SeekRock(monitor, !viewModel.Composition.IsLocked);
+            var sought = await SeekRock(monitor, viewModel.WantsCompositionScan);
             captured = sought.Bmp;
             lines = sought.Lines;
         }
@@ -889,7 +889,7 @@ public partial class MainWindow : Window
             return new WatchFrame(sought.Lines, false, false);
         }
 
-        var rockFrame = await SeekRock(monitor, !viewModel.Composition.IsLocked);
+        var rockFrame = await SeekRock(monitor, viewModel.WantsCompositionScan);
         return new WatchFrame(rockFrame.Lines, false, rockFrame.CompositionAllowed);
     }
 
@@ -1358,7 +1358,7 @@ public partial class MainWindow : Window
         }
 
         output.Text = "Reading...";
-        var rockFrame = await SeekRock(rockMonitor, !rockModel.Composition.IsLocked);
+        var rockFrame = await SeekRock(rockMonitor, rockModel.WantsCompositionScan);
         var sample = rockFrame.Lines is null ? null : RockOcrFields.Read(rockFrame.Lines);
         var shown = sample is { HasPanel: true } ? rockModel.WatchRock(sample, rockFrame.CompositionAllowed) : sample;
         output.Text = FormatField("Mass", shown?.Mass ?? ObservedValue<double>.Missing())

@@ -186,7 +186,9 @@ public class LoadoutLibraryTests
             SignatureOverlayColor = "#FF5FE8D2",
             SignatureOverlayOpacity = 0.8,
             SignatureOverlayLocked = true,
-            SignatureOverlayPreview = true
+            SignatureOverlayPreview = true,
+            AutoScanRockDetails = false,
+            AutoScanComposition = false
         };
 
         var restored = LoadoutLibrary.TryParse(library.ToJson());
@@ -202,6 +204,8 @@ public class LoadoutLibraryTests
         Assert.Equal(0.8, restored.SignatureOverlayOpacity);
         Assert.True(restored.SignatureOverlayLocked);
         Assert.True(restored.SignatureOverlayPreview);
+        Assert.False(restored.AutoScanRockDetails);
+        Assert.False(restored.AutoScanComposition);
     }
 
     [Fact]
@@ -218,6 +222,8 @@ public class LoadoutLibraryTests
         Assert.Equal(1, restored.SignatureOverlayOpacity);
         Assert.False(restored.SignatureOverlayLocked);
         Assert.False(restored.SignatureOverlayPreview);
+        Assert.True(restored.AutoScanRockDetails);
+        Assert.True(restored.AutoScanComposition);
         Assert.Equal("", restored.RockOverlayHotkey);
         Assert.Equal("", restored.SignatureOverlayHotkey);
     }

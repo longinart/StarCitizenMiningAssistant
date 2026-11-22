@@ -6,14 +6,14 @@ An external Windows desktop utility designed to assist with Star Citizen mining.
 
 *   **📡 Signature Scanning:** Uses OCR to read deposit signatures from the radar HUD, identifying minerals when they match the provided signature list.
 *   **🔨 Automated Crackability:** Reads rock mass and resistance from scan results to determine if your current ship configuration can fracture the rock.
-*   **📊 Composition Analysis:** Uses OCR to detect Total SCU and mineral percentages directly from the scan interface. The reading locks after it stays the same. **Rescan** takes a new one if that lock was wrong.
+*   **📊 Composition Analysis:** Uses OCR to detect Total SCU and mineral percentages directly from the scan interface. The reading locks after it stays the same. A short **Rescan** takes a new composition. Hold **Rescan** to read the rock again too.
 *   **💰 Refinery & Pricing:** Calculates potential yields and profit based on selected refinery methods and current market prices.
 *   **🛠️ Loadout Management:** Saves and switches between ship loadouts, including installed heads, modules, and gadgets.
 *   **🖼️ Configurable Overlays:** Separate, customizable windows for signature and rock data, supporting independent position, opacity, and click-through settings.
 
 ## ⬇️ How to Download and Run
 
-**[Download StarCitizenMiningAssistant-0.3.0-win-x64.zip](https://github.com/longinart/StarCitizenMiningAssistant/releases/download/v0.3.0/StarCitizenMiningAssistant-0.3.0-win-x64.zip)**
+**[Download StarCitizenMiningAssistant-0.4.0-win-x64.zip](https://github.com/longinart/StarCitizenMiningAssistant/releases/download/v0.4.0/StarCitizenMiningAssistant-0.4.0-win-x64.zip)**
 
 1.  **Download:** Click the link above, or get the latest zip from the [Releases](../../releases) page.
 2.  **Extract:** Right-click the ZIP and choose **Extract All**. Put it in a folder you can write to. Do not run the app from inside the ZIP.
@@ -22,7 +22,7 @@ An external Windows desktop utility designed to assist with Star Citizen mining.
 
 > **Windows SmartScreen:** Because this is an independent project, you may see an "Unknown publisher" warning when launching the app for the first time. To continue, click **"More info"** and then **"Run anyway."**
 
-The label in the bottom-left corner, such as `v.0.3`, is the version you are running.
+The label in the bottom-left corner, such as `v.0.4`, is the version you are running. What changed since 0.2 is in [CHANGELOG.md](CHANGELOG.md).
 
 ## ⚙️ Quick Setup
 

@@ -70,6 +70,10 @@ public sealed class LoadoutLibrary
 
     public bool ScanLogEnabled { get; set; } = true;
 
+    public bool AutoScanRockDetails { get; set; } = true;
+
+    public bool AutoScanComposition { get; set; } = true;
+
     public double? OverlayLeft { get; set; }
 
     public double? OverlayTop { get; set; }
